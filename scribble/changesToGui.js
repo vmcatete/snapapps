@@ -195,7 +195,7 @@ IDE_Morph.prototype.exportProjectZip = function()
     getIndexHtmlContentsWithEmbeddedProject(onGetHtmlSuccess, showError);
 }
 
-IDE_Morph.prototype.uberCreateControlBar = IDE_Morph.prototype.createControlBar;
+/*IDE_Morph.prototype.uberCreateControlBar = IDE_Morph.prototype.createControlBar;
 IDE_Morph.prototype.createControlBar = function () {
     var me = this;
     var returnValue = this.uberCreateControlBar();
@@ -209,7 +209,7 @@ IDE_Morph.prototype.createControlBar = function () {
     };
     
     return returnValue;
-}
+}*/
    
 IDE_Morph.prototype.projectMenuSnapAppsModifier = function (menu)
 {
