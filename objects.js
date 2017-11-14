@@ -1555,7 +1555,11 @@ SpriteMorph.prototype.appearIn = function (ide) {
 // SpriteMorph versioning
 
 SpriteMorph.prototype.setName = function (string) {
-    this.name = string || this.name;
+    var name = string || this.name;
+    if (name != this.name) {
+        Trace.log('Sprite.setName', name);
+    }
+    this.name = name;
     this.version = Date.now();
 };
 
@@ -2401,6 +2405,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
             menu.addItem(
                 'show primitives',
                 function () {
+                    Trace.log('IDE.showPrimitives', ide.currentCategory);
                     var hiddens = StageMorph.prototype.hiddenPrimitives,
                         defs = SpriteMorph.prototype.blocks;
                     Object.keys(hiddens).forEach(function (sel) {
@@ -2947,6 +2952,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
 // SpriteMorph variable management
 
 SpriteMorph.prototype.addVariable = function (name, isGlobal) {
+    Trace.log('Sprite.addVariable', name);
     var ide = this.parentThatIsA(IDE_Morph);
     if (isGlobal) {
         this.globalVariables().addVar(name);
@@ -2960,6 +2966,7 @@ SpriteMorph.prototype.addVariable = function (name, isGlobal) {
 };
 
 SpriteMorph.prototype.deleteVariable = function (varName) {
+    Trace.log('Sprite.deleteVariable', varName);
     var ide = this.parentThatIsA(IDE_Morph);
     if (!contains(this.inheritedVariableNames(true), varName)) {
         // check only shadowed variables
@@ -6140,6 +6147,7 @@ function StageMorph(globals) {
 
 StageMorph.prototype.init = function (globals) {
     this.name = localize('Stage');
+    this.guid = newGuid();
     this.instrument = null;
     this.threads = new ThreadManager();
     this.variables = new VariableFrame(globals || null, this);
@@ -6694,7 +6702,7 @@ StageMorph.prototype.fireKeyEvent = function (key) {
             });
         }
     });
-    
+
     return procs;
 };
 
@@ -6713,7 +6721,7 @@ StageMorph.prototype.fireGreenFlagEvent = function () {
     var procs = [],
         ide = this.parentThatIsA(IDE_Morph),
         myself = this;
-        
+
     this.children.concat(this).forEach(function (morph) {
         if (isSnapObject(morph)) {
             morph.allHatBlocksFor('__shout__go__').forEach(function (block) {
@@ -6725,7 +6733,7 @@ StageMorph.prototype.fireGreenFlagEvent = function () {
             });
         }
     });
-    
+
     if (ide) {
         ide.controlBar.pauseButton.refresh();
     }
@@ -7228,7 +7236,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         menu.addItem('help...', 'showHelp');
         return menu;
     }
-	
+
     /* SNAPAPPS HOOK*/
 	if (this.snapappsHookBlockTemplates)
 		this.snapappsHookBlockTemplates(blocks, block, cat, helpMenu);
