@@ -1,20 +1,20 @@
 // Logger classes
 
-require('assignment');
-
 function Logger(interval) {
     this.init(interval);
 }
 
-Logger.sessionID = newGuid();
 Logger.prototype.serializer = new SnapSerializer();
 
 Logger.prototype.init = function(interval) {
     this.queue = [];
-    this.onCodeChanged = function(code) { };
+    this.onCodeChanged = null;
     this.log('Logger.started');
     this.start(interval);
     this.forceLogCode = false;
+    if (!Logger.sessionID) {
+        Logger.sessionID = newGuid();
+    }
 };
 
 // Get user identifying user info and bundle it as an object
@@ -29,7 +29,6 @@ Logger.prototype.userInfo = function() {
         }
     }
     return {
-        'userID': userID,
         'sessionID': Logger.sessionID,
         'browserID': browserID,
     };
@@ -74,7 +73,6 @@ Logger.prototype.log = function(message, data, saveImmediately, forceLogCode) {
         'message': message,
         'data': data,
         'time': Date.now(),
-        'assignmentID': Assignment.getID(),
     };
 
     this.forceLogCode |= forceLogCode;
@@ -152,10 +150,11 @@ Logger.prototype.getBrowser = function() {
 };
 
 Logger.prototype.addCode = function(log) {
+    var ide = world.children[0];
     if (typeof(ide) == 'undefined' || !ide.stage) return;
     log.projectID = ide.stage.guid;
-
-    var code = this.simpleCodeXML();
+    var code = this.serializer.serialize(ide.stage);
+    code = this.removeImages(code);
 
     if (this.forceLogCode || this.hasCodeChanged(this.lastCode, code)) {
         this.forceLogCode = false;
@@ -175,16 +174,6 @@ Logger.prototype.hasCodeChanged = function(xml1, xml2) {
     // Remove coordinates before comparing code, since we don't need to
     // log these unimportant changes to the code state
     return this.removeCoordinates(xml1) !== this.removeCoordinates(xml2);
-};
-
-Logger.prototype.addXmlNewlines = function(xml) {
-    // Add newlines at the end of each tag
-    // TODO: there's probably a better regex way to do this
-    if (!xml) return xml;
-    xml = xml.replace(/(<[^<>]*>)/g, '$1\n');
-    xml = xml.replace(/(.)(<[^<>]*>)/g, '$1\n$2');
-    xml = xml.trim();
-    return xml;
 };
 
 Logger.prototype.storeMessages = function(logs) {
@@ -213,66 +202,15 @@ Logger.prototype.start = function(interval) {
     if (!interval) return;
     var myself = this;
     this.storeCallback = setInterval(function() {
-        myself.sendLogs();
+        if (myself.queue.length == 0) return;
+        myself.flushSaveCode();
+        myself.storeMessages(myself.queue);
+        myself.queue = [];
     }, interval);
 };
 
-Logger.prototype.sendLogs = function() {
-    if (this.queue.length === 0) return;
-    this.flushSaveCode();
-    this.storeMessages(this.queue);
-    this.queue = [];
-};
-
-Logger.prototype.simpleCodeXML = function() {
-    // Don't serialize the project while it's still opening
-    if (Logger.openingProject) return this.lastCode || '';
-
-    // Add a special flag to make the VariableFrame omit variable state
-    VariableFrame.dontSerializeVariableState = true;
-    var xml = this.serializer.serialize(ide.stage);
-    // Then make sure to reset it
-    VariableFrame.dontSerializeVariableState = false;
-
+Logger.prototype.removeImages = function(xml) {
     if (!xml) return xml;
     // We don't want to log the stage image every time
-    xml = xml.replace(/data:image\/[^<\"]*/g, '');
-    xml = xml.replace(/data:audio\/[^<\"]*/g, '');
-    return xml;
+    return xml.replace(/data:image\/png;base64[^<\"]*/g, '');
 };
-
-extend(VariableFrame, 'toXML', function(base, serializer) {
-    var removeValues = VariableFrame.dontSerializeVariableState;
-    var valueMap = null;
-    var myself = this;
-
-    if (removeValues) {
-        // If needed, we remove the value of non-literal variables first
-        // and store them in a map for later replacement
-        valueMap = { };
-        Object.keys(this.vars).forEach(function(key) {
-            var value = myself.vars[key].value;
-            if (typeof value === 'object') {
-                valueMap[key] = value;
-                myself.vars[key].value = null;
-            }
-        });
-    }
-
-    var value = base.call(this, serializer);
-
-    if (valueMap) {
-        // then we add it back after
-        Object.keys(valueMap).forEach(function(key) {
-            myself.vars[key].value = valueMap[key];
-        });
-    }
-
-    return value;
-});
-
-extend(SnapSerializer, 'openProject', function(base, project, ide) {
-    Logger.openingProject = true;
-    base.call(this, project, ide);
-    Logger.openingProject = false;
-});
