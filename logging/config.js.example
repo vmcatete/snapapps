@@ -7,46 +7,21 @@ window.assignments = {
         name: 'None',
         hint: 'just using Snap',
     },
-    'lightsCameraActionHW': {
-        name: 'Lights, Camera, Action!',
-        hint: 'Homework 1',
+    'invasiveSpecies1': {
+        name: 'Invasive Species Simulation',
+        hint: 'Day 1',
     },
-    'polygonMakerLab': {
-        name: 'Polygon Maker',
-        hint: 'In Lab Activity 2',
+    'invasiveSpecies2': {
+        name: 'Invasive Species Simulation',
+        hint: 'Day 2',
         hints: true,
-    },
-    'squiralHW': {
-        name: 'Squiral',
-        hint: 'Homework 2',
-        hints: true,
-    },
-    'guess1Lab': {
-        name: 'Guessing Game Part 1',
-        hint: 'In Lab Activity 3',
-        hints: true,
-    },
-    'guess2HW': {
-        name: 'Guessing Game Part 2',
-        hint: 'Homework 3',
-        hints: true,
-        prequel: 'guess1Lab',
-    },
-    'guess3Lab': {
-        name: 'Guessing Game Part 3',
-        hint: 'In Lab Activity 4',
-        prequel: 'guess2HW',
-    },
-    'project': {
-        name: 'SNAP Project',
-        hint: 'Project Deliverable 1',
     },
     'test': {
         name: 'Testing',
     },
     'view': {
         name: 'Viewing',
-    },
+    }
 };
 
 // If true, requires the Snap users to select an assignment before
