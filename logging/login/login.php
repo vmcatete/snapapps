@@ -7,10 +7,10 @@ include('../config.php');
     }
 
     $id = strtolower($_POST['id']);
-    $hash = password_hash($id, PASSWORD_DEFAULT, array(
+    $hash = $hashUserID ? password_hash($id, PASSWORD_DEFAULT, array(
         // Salt comes from the config file and is static
         'salt' => $salt
-    ));
+    )) : $id;
 
     $new = array_key_exists('new', $_POST) && $_POST['new'] === 'true';
 
