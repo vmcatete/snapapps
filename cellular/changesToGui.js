@@ -545,3 +545,49 @@ IDE_Morph.prototype.removeSprite = function (object) {
 // and I thought the dimensions of the stage were hardcoded somewhere. FIX ME.
 IDE_Morph.prototype.userSetStageSize = function () { };
 IDE_Morph.prototype._snapapps_showStageSizeOptions = false;
+
+
+// Change saving feature to save to the last_saved table
+
+IDE_Morph.prototype.save = function() {
+    this.source = 'cloud';
+    
+    if (window.assignmentID) {
+        this.saveProject(window.assignmentID);
+    } else {
+        this.showMessage("You need to set a project name first.", 2);
+    }
+}
+
+IDE_Morph.prototype.saveProject = function (name) {
+    Trace.log('IDE.saveProject', name);
+    var myself = this;
+    this.nextSteps([
+        function () {
+            myself.showMessage('Saving...');
+        },
+        function () {
+            myself.rawSaveProject(name);
+        }
+    ]);
+};
+
+IDE_Morph.prototype.rawSaveProject = function (name) {
+    var str;
+    if (name) {
+        this.setProjectName(name);
+        if (Process.prototype.isCatchingErrors) {
+            try {
+                
+                console.log("in try block: \n" + this.serializer.serialize(this.stage));
+                this.showMessage('Saved!', 1);
+            } catch (err) {
+                this.showMessage('Save failed: ' + err);
+            }
+        } else {
+            
+            console.log("Not in try block: \n" + this.serializer.serialize(this.stage));
+            this.showMessage('Saved!', 1);
+        }
+    }
+};
