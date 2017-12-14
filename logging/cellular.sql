@@ -55,3 +55,17 @@ CREATE TABLE IF NOT EXISTS users (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 ALTER TABLE trace ADD INDEX (userID);
+
+DROP TABLE IF EXISTS last_saved;
+
+CREATE TABLE IF NOT EXISTS last_saved (
+  id int NOT NULL AUTO_INCREMENT,
+  time datetime NOT NULL,
+  data text NOT NULL,
+  assignmentID varchar(40) NOT NULL,
+  userID varchar(255) NOT NULL,
+  projectID varchar(40) NOT NULL,
+  sessionID varchar(40) NOT NULL,
+  browserID varchar(40) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
