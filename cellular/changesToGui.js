@@ -575,7 +575,8 @@ IDE_Morph.prototype.saveProject = function (name) {
 IDE_Morph.prototype.rawSaveProject = function (name) {
     var str;
     if (name) {
-        this.setProjectName(name);
+        // do not mess with project name since it's already set
+        // this.setProjectName(name);
         if (Process.prototype.isCatchingErrors) {
             try {
                 
