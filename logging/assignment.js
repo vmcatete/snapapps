@@ -137,10 +137,8 @@ extend(IDE_Morph, 'createControlBar', function(baseCreate) {
         if (!assignment) return;
         // A bit of a crude approximation, but it's not worth measuring exactly
         var maxLength = Math.max(0, (ide.spriteEditor.width() / 6) - 35);
-        var text = this.label.text;
-        if (Assignment.getID() !== 'none' && (maxLength - text.length) > 5) {
-            text += ' - ' + assignment.name;
-        }
+        var text = assignment.name + ' (' + assignment.hint + ')';
+
         if (text.length > maxLength) {
             text = text.slice(0, maxLength) + '...';
         }
