@@ -35,7 +35,7 @@ window.allowChangeAssignment = true;
 window.requireLogin = true;
 
 // If true, allow new user to login
-window.allowNewUser = true;
+window.allowNewUser = false;
 
 // Specify to override the default Snap cloud URL
 // window.snapCloudURL = 'https://snap.apps.miosoft.com/SnapCloud';

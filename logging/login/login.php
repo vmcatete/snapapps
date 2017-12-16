@@ -21,7 +21,7 @@ include('../config.php');
             die ("Failed to connect to MySQL: ($mysqli->errno) $mysqli->error");
         }
 
-        $query = "SELECT 1 FROM $table WHERE userID='$hash' LIMIT 1";
+        $query = "SELECT 1 FROM $userTable WHERE userID='$hash' LIMIT 1";
         $result = $mysqli->query($query);
         if (!$result) {
             http_response_code(500);
