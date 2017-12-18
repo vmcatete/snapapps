@@ -580,9 +580,17 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
         // this.setProjectName(name);
         if (Process.prototype.isCatchingErrors) {
             try {
-                
-                console.log("in try block: \n" + this.serializer.serialize(this.stage));
                 this.showMessage('Saved!', 1);
+
+                var projectInfo = {
+                    'userID': window.userID,
+                    'time': Date.now(),
+                    'assignmentID': Assignment.getID(),
+                    'data': this.serializer.serialize(this.stage)
+                };
+
+                console.log(projectInfo);
+
                 $.post('logging/login/saveProject.php', {
                     'id': window.userID
                 }, function(data, status) {
@@ -597,6 +605,8 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
                 }).fail(function() {
                     myself.showMessage("Save failed.");
                 }); 
+
+                this.showMessage('Saved!', 1);
             } catch (err) {
                 myself.showMessage('Save failed: ' + err);
             }
