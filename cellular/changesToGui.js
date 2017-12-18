@@ -573,15 +573,15 @@ IDE_Morph.prototype.saveProject = function (name) {
 };
 
 IDE_Morph.prototype.rawSaveProject = function (name) {
-    var str;
     var myself = this;
+    
     if (name) {
         // do not mess with project name since it's already set
         // this.setProjectName(name);
+
         if (Process.prototype.isCatchingErrors) {
             try {
-                this.showMessage('Saved!', 1);
-
+                var xhr = new XMLHttpRequest();
                 var projectInfo = {
                     'userID': window.userID,
                     'time': Date.now(),
@@ -589,24 +589,16 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
                     'data': this.serializer.serialize(this.stage)
                 };
 
-                console.log(projectInfo);
-
-                $.post('logging/login/saveProject.php', {
-                    'id': window.userID
-                }, function(data, status) {
-                    var response;
-                    try {
-                        response = JSON.parse(data);
-                    } catch(e) {
-                        myself.showMessage('Save failed: ' + e);
-                        return;
+                xhr.onreadystatechange = function() {
+                    if (xhr.status === 200) {
+                        myself.showMessage('Saved!', 1);
                     }
-                    console.log(response);
-                }).fail(function() {
-                    myself.showMessage("Save failed.");
-                }); 
-
-                this.showMessage('Saved!', 1);
+                    else {
+                        myself.showMessage('Failed to save: ' + xhr.responseText);
+                    }
+                }
+                xhr.open('POST', 'logging/login/saveProject.php', true); 
+                xhr.send(JSON.stringify(projectInfo));
             } catch (err) {
                 myself.showMessage('Save failed: ' + err);
             }
