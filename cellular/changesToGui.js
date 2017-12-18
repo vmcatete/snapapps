@@ -574,6 +574,7 @@ IDE_Morph.prototype.saveProject = function (name) {
 
 IDE_Morph.prototype.rawSaveProject = function (name) {
     var str;
+    var myself = this;
     if (name) {
         // do not mess with project name since it's already set
         // this.setProjectName(name);
@@ -582,13 +583,27 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
                 
                 console.log("in try block: \n" + this.serializer.serialize(this.stage));
                 this.showMessage('Saved!', 1);
+                $.post('logging/login/saveProject.php', {
+                    'id': window.userID
+                }, function(data, status) {
+                    var response;
+                    try {
+                        response = JSON.parse(data);
+                    } catch(e) {
+                        myself.showMessage('Save failed: ' + e);
+                        return;
+                    }
+                    console.log(response);
+                }).fail(function() {
+                    myself.showMessage("Save failed.");
+                }); 
             } catch (err) {
-                this.showMessage('Save failed: ' + err);
+                myself.showMessage('Save failed: ' + err);
             }
         } else {
             
             console.log("Not in try block: \n" + this.serializer.serialize(this.stage));
-            this.showMessage('Saved!', 1);
+            myself.showMessage('Saved!', 1);
         }
     }
 };
