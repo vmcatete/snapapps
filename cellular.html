@@ -82,11 +82,11 @@
 		<script type="text/javascript" src="logging/main.js"></script>
 		-->
 		<script type="text/javascript">
-			var world;
+			var world, ide;
 			window.onload = function () {
 				world = new WorldMorph(document.getElementById('world'));
                 world.worldCanvas.focus();
-				var ide = new IDE_Morph();
+				ide = new IDE_Morph();
                 ide.openIn(world);
                 window.onInteractiveLoad = function() {
                     window.onbeforeunload = function() { };
