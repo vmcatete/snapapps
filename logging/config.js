@@ -2,19 +2,19 @@
 // A list of assignments that users can select from when using Snap
 // The assignmentID will be logged with each statement
 // 'test' and 'view' will not show up on the selection menu
+// Assignment name needs to be the same as example name in EXAMPLES file
 window.assignments = {
     'none': {
         name: 'None',
         hint: 'just using Snap',
     },
-    'invasiveSpecies1': {
-        name: 'Invasive Species Simulation',
-        hint: 'Day 1',
+    'epidemic2Starter': {
+        name: 'Epidemic Day 2 Starter',
+        hint: 'Topic for today',
     },
-    'invasiveSpecies2': {
-        name: 'Invasive Species Simulation',
-        hint: 'Day 2',
-        hints: true,
+    'epidemic2Final': {
+        name: 'Epidemic Day 2 Final',
+        hint: 'Topic for today',
     },
     'test': {
         name: 'Testing',
