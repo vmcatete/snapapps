@@ -626,3 +626,15 @@ IDE_Morph.prototype.loadExampleProject = function(name) {
         return false;
     }
 }
+
+IDE_Morph.prototype.loadAssignment = function(assignmentID) {
+    Assignment.setID(assignmentID);
+    if (assignmentID === "lastSaved") {
+
+    }
+    else {
+        ide.loadExampleProject(window.assignments[assignmentID].name);
+    }
+    ide.controlBar.updateLabel();
+    ide.controlBar.fixLayout();
+}

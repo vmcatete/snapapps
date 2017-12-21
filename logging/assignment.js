@@ -173,15 +173,7 @@ extend(IDE_Morph, 'createControlBar', function(baseCreate) {
                     ide.confirm("Are you sure you want to open a new project? Unsaved changes will be lost.",
                     "New Project?", 
                     function() {
-                        Assignment.setID(key);
-                        if (key === "lastSaved") {
-
-                        }
-                        else {
-                            ide.loadExampleProject(assignment.name);
-                        }
-                        ide.controlBar.updateLabel();
-                        ide.controlBar.fixLayout();
+                        ide.loadAssignment(key);
                     }, null, null, key === Assignment.getID());
                 });
             });
