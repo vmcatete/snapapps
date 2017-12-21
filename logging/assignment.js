@@ -170,26 +170,30 @@ extend(IDE_Morph, 'createControlBar', function(baseCreate) {
                     name += ' (' + assignment.hint + ')';
                 }
                 menu.addItem(name, function() {
-                    Assignment.setID(key);
-                    if (key === "lastSaved") {
+                    ide.confirm("Are you sure you want to open a new project? Unsaved changes will be lost.",
+                    "New Project?", 
+                    function() {
+                        Assignment.setID(key);
+                        if (key === "lastSaved") {
 
-                    }
-                    else {
-                        var examples = ide.getMediaList("Examples");
-                        var resourceURL = null;
-                        examples.forEach(function(example) {
-                            if (example.name === assignment.name) {
-                                resourceURL = ide.resourceURL('Examples', example.fileName);
-                            }
-                        });
-                        
-                        if (resourceURL) {
-                            ide.openProjectString(ide.getURL(resourceURL));
                         }
-                    }
-                    ide.controlBar.updateLabel();
-                    ide.controlBar.fixLayout();
-                }, null, null, key === Assignment.getID());
+                        else {
+                            var examples = ide.getMediaList("Examples");
+                            var resourceURL = null;
+                            examples.forEach(function(example) {
+                                if (example.name === assignment.name) {
+                                    resourceURL = ide.resourceURL('Examples', example.fileName);
+                                }
+                            });
+                            
+                            if (resourceURL) {
+                                ide.openProjectString(ide.getURL(resourceURL));
+                            }
+                        }
+                        ide.controlBar.updateLabel();
+                        ide.controlBar.fixLayout();
+                    }, null, null, key === Assignment.getID());
+                });
             });
             menu.popup(world, pos);
         };
