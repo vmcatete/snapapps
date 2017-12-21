@@ -609,3 +609,17 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
         }
     }
 };
+
+IDE_Morph.prototype.loadExampleProject = function(name) {
+    var examples = ide.getMediaList("Examples");
+    var resourceURL = null;
+    examples.forEach(function(example) {
+        if (example.name === name) {
+            resourceURL = ide.resourceURL('Examples', example.fileName);
+        }
+    });
+    
+    if (resourceURL) {
+        ide.openProjectString(ide.getURL(resourceURL));
+    }
+}
