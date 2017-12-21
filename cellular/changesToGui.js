@@ -622,4 +622,7 @@ IDE_Morph.prototype.loadExampleProject = function(name) {
     if (resourceURL) {
         ide.openProjectString(ide.getURL(resourceURL));
     }
+    else {
+        return false;
+    }
 }
