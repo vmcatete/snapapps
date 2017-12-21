@@ -94,9 +94,15 @@
                     if (project !== undefined) {
                         ide.rawOpenProjectString(project);
 				        ide.toggleAppMode(true);
-                    }
+					}
                 }
 				ide.controlBar.updateLabel();
+
+				var assignmentID = Assignment.getID();
+				if (assignmentID) {
+					ide.loadAssignment(assignmentID);
+				}
+
 		        loop();
 			};
 			function loop() {
