@@ -604,13 +604,14 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
             }
         } else {
             
-            console.log("Not in try block: \n" + this.serializer.serialize(this.stage));
-            myself.showMessage('Saved!', 1);
+            // console.log("Not in try block: \n" + this.serializer.serialize(this.stage));
+            // myself.showMessage('Saved!', 1);
         }
     }
 };
 
 IDE_Morph.prototype.loadExampleProject = function(name) {
+    if (!name) return;
     var examples = ide.getMediaList("Examples");
     var resourceURL = null;
     examples.forEach(function(example) {
@@ -627,6 +628,43 @@ IDE_Morph.prototype.loadExampleProject = function(name) {
     }
 }
 
+IDE_Morph.prototype.loadLastSavedProject = function(userID) {
+    if (!userID) return;
+
+    var myself = this;
+    
+    if (Process.prototype.isCatchingErrors) {
+        try {
+            var xhr = new XMLHttpRequest();
+            var projectInfo = {
+                'userID': userID
+            };
+
+            xhr.onreadystatechange = function() {
+                if (xhr.status === 200) {
+                    if (xhr.responseText.length === 0) {
+                        myself.showMessage("You don't have saved project.");
+                    }
+                    else {
+                        myself.openProjectString();
+                    }
+                }
+                else {
+                    myself.showMessage('Failed to load saved project: ' + xhr.responseText);
+                }
+            }
+            xhr.open('POST', 'logging/login/getProject.php', true); 
+            xhr.send(JSON.stringify(projectInfo));
+        } catch (err) {
+            myself.showMessage('Load saved project failed: ' + err);
+        }
+    } else {
+        
+        // console.log("Not in try block: \n" + this.serializer.serialize(this.stage));
+        // myself.showMessage('Saved!', 1);
+    }
+}
+
 IDE_Morph.prototype.loadAssignment = function(assignmentID) {
     Assignment.setID(assignmentID);
     if (assignmentID === "lastSaved") {
@@ -638,3 +676,4 @@ IDE_Morph.prototype.loadAssignment = function(assignmentID) {
     ide.controlBar.updateLabel();
     ide.controlBar.fixLayout();
 }
+
