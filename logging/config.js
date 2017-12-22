@@ -4,16 +4,12 @@
 // 'test' and 'view' will not show up on the selection menu
 // Assignment name needs to be the same as example name in EXAMPLES file
 window.assignments = {
-    'none': {
-        name: 'None',
-        hint: 'just using Snap',
+    'lastSaved': {
+        name: 'Last Saved Project',
+        hint: 'From previous session',
     },
     'epidemic2Starter': {
         name: 'Epidemic Day 2 Starter',
-        hint: 'Topic for today',
-    },
-    'epidemic2Final': {
-        name: 'Epidemic Day 2 Final',
         hint: 'Topic for today',
     },
     'test': {

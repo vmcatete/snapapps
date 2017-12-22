@@ -586,7 +586,7 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
                     'userID': window.userID,
                     'time': Date.now(),
                     'assignmentID': Assignment.getID(),
-                    'data': this.serializer.serialize(this.stage)
+                    'data': myself.serializer.serialize(myself.stage)
                 };
 
                 xhr.onreadystatechange = function() {
@@ -643,10 +643,10 @@ IDE_Morph.prototype.loadLastSavedProject = function(userID) {
             xhr.onreadystatechange = function() {
                 if (xhr.status === 200) {
                     if (xhr.responseText.length === 0) {
-                        myself.showMessage("You don't have saved project.");
+                        myself.showMessage("You don't have a saved project.");
                     }
                     else {
-                        myself.openProjectString();
+                        myself.openProjectString(xhr.responseText);
                     }
                 }
                 else {
@@ -668,7 +668,7 @@ IDE_Morph.prototype.loadLastSavedProject = function(userID) {
 IDE_Morph.prototype.loadAssignment = function(assignmentID) {
     Assignment.setID(assignmentID);
     if (assignmentID === "lastSaved") {
-
+        ide.loadLastSavedProject(window.userID);
     }
     else {
         ide.loadExampleProject(window.assignments[assignmentID].name);

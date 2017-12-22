@@ -21,7 +21,7 @@ try {
 
     $userID = $projectInfo['userID'];
     $timestamp = date("Y-m-d H:i:s", $projectInfo['time'] / 1000);
-    $data = $mysqli->escape_string(json_encode($projectInfo['data']));
+    $data = $projectInfo['data'];
     $assignmentID = $mysqli->escape_string($projectInfo['assignmentID']);
 
 
