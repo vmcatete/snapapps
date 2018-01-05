@@ -63,7 +63,7 @@ window.allowNewUser = false;
 // Specify the login header's logo and title text
 window.loginHeader = {
     logo: 'login/NCStateLogoWhite.png',
-    description: 'CSC 200 | Introduction To Computers and Their Uses'
+    description: 'Epidemics Simulation Activities'
 };
 
 // Create the logger you want to use on this snap deployment
