@@ -15,23 +15,22 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
     if (cat === 'motion')
     {
         blocks.splice(6, 0, block('faceToXY'), block('setDirection'));
-       // blocks.splice(11, 0, block('gotoRandomLocation'));
+        blocks.splice(11, 0, block('gotoRandomLocation'));
     }
     if (cat === 'control')
     {
-      //  blocks.splice(1, 0, block('receiveKeyReleased'));
+        blocks.splice(1, 0, block('receiveKeyReleased'));
     }
     if (cat === 'operators')
     {
-      //  blocks.push(block('reportExpression'));
+        blocks.push(block('reportExpression'));
     }
     if (cat === 'variables')
     {
         blocks.splice(blocks.length - 2, 0, block('reportCopyList'), block('reportListText'));
     }
-	/*
     if (cat === 'shapes') { 
-       blocks.push(block('startShape'));
+        blocks.push(block('startShape'));
         blocks.push(block('endShape'));
         blocks.push('-');
         blocks.push(block('setShapeColor'));
@@ -99,14 +98,13 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
         blocks.push('-');
         blocks.push(block('reportPenDown'));
     }
-	*/
 };
 
 StageMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, helpMenu)
 {
     if (cat === 'control')
     {
-     //   blocks.splice(1, 0, block('receiveKeyReleased'));
+        blocks.splice(1, 0, block('receiveKeyReleased'));
     }
 };
 
@@ -117,10 +115,10 @@ StageMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, h
 /*
  * Add the shape category
  */
-//SpriteMorph.prototype.blockColor.shapes = new Color(215, 45, 45);
-//SpriteMorph.prototype.categories.push("shapes");
-//SpriteMorph.prototype.blockColor.text = new Color(223, 0, 124);
-//SpriteMorph.prototype.categories.push("text");
+SpriteMorph.prototype.blockColor.shapes = new Color(215, 45, 45);
+SpriteMorph.prototype.categories.push("shapes");
+SpriteMorph.prototype.blockColor.text = new Color(223, 0, 124);
+SpriteMorph.prototype.categories.push("text");
 
 /*
  * Override for the default implementation of SpriteMorph.initBlocks
@@ -148,122 +146,117 @@ SpriteMorph.prototype.addScribbleBlocks = function () {
         spec: 'point to x: %n y: %n'
     };
 
-    /*
     SpriteMorph.prototype.blocks.receiveKeyReleased = {
-            type: 'hat',
-            category: 'control',
-            spec: 'when %keyHat key released'
-        };
+        type: 'hat',
+        category: 'control',
+        spec: 'when %keyHat key released'
+    };
+
+    SpriteMorph.prototype.blocks.startShape = {
+        type: 'command',
+        category: 'shapes',
+        spec: 'start shape'
+    };
     
-        SpriteMorph.prototype.blocks.startShape = {
-            type: 'command',
-            category: 'shapes',
-            spec: 'start shape'
-        };
-        
-        SpriteMorph.prototype.blocks.endShape = {
-            type: 'command',
-            category: 'shapes',
-            spec: 'end shape'
-        };
-        
-        SpriteMorph.prototype.blocks.setShapeColor = {
-            type: 'command',
-            category: 'shapes',
-            spec: 'set fill color to %clr',
-        };
+    SpriteMorph.prototype.blocks.endShape = {
+        type: 'command',
+        category: 'shapes',
+        spec: 'end shape'
+    };
     
-        SpriteMorph.prototype.blocks.changeShapeHue = {
-            type: 'command',
-            category: 'shapes',
-            spec: 'change fill hue by %n',
-            defaults: [10]
-        };
-        
-        SpriteMorph.prototype.blocks.setShapeHue = {
-            type: 'command',
-            category: 'shapes',
-            spec: 'set fill hue to %n',
-            defaults: [0]
-        };
-        
-        SpriteMorph.prototype.blocks.getShapeHue = {
-            type: 'reporter',
-            category: 'shapes',
-            spec: 'get fill hue'
-        };
-        
-        SpriteMorph.prototype.blocks.changeShapeBrightness = {
-            type: 'command',
-            category: 'shapes',
-            spec: 'change fill shade by %n',
-            defaults: [10]
-        };
-        
-        SpriteMorph.prototype.blocks.getShapeBrightness = {
-            type: 'reporter',
-            category: 'shapes',
-            spec: 'get fill shade'
-        };
-        
-        SpriteMorph.prototype.blocks.setShapeBrightness = {
-            type: 'command',
-            category: 'shapes',
-            spec: 'set fill shade to %n',
-            defaults: [100]
-        };
-        
-        SpriteMorph.prototype.blocks.changeShapeAlpha = {
-            type: 'command',
-            category: 'shapes',
-            spec: 'change fill alpha by %n',
-            defaults: [10]
-        };
-        
-        SpriteMorph.prototype.blocks.getShapeAlpha = {
-            type: 'reporter',
-            category: 'shapes',
-            spec: 'get fill alpha'
-        };
-        
-        SpriteMorph.prototype.blocks.setShapeAlpha = {
-            type: 'command',
-            category: 'shapes',
-            spec: 'set fill alpha to %n',
-            defaults: [100]
-        };
-        
-        SpriteMorph.prototype.blocks.drawCircle = {
-            type: 'command',
-            category: 'shapes',
-            spec: 'draw circle radius %n',
-            defaults: [50]
-        };
-        
-        SpriteMorph.prototype.blocks.drawOval = {
-            type: 'command',
-            category: 'shapes',
-            spec: 'draw oval radius %n by %n',
-            defaults: [25, 50]
-        };
-        
-        SpriteMorph.prototype.blocks.drawRectangle = {
-            type: 'command',
-            category: 'shapes',
-            spec: 'draw rectangle %n by %n',
-            defaults: [50, 50]
-        };
-	*/
-        
-        /* The lambda expression*/
-       /*
-        SpriteMorph.prototype.blocks.reportExpression = {
-                   type: 'reporter',
-                   category: 'operators',
-                   spec: '\u03BB %s'
-               };
-               */
-       
+    SpriteMorph.prototype.blocks.setShapeColor = {
+        type: 'command',
+        category: 'shapes',
+        spec: 'set fill color to %clr',
+    };
+
+    SpriteMorph.prototype.blocks.changeShapeHue = {
+        type: 'command',
+        category: 'shapes',
+        spec: 'change fill hue by %n',
+        defaults: [10]
+    };
+    
+    SpriteMorph.prototype.blocks.setShapeHue = {
+        type: 'command',
+        category: 'shapes',
+        spec: 'set fill hue to %n',
+        defaults: [0]
+    };
+    
+    SpriteMorph.prototype.blocks.getShapeHue = {
+        type: 'reporter',
+        category: 'shapes',
+        spec: 'get fill hue'
+    };
+    
+    SpriteMorph.prototype.blocks.changeShapeBrightness = {
+        type: 'command',
+        category: 'shapes',
+        spec: 'change fill shade by %n',
+        defaults: [10]
+    };
+    
+    SpriteMorph.prototype.blocks.getShapeBrightness = {
+        type: 'reporter',
+        category: 'shapes',
+        spec: 'get fill shade'
+    };
+    
+    SpriteMorph.prototype.blocks.setShapeBrightness = {
+        type: 'command',
+        category: 'shapes',
+        spec: 'set fill shade to %n',
+        defaults: [100]
+    };
+    
+    SpriteMorph.prototype.blocks.changeShapeAlpha = {
+        type: 'command',
+        category: 'shapes',
+        spec: 'change fill alpha by %n',
+        defaults: [10]
+    };
+    
+    SpriteMorph.prototype.blocks.getShapeAlpha = {
+        type: 'reporter',
+        category: 'shapes',
+        spec: 'get fill alpha'
+    };
+    
+    SpriteMorph.prototype.blocks.setShapeAlpha = {
+        type: 'command',
+        category: 'shapes',
+        spec: 'set fill alpha to %n',
+        defaults: [100]
+    };
+    
+    SpriteMorph.prototype.blocks.drawCircle = {
+        type: 'command',
+        category: 'shapes',
+        spec: 'draw circle radius %n',
+        defaults: [50]
+    };
+    
+    SpriteMorph.prototype.blocks.drawOval = {
+        type: 'command',
+        category: 'shapes',
+        spec: 'draw oval radius %n by %n',
+        defaults: [25, 50]
+    };
+    
+    SpriteMorph.prototype.blocks.drawRectangle = {
+        type: 'command',
+        category: 'shapes',
+        spec: 'draw rectangle %n by %n',
+        defaults: [50, 50]
+    };
+    
+    /* The lambda expression*/
+    SpriteMorph.prototype.blocks.reportExpression = {
+        type: 'reporter',
+        category: 'operators',
+        spec: '\u03BB %s'
+    };
     
     SpriteMorph.prototype.blocks.gotoRandomLocation = {
         type: 'command',
@@ -271,58 +264,56 @@ SpriteMorph.prototype.addScribbleBlocks = function () {
         spec: 'go to random location'
     };
     
-   /*
     SpriteMorph.prototype.blocks.changePenAlpha = {
-           type: 'command',
-           category: 'pen',
-           spec: 'change pen alpha by %n',
-           defaults: [10]
-       };
-       
-       SpriteMorph.prototype.blocks.getPenAlpha = {
-           type: 'reporter',
-           category: 'pen',
-           spec: 'get pen alpha'
-       };
-       
-       SpriteMorph.prototype.blocks.setPenAlpha = {
-           type: 'command',
-           category: 'pen',
-           spec: 'set pen alpha to %n',
-           defaults: [100]
-       };
-       
-       SpriteMorph.prototype.blocks.reportPenDown = {
-           type: 'predicate',
-           category: 'pen',
-           spec: 'pen down?'
-       };
-       
-       SpriteMorph.prototype.blocks.getPenString = {
-           type: 'reporter',
-           category: 'pen',
-           spec: 'get pen color string'
-       };
-       
-       SpriteMorph.prototype.blocks.setPenString = {
-           type: 'command',
-           category: 'pen',
-           spec: 'set pen color string %s'
-       };
-       
-       SpriteMorph.prototype.blocks.getFillString = {
-           type: 'reporter',
-           category: 'shapes',
-           spec: 'get fill color string'
-       };
-       
-       SpriteMorph.prototype.blocks.setFillString = {
-           type: 'command',
-           category: 'shapes',
-           spec: 'set fill color string %s'
-       };
-       */
-   
+        type: 'command',
+        category: 'pen',
+        spec: 'change pen alpha by %n',
+        defaults: [10]
+    };
+    
+    SpriteMorph.prototype.blocks.getPenAlpha = {
+        type: 'reporter',
+        category: 'pen',
+        spec: 'get pen alpha'
+    };
+    
+    SpriteMorph.prototype.blocks.setPenAlpha = {
+        type: 'command',
+        category: 'pen',
+        spec: 'set pen alpha to %n',
+        defaults: [100]
+    };
+    
+    SpriteMorph.prototype.blocks.reportPenDown = {
+        type: 'predicate',
+        category: 'pen',
+        spec: 'pen down?'
+    };
+    
+    SpriteMorph.prototype.blocks.getPenString = {
+        type: 'reporter',
+        category: 'pen',
+        spec: 'get pen color string'
+    };
+    
+    SpriteMorph.prototype.blocks.setPenString = {
+        type: 'command',
+        category: 'pen',
+        spec: 'set pen color string %s'
+    };
+    
+    SpriteMorph.prototype.blocks.getFillString = {
+        type: 'reporter',
+        category: 'shapes',
+        spec: 'get fill color string'
+    };
+    
+    SpriteMorph.prototype.blocks.setFillString = {
+        type: 'command',
+        category: 'shapes',
+        spec: 'set fill color string %s'
+    };
+    
     SpriteMorph.prototype.blocks.reportCopyList = {
         type: 'reporter',
         category: 'lists',
@@ -339,103 +330,101 @@ SpriteMorph.prototype.addScribbleBlocks = function () {
     ** Text Blocks
     */
     
-   /*
     SpriteMorph.prototype.blocks.drawText = {
-           type: 'command',
-           category: 'text',
-           spec: 'draw text %s'
-       };
-       
-       SpriteMorph.prototype.blocks.setFont = {
-           type: 'command',
-           category: 'text',
-           spec: 'set font to %font'
-       };
-       
-       SpriteMorph.prototype.blocks.setFontSize = {
-           type: 'command',
-           category: 'text',
-           spec: 'set font size to %n'
-       };
-       
-       SpriteMorph.prototype.blocks.getTextFillString = {
-           type: 'reporter',
-           category: 'text',
-           spec: 'get text color string'
-       };
-       
-       SpriteMorph.prototype.blocks.setTextFillString = {
-           type: 'command',
-           category: 'text',
-           spec: 'set text color string %n'
-       };
-       
-       SpriteMorph.prototype.blocks.setTextColor = {
-           type: 'command',
-           category: 'text',
-           spec: 'set text color to %clr',
-       };
-   
-       SpriteMorph.prototype.blocks.changeTextHue = {
-           type: 'command',
-           category: 'text',
-           spec: 'change text hue by %n',
-           defaults: [10]
-       };
-       
-       SpriteMorph.prototype.blocks.setTextHue = {
-           type: 'command',
-           category: 'text',
-           spec: 'set text hue to %n',
-           defaults: [0]
-       };
-       
-       SpriteMorph.prototype.blocks.getTextHue = {
-           type: 'reporter',
-           category: 'text',
-           spec: 'get text hue'
-       };
-       
-       SpriteMorph.prototype.blocks.changeTextBrightness = {
-           type: 'command',
-           category: 'text',
-           spec: 'change text shade by %n',
-           defaults: [10]
-       };
-       
-       SpriteMorph.prototype.blocks.getTextBrightness = {
-           type: 'reporter',
-           category: 'text',
-           spec: 'get text shade'
-       };
-       
-       SpriteMorph.prototype.blocks.setTextBrightness = {
-           type: 'command',
-           category: 'text',
-           spec: 'set text shade to %n',
-           defaults: [100]
-       };
-       
-       SpriteMorph.prototype.blocks.changeTextAlpha = {
-           type: 'command',
-           category: 'text',
-           spec: 'change text alpha by %n',
-           defaults: [10]
-       };
-       
-       SpriteMorph.prototype.blocks.getTextAlpha = {
-           type: 'reporter',
-           category: 'text',
-           spec: 'get text alpha'
-       };
-       
-       SpriteMorph.prototype.blocks.setTextAlpha = {
-           type: 'command',
-           category: 'text',
-           spec: 'set text alpha to %s',
-           defaults: [100]
-       };*/
-   
+        type: 'command',
+        category: 'text',
+        spec: 'draw text %s'
+    };
+    
+    SpriteMorph.prototype.blocks.setFont = {
+        type: 'command',
+        category: 'text',
+        spec: 'set font to %font'
+    };
+    
+    SpriteMorph.prototype.blocks.setFontSize = {
+        type: 'command',
+        category: 'text',
+        spec: 'set font size to %n'
+    };
+    
+    SpriteMorph.prototype.blocks.getTextFillString = {
+        type: 'reporter',
+        category: 'text',
+        spec: 'get text color string'
+    };
+    
+    SpriteMorph.prototype.blocks.setTextFillString = {
+        type: 'command',
+        category: 'text',
+        spec: 'set text color string %n'
+    };
+    
+    SpriteMorph.prototype.blocks.setTextColor = {
+        type: 'command',
+        category: 'text',
+        spec: 'set text color to %clr',
+    };
+
+    SpriteMorph.prototype.blocks.changeTextHue = {
+        type: 'command',
+        category: 'text',
+        spec: 'change text hue by %n',
+        defaults: [10]
+    };
+    
+    SpriteMorph.prototype.blocks.setTextHue = {
+        type: 'command',
+        category: 'text',
+        spec: 'set text hue to %n',
+        defaults: [0]
+    };
+    
+    SpriteMorph.prototype.blocks.getTextHue = {
+        type: 'reporter',
+        category: 'text',
+        spec: 'get text hue'
+    };
+    
+    SpriteMorph.prototype.blocks.changeTextBrightness = {
+        type: 'command',
+        category: 'text',
+        spec: 'change text shade by %n',
+        defaults: [10]
+    };
+    
+    SpriteMorph.prototype.blocks.getTextBrightness = {
+        type: 'reporter',
+        category: 'text',
+        spec: 'get text shade'
+    };
+    
+    SpriteMorph.prototype.blocks.setTextBrightness = {
+        type: 'command',
+        category: 'text',
+        spec: 'set text shade to %n',
+        defaults: [100]
+    };
+    
+    SpriteMorph.prototype.blocks.changeTextAlpha = {
+        type: 'command',
+        category: 'text',
+        spec: 'change text alpha by %n',
+        defaults: [10]
+    };
+    
+    SpriteMorph.prototype.blocks.getTextAlpha = {
+        type: 'reporter',
+        category: 'text',
+        spec: 'get text alpha'
+    };
+    
+    SpriteMorph.prototype.blocks.setTextAlpha = {
+        type: 'command',
+        category: 'text',
+        spec: 'set text alpha to %s',
+        defaults: [100]
+    };
 }
 
 /*
