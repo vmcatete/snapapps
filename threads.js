@@ -525,8 +525,8 @@ Process.prototype.constructor = Process;
 Process.prototype.timeout = 500; // msecs after which to force yield
 Process.prototype.isCatchingErrors = true;
 Process.prototype.enableLiveCoding = false; // experimental
-Process.prototype.enableSingleStepping = false; // experimental
-Process.prototype.flashTime = 0; // experimental
+Process.prototype.enableSingleStepping = true; // experimental
+Process.prototype.flashTime = 0.2; // experimental
 // Process.prototype.enableJS = false;
 
 function Process(topBlock, receiver, onComplete, yieldFirst) {
