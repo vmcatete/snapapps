@@ -593,7 +593,7 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
                     if (xhr.status === 200) {
                         myself.showMessage('Saved!', 1);
                     }
-                    else {
+                    else if (xhr.status > 0) {
                         myself.showMessage('Failed to save: ' + xhr.responseText);
                         Trace.logErrorMessage(xhr.responseText);
                     }
