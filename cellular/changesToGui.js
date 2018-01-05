@@ -611,6 +611,7 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
 };
 
 IDE_Morph.prototype.loadExampleProject = function(name) {
+    Trace.log("IDE.loadExampleProject", name);
     if (!name) return;
     var examples = ide.getMediaList("Examples");
     var resourceURL = null;
@@ -629,6 +630,7 @@ IDE_Morph.prototype.loadExampleProject = function(name) {
 }
 
 IDE_Morph.prototype.loadLastSavedProject = function(userID) {
+    Trace.log("IDE.loadLastSavedProject", userID);
     if (!userID) return;
 
     var myself = this;
