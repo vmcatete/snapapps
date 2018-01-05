@@ -2499,7 +2499,7 @@ IDE_Morph.prototype.cloudMenu = function () {
         menu.addItem(
             'open shared project from cloud...',
             function () {
-                myself.prompt('Author nameâ€¦', function (usr) {
+                myself.prompt('Author nameâ€?', function (usr) {
                     myself.prompt('Project name...', function (prj) {
                         var id = 'Username=' +
                             encodeURIComponent(usr.toLowerCase()) +
@@ -2954,10 +2954,10 @@ IDE_Morph.prototype.projectMenu = function () {
     menu = new MenuMorph(this);
     menu.addItem('Project notes...', 'editProjectNotes');
     menu.addLine();
-    menu.addPair('New', 'createNewProject', '^N');
-    menu.addPair('Open...', 'openProjectsBrowser', '^O');
+    // menu.addPair('New', 'createNewProject', '^N');
+    // menu.addPair('Open...', 'openProjectsBrowser', '^O');
     menu.addPair('Save', "save", '^S');
-    menu.addItem('Save As...', 'saveProjectsBrowser');
+    // menu.addItem('Save As...', 'saveProjectsBrowser');
     menu.addLine();
     menu.addItem(
         'Import...',
