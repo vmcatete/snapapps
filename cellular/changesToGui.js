@@ -595,12 +595,14 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
                     }
                     else {
                         myself.showMessage('Failed to save: ' + xhr.responseText);
+                        Trace.logErrorMessage(xhr.responseText);
                     }
                 }
                 xhr.open('POST', 'logging/login/saveProject.php', true); 
                 xhr.send(JSON.stringify(projectInfo));
             } catch (err) {
                 myself.showMessage('Save failed: ' + err);
+                Trace.logError(err);
             }
         } else {
             
@@ -625,6 +627,7 @@ IDE_Morph.prototype.loadExampleProject = function(name) {
         ide.openProjectString(ide.getURL(resourceURL));
     }
     else {
+        Trace.logErrorMessage("Example project doesn't exist.");
         return false;
     }
 }
@@ -646,6 +649,7 @@ IDE_Morph.prototype.loadLastSavedProject = function(userID) {
                 if (xhr.status === 200) {
                     if (xhr.responseText.length === 0) {
                         myself.showMessage("You don't have a saved project.");
+                        Trace.logErrorMessage("No saved project.", userID);
                     }
                     else {
                         myself.openProjectString(xhr.responseText);
@@ -653,12 +657,14 @@ IDE_Morph.prototype.loadLastSavedProject = function(userID) {
                 }
                 else {
                     myself.showMessage('Failed to load saved project: ' + xhr.responseText);
+                    Trace.logErrorMessage(xhr.responseText);
                 }
             }
             xhr.open('POST', 'logging/login/getProject.php', true); 
             xhr.send(JSON.stringify(projectInfo));
         } catch (err) {
             myself.showMessage('Load saved project failed: ' + err);
+            Trace.logError(err);
         }
     } else {
         
@@ -668,6 +674,7 @@ IDE_Morph.prototype.loadLastSavedProject = function(userID) {
 }
 
 IDE_Morph.prototype.loadAssignment = function(assignmentID) {
+    Trace.log("IDE.loadAssignment", assignmentID);
     Assignment.setID(assignmentID);
     if (assignmentID === "lastSaved") {
         ide.loadLastSavedProject(window.userID);
