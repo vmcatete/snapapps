@@ -2955,7 +2955,7 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem('Project notes...', 'editProjectNotes');
     menu.addLine();
     // menu.addPair('New', 'createNewProject', '^N');
-    // menu.addPair('Open...', 'openProjectsBrowser', '^O');
+    menu.addPair('Open...', 'openProjectsBrowser', '^O');
     menu.addPair('Save', "save", '^S');
     // menu.addItem('Save As...', 'saveProjectsBrowser');
     menu.addLine();
