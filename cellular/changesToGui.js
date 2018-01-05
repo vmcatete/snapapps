@@ -546,7 +546,9 @@ IDE_Morph.prototype.removeSprite = function (object) {
 IDE_Morph.prototype.userSetStageSize = function () { };
 IDE_Morph.prototype._snapapps_showStageSizeOptions = false;
 
-
+/*************************************************************
+ * For Epidemic Simulatioin
+ *************************************************************/
 // Change saving feature to save to the last_saved table
 
 IDE_Morph.prototype.save = function() {
@@ -686,3 +688,159 @@ IDE_Morph.prototype.loadAssignment = function(assignmentID) {
     ide.controlBar.fixLayout();
 }
 
+IDE_Morph.prototype.cloudMenu = function() {
+    var menu,
+        myself = this,
+        world = this.world(),
+        pos = this.controlBar.cloudButton.bottomLeft(),
+        shiftClicked = (world.currentKey === 16);
+
+    menu = new MenuMorph(this);
+    if (shiftClicked) {
+        menu.addItem(
+            'url...',
+            'setCloudURL',
+            null,
+            new Color(100, 0, 0)
+        );
+        menu.addLine();
+    }
+    // if (!SnapCloud.username) {
+    //     menu.addItem(
+    //         'Login...',
+    //         'initializeCloud'
+    //     );
+    //     menu.addItem(
+    //         'Signup...',
+    //         'createCloudAccount'
+    //     );
+    //     menu.addItem(
+    //         'Reset Password...',
+    //         'resetCloudPassword'
+    //     );
+    // } else {
+    //     menu.addItem(
+    //         localize('Logout') + ' ' + SnapCloud.username,
+    //         'logout'
+    //     );
+    //     menu.addItem(
+    //         'Change Password...',
+    //         'changeCloudPassword'
+    //     );
+    // }
+    if (window.hasOwnProperty('userID') && window.userID) {
+        menu.addItem(
+            localize('Logout') + ' ' + window.userID,
+            'logout'
+        );
+    }
+    else {
+        menu.addItem(
+            'Login...',
+            'login'
+        );
+    }
+    if (shiftClicked) {
+        menu.addLine();
+        menu.addItem(
+            'export project media only...',
+            function () {
+                if (myself.projectName) {
+                    myself.exportProjectMedia(myself.projectName);
+                } else {
+                    myself.prompt('Export Project As...', function (name) {
+                        myself.exportProjectMedia(name);
+                    }, null, 'exportProject');
+                }
+            },
+            null,
+            this.hasChangedMedia ? new Color(100, 0, 0) : new Color(0, 100, 0)
+        );
+        menu.addItem(
+            'export project without media...',
+            function () {
+                if (myself.projectName) {
+                    myself.exportProjectNoMedia(myself.projectName);
+                } else {
+                    myself.prompt('Export Project As...', function (name) {
+                        myself.exportProjectNoMedia(name);
+                    }, null, 'exportProject');
+                }
+            },
+            null,
+            new Color(100, 0, 0)
+        );
+        menu.addItem(
+            'export project as cloud data...',
+            function () {
+                if (myself.projectName) {
+                    myself.exportProjectAsCloudData(myself.projectName);
+                } else {
+                    myself.prompt('Export Project As...', function (name) {
+                        myself.exportProjectAsCloudData(name);
+                    }, null, 'exportProject');
+                }
+            },
+            null,
+            new Color(100, 0, 0)
+        );
+        menu.addLine();
+        menu.addItem(
+            'open shared project from cloud...',
+            function () {
+                myself.prompt('Author nameâ€?', function (usr) {
+                    myself.prompt('Project name...', function (prj) {
+                        var id = 'Username=' +
+                            encodeURIComponent(usr.toLowerCase()) +
+                            '&ProjectName=' +
+                            encodeURIComponent(prj);
+                        myself.showMessage(
+                            'Fetching project\nfrom the cloud...'
+                        );
+                        SnapCloud.getPublicProject(
+                            id,
+                            function (projectData) {
+                                var msg;
+                                if (!Process.prototype.isCatchingErrors) {
+                                    window.open(
+                                        'data:text/xml,' + projectData
+                                    );
+                                }
+                                myself.nextSteps([
+                                    function () {
+                                        msg = myself.showMessage(
+                                            'Opening project...'
+                                        );
+                                    },
+                                    function () {nop(); }, // yield (Chrome)
+                                    function () {
+                                        myself.rawOpenCloudDataString(
+                                            projectData
+                                        );
+                                    },
+                                    function () {
+                                        msg.destroy();
+                                    }
+                                ]);
+                            },
+                            myself.cloudError()
+                        );
+
+                    }, null, 'project');
+                }, null, 'project');
+            },
+            null,
+            new Color(100, 0, 0)
+        );
+    }
+    menu.popup(world, pos);
+}
+
+IDE_Morph.prototype.logout = function() {
+    window.userID = null;
+    window.location.replace('logging/assignment.html');
+}
+
+IDE_Morph.prototype.login = function() {
+    window.location.replace('logging/assignment.html');
+}
