@@ -879,7 +879,7 @@ SnapSerializer.prototype.loadCustomBlocks = function (
     }, this);
 };
 
-SnapSerializer.prototype.loadCustomBlock = function(object, child, isGlobal) {
+SnapSerializer.prototype.loadCustomBlock = function(object, child, isGlobal, isDispatch) {
     var definition, names, inputs, vars, header, code, comment, i;
     if (child.tag !== 'block-definition') {
         return null;
@@ -899,14 +899,11 @@ SnapSerializer.prototype.loadCustomBlock = function(object, child, isGlobal) {
     definition.isGlobal = (isGlobal === true);
     if (isDispatch) {
         object.inheritedMethodsCache.push(definition);
+    } else {
         if (definition.isGlobal) {
             object.globalBlocks.push(definition);
         } else {
-            if (definition.isGlobal) {
-                object.globalBlocks.push(definition);
-            } else {
-                object.customBlocks.push(definition);
-            }
+            object.customBlocks.push(definition);
         }
     }
 
@@ -917,25 +914,6 @@ SnapSerializer.prototype.loadCustomBlock = function(object, child, isGlobal) {
     ).map(function (str) {
         return str.substr(1);
     });
-
-    definition.names = names;
-    inputs = child.childNamed('inputs');
-    if (inputs) {
-        i = -1;
-        inputs.children.forEach(function (child) {
-            var options = child.childNamed('options');
-            if (child.tag !== 'input') {
-                return;
-            }
-            i += 1;
-            definition.declarations[names[i]] = [
-                child.attributes.type,
-                child.contents,
-                options ? options.contents : undefined,
-                child.attributes.readonly === 'true'
-            ];
-        });
-    }
 
     definition.names = names;
     inputs = child.childNamed('inputs');
