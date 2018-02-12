@@ -566,7 +566,9 @@ IDE_Morph.prototype.saveProject = function (name, table) {
     var myself = this;
     this.nextSteps([
         function () {
-            myself.showMessage('Saving...');
+            if (table === "last_saved") {
+                myself.showMessage('Saving...');
+            }
         },
         function () {
             myself.rawSaveProject(name, table);
@@ -593,12 +595,14 @@ IDE_Morph.prototype.rawSaveProject = function (name, table) {
                 };
 
                 xhr.onreadystatechange = function() {
-                    if (xhr.status === 200) {
-                        myself.showMessage('Saved!', 1);
-                    }
-                    else if (xhr.status > 0) {
-                        myself.showMessage('Failed to save: ' + xhr.responseText);
-                        Trace.logErrorMessage(xhr.responseText);
+                    if (table === "last_saved") {
+                        if (xhr.status === 200) {
+                            myself.showMessage('Saved!', 1);
+                        }
+                        else if (xhr.status > 0) {
+                            myself.showMessage('Failed to save: ' + xhr.responseText);
+                            Trace.logErrorMessage(xhr.responseText);
+                        }
                     }
                 }
                 xhr.open('POST', 'logging/login/saveProject.php', true); 

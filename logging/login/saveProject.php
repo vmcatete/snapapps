@@ -26,7 +26,7 @@ try {
     $table = $projectInfo['table'];
 
     if ($table) {
-        $query = "INSERT INTO $lastSavedTable (time, assignmentID, userID, data)
+        $query = "INSERT INTO $table (time, assignmentID, userID, data)
             VALUES('$timestamp', '$assignmentID', '$userID', '$data');";
     }
     else {

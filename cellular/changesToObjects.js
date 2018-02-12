@@ -2863,6 +2863,13 @@ StageMorph.prototype.fireKeyEvent = function (key) {
 
 StageMorph.prototype.uberFireGreenFlagEvent = StageMorph.prototype.fireGreenFlagEvent;
 StageMorph.prototype.fireGreenFlagEvent = function () {
+    // add logging here
+    if (window.assignmentID) {
+        this.parent.saveProject(window.assignmentID, "run_script");
+    } else {
+        this.parent.showMessage("You need to set a project name first.", 2);
+    }
+
     return removeNulls(this.uberFireGreenFlagEvent());
 };
 
