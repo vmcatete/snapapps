@@ -555,13 +555,13 @@ IDE_Morph.prototype.save = function() {
     this.source = 'cloud';
     
     if (window.assignmentID) {
-        this.saveProject(window.assignmentID);
+        this.saveProject(window.assignmentID, "last_saved");
     } else {
         this.showMessage("You need to set a project name first.", 2);
     }
 }
 
-IDE_Morph.prototype.saveProject = function (name) {
+IDE_Morph.prototype.saveProject = function (name, table) {
     Trace.log('IDE.saveProject', name);
     var myself = this;
     this.nextSteps([
@@ -569,12 +569,12 @@ IDE_Morph.prototype.saveProject = function (name) {
             myself.showMessage('Saving...');
         },
         function () {
-            myself.rawSaveProject(name);
+            myself.rawSaveProject(name, table);
         }
     ]);
 };
 
-IDE_Morph.prototype.rawSaveProject = function (name) {
+IDE_Morph.prototype.rawSaveProject = function (name, table) {
     var myself = this;
     
     if (name) {
@@ -588,7 +588,8 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
                     'userID': window.userID,
                     'time': Date.now(),
                     'assignmentID': Assignment.getID(),
-                    'data': myself.serializer.serialize(myself.stage)
+                    'data': myself.serializer.serialize(myself.stage),
+                    'table': table
                 };
 
                 xhr.onreadystatechange = function() {
@@ -648,18 +649,20 @@ IDE_Morph.prototype.loadLastSavedProject = function(userID) {
             };
 
             xhr.onreadystatechange = function() {
-                if (xhr.status === 200) {
-                    if (xhr.responseText.length === 0) {
-                        myself.showMessage("You don't have a saved project.");
-                        Trace.logErrorMessage("No saved project.", userID);
+                if (this.readyState === 4) {
+                    if (xhr.status === 200) {
+                        if (xhr.responseText.length === 0) {
+                            myself.showMessage("You don't have a saved project.");
+                            Trace.logErrorMessage("No saved project.", userID);
+                        }
+                        else {
+                            myself.openProjectString(xhr.responseText);
+                        }
                     }
                     else {
-                        myself.openProjectString(xhr.responseText);
+                        myself.showMessage('Failed to load saved project: ' + xhr.responseText);
+                        Trace.logErrorMessage(xhr.responseText);
                     }
-                }
-                else {
-                    myself.showMessage('Failed to load saved project: ' + xhr.responseText);
-                    Trace.logErrorMessage(xhr.responseText);
                 }
             }
             xhr.open('POST', 'logging/login/getProject.php', true); 
