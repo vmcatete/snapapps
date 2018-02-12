@@ -23,10 +23,16 @@ try {
     $timestamp = date("Y-m-d H:i:s", $projectInfo['time'] / 1000);
     $data = $projectInfo['data'];
     $assignmentID = $mysqli->escape_string($projectInfo['assignmentID']);
+    $table = $projectInfo['table'];
 
+    if ($table) {
+        $query = "INSERT INTO $lastSavedTable (time, assignmentID, userID, data)
+            VALUES('$timestamp', '$assignmentID', '$userID', '$data');";
+    }
+    else {
+        die("Saving failed: no table name provided.");
+    }
 
-    $query = "INSERT INTO $lastSavedTable (time, assignmentID, userID, data)
-        VALUES('$timestamp', '$assignmentID', '$userID', '$data');";
 
     if (!$mysqli->query($query)) {
         // No need to retry, so don't return an error, but display the
