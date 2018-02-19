@@ -2044,8 +2044,16 @@ ReporterBlockMorph.prototype.toScriptXML = function (
 };
 
 CustomCommandBlockMorph.prototype.toBlockXML = function (serializer) {
-    var scope = (this.definition.isGlobal || !this.definition.receiver) ? undefined
+    var scope; 
+    
+    if (this.definition) {
+        scope = (this.definition.isGlobal || !this.definition.receiver) ? undefined
         : this.definition.receiver.name;
+    }
+    else {
+        this.isGlobal ? undefined : 'local';
+    }
+    
     return serializer.format(
         '<custom-block id="@" s="@"%>%%%%</custom-block>',
         this.id,
