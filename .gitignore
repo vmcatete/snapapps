@@ -3,3 +3,5 @@ build
 node_modules
 *.swp
 .tern-port
+config.js
+config.php
