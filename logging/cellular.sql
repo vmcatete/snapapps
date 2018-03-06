@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS trace (
   projectID varchar(40) NOT NULL,
   sessionID varchar(40) NOT NULL,
   browserID varchar(40) NOT NULL,
-  code text NOT NULL,
+  code mediumtext NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

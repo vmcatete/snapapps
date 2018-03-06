@@ -15,7 +15,7 @@ DBLogger.prototype.storeMessages = function(logs) {
         'logs': logs,
     };
     // Approximate max length of a TEXT field in MySQL
-    var maxCodeLength = 65000;
+    var maxCodeLength = 16777000;
     var maxMessageLength = 64;
     logs.forEach(function(log) {
         if (log.code && JSON.stringify(log.code).length > maxCodeLength) {
