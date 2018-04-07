@@ -4,13 +4,45 @@
 // 'test' and 'view' will not show up on the selection menu
 // Assignment name needs to be the same as example name in EXAMPLES file
 window.assignments = {
-    'lastSaved': {
-        name: 'Last Saved Project',
-        hint: 'From previous session',
-    },
-    'epidemic2Starter': {
-        name: 'Epidemic Day 2 Starter',
-        hint: 'Topic for today',
+    // 'epidemicEnv': {
+    //     name: 'Epidemic Environment Factors',
+    //     hint: 'Effect of the Environment'
+    // },
+    // 'epidemic2Starter': {
+    //     name: 'Epidemic Day 2 Starter',
+    //     hint: 'Topic for Day 2',
+    // },
+    // 'cellularTutorialStarter': {
+    //     name: 'Cellular Tutorial Starter',
+    //     hint: 'Tutorial Starter Kit',
+    // },
+    // 'epidemic2Final': {
+    //     name: 'Epidemic Day 2 Final',
+    //     hint: 'Topic for Day 2',
+    // },
+    // 'epidemic3Starter': {
+    //     name: 'Epidemic Day 3 Starter',
+    //     hint: 'Topic for Day 3',
+    // },
+    // 'epidemic3Final': {
+    //     name: 'Epidemic Day 3 Final',
+    //     hint: 'Topic for Day 3',
+    // },
+    // 'epidemic5Starter': {
+    //     name: 'Epidemic Day 5 Starter',
+    //     hint: 'Topic for Day 5',
+    // },
+    // 'epidemic5Final': {
+    //     name: 'Epidemic Day 5 Final',
+    //     hint: 'Topic for Day 5',
+    // },
+    // 'lastSaved': {
+    //     name: 'Last Saved Project',
+    //     hint: 'The last time you pressed save',
+    // },
+    'none': {
+        name: 'None',
+        hint: 'Just using cellular',
     },
     'test': {
         name: 'Testing',
@@ -39,7 +71,7 @@ window.allowNewUser = false;
 // Specify the login header's logo and title text
 window.loginHeader = {
     logo: 'login/NCStateLogoWhite.png',
-    description: 'CSC 200 | Introduction To Computers and Their Uses'
+    description: 'Epidemics Simulation Activities'
 };
 
 // Create the logger you want to use on this snap deployment
