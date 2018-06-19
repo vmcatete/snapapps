@@ -129,7 +129,7 @@ include '../config.php';
 				}
 			</script>
 			<div id="sidebar">
-				 <iframe id="snap" width="100%" height="100%" src="../../snap.html?assignment=view"></iframe>
+				 <iframe id="snap" width="100%" height="100%" src="../../cellular.html?assignment=view"></iframe>
 			</div>
 			<div id="content">
 				<div style="overflow-y: scroll; height: 100%;">
