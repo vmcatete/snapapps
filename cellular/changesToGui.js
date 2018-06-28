@@ -622,6 +622,7 @@ IDE_Morph.prototype.rawSaveProject = function (name, table) {
 IDE_Morph.prototype.loadExampleProject = function(name) {
     Trace.log("IDE.loadExampleProject", name);
     if (!name) return;
+    if (name === "Viewing") return;
     var examples = ide.getMediaList("Examples");
     var resourceURL = null;
     examples.forEach(function(example) {
@@ -795,7 +796,7 @@ IDE_Morph.prototype.cloudMenu = function() {
         menu.addItem(
             'open shared project from cloud...',
             function () {
-                myself.prompt('Author nameâ€?', function (usr) {
+                myself.prompt('Author nameï¿½?', function (usr) {
                     myself.prompt('Project name...', function (prj) {
                         var id = 'Username=' +
                             encodeURIComponent(usr.toLowerCase()) +
