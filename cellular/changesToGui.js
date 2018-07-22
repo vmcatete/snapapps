@@ -795,7 +795,7 @@ IDE_Morph.prototype.cloudMenu = function() {
         menu.addItem(
             'open shared project from cloud...',
             function () {
-                myself.prompt('Author nameâ€?', function (usr) {
+                myself.prompt('Author nameï¿½?', function (usr) {
                     myself.prompt('Project name...', function (prj) {
                         var id = 'Username=' +
                             encodeURIComponent(usr.toLowerCase()) +

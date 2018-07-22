@@ -387,7 +387,11 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     if (model.stage.attributes.name) {
         project.stage.name = model.stage.attributes.name;
     }
-    if (model.stage.attributes.guid) {
+    // We store the project guid and assignment in stage because there is no
+    // serialized 'project' object.
+    if (model.project.attributes.guid) {
+        project.stage.guid = model.project.attributes.guid;
+    } else if (model.stage.attributes.guid) {
         project.stage.guid = model.stage.attributes.guid;
     }
     if (model.stage.attributes.scheduled === 'true') {
