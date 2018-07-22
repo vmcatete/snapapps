@@ -46,12 +46,12 @@ include '../config.php';
 		</style>
 		<script type="text/javascript">
 			function loadSnap(id, project) {
-				var assignment = "<?php echo $_GET['assignment']; ?>";
+				// var assignment = "</?php echo $_GET['assignment']; ?>"; 
 				var xhr = new XMLHttpRequest();
 				xhr.onreadystatechange = function() {
 					if (xhr.readyState==4 && xhr.status==200) {
 						var contentWindow = document.getElementById('snap').contentWindow;
-						contentWindow.Assignment.setID(assignment);
+						// contentWindow.Assignment.setID(assignment);
 						contentWindow.ide.droppedText(xhr.responseText);
 					}
 				};
