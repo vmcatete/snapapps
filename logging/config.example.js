@@ -65,6 +65,12 @@ window.allowNewUser = true;
 // Specify to override the default Snap cloud URL
 // window.snapCloudURL = 'https://snap.apps.miosoft.com/SnapCloud';
 
+// Specify login instructions such as which login ID to use.
+window.unityID = {
+    instruction: 'Sign in with your first name',
+    hint: '( This is the same as your first name )'
+}
+
 // Specify the login header's logo and title text
 window.loginHeader = {
     logo: 'login/NCStateLogoWhite.png',

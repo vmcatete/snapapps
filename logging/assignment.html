@@ -19,8 +19,8 @@
 							<div class="belt">
 							    <div class="state state-1">
 									<div>
-										<h1>Sign in with your assigned ID</h1>
-										<div id="unityID-hint"> ( This is the same id for your surveys )</div>
+										<h1 id="unityID-instruction">Sign in with your Unity ID</h1>
+										<div id="unityID-hint"> ( This is the ID in your email address )</div>
 									</div>
 									<div id="form-id">
 										<form id="form-flex-Parent">
@@ -55,6 +55,10 @@
 		<script type="text/javascript" src="../isnap/lib/jquery.cookie.js"></script>
 
 		<script type="text/javascript">
+			// Adding custom login ID instruction
+			$('#unityID-instruction').text(window.unityID.instruction);
+			$('#unityID-hint').text(window.unityID.hint);
+
 			var ID_COOKIE = 'snapIDHash', COOKIE_PATH = '/';
 			var preselectedAssignment = getSearchParameters()['assignment'];
 			var assignments = window.assignments;
