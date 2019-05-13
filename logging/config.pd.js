@@ -6,44 +6,14 @@ window.assignments = {
     'none': {
         name: 'None',
         hint: 'just using Snap',
+    },
+    'Day1': {
+        name: 'Day 1',
+        hint: 'coding session',
         quizURLs: {
             quiz1: 'https://ncsu.qualtrics.com/jfe/form/SV_7NXEVgEDMpX2zxX',
             quiz2: 'https://ncsu.qualtrics.com/jfe/form/SV_7ail5FmXLAGPjvL'
         }
-    },
-    'lightsCameraActionHW': {
-        name: 'Lights, Camera, Action!',
-        hint: 'Homework 1',
-    },
-    'polygonMakerLab': {
-        name: 'Polygon Maker',
-        hint: 'In Lab Activity 2',
-        hints: true,
-    },
-    'squiralHW': {
-        name: 'Squiral',
-        hint: 'Homework 2',
-        hints: true,
-    },
-    'guess1Lab': {
-        name: 'Guessing Game Part 1',
-        hint: 'In Lab Activity 3',
-        hints: true,
-    },
-    'guess2HW': {
-        name: 'Guessing Game Part 2',
-        hint: 'Homework 3',
-        hints: true,
-        prequel: 'guess1Lab',
-    },
-    'guess3Lab': {
-        name: 'Guessing Game Part 3',
-        hint: 'In Lab Activity 4',
-        prequel: 'guess2HW',
-    },
-    'project': {
-        name: 'SNAP Project',
-        hint: 'Project Deliverable 1',
     },
     'test': {
         name: 'Testing',
@@ -58,7 +28,7 @@ window.assignments = {
 // snap.html?assignment=id
 window.requireAssignment = true;
 // Allows the user to change their assignment by clicking on project title
-window.allowChangeAssignment = true;
+window.allowChangeAssignment = false;
 
 // If true, users are required to login before they can use the system
 window.requireLogin = true;
