@@ -11832,23 +11832,28 @@ WorldMorph.prototype.doOneCycle = function () {
 };
 
 WorldMorph.prototype.fillPage = function () {
-    var clientHeight = window.innerHeight,
-        clientWidth = window.innerWidth,
+    var fillParent = true;
+
+    var clientHeight = fillParent ? this.worldCanvas.offsetHeight :
+            window.innerHeight,
+        clientWidth = fillParent ? this.worldCanvas.offsetWidth :
+            window.innerWidth,
         myself = this;
 
-    this.worldCanvas.style.position = "absolute";
-    this.worldCanvas.style.left = "0px";
-    this.worldCanvas.style.right = "0px";
-    this.worldCanvas.style.width = "100%";
-    this.worldCanvas.style.height = "100%";
-
-    if (document.documentElement.scrollTop) {
-        // scrolled down b/c of viewport scaling
-        clientHeight = document.documentElement.clientHeight;
-    }
-    if (document.documentElement.scrollLeft) {
-        // scrolled left b/c of viewport scaling
-        clientWidth = document.documentElement.clientWidth;
+    if (!fillParent) {
+            this.worldCanvas.style.position = "absolute";
+            this.worldCanvas.style.left = "0px";
+            this.worldCanvas.style.right = "0px";
+            this.worldCanvas.style.width = "100%";
+            this.worldCanvas.style.height = "100%";
+        if (document.documentElement.scrollTop) {
+            // scrolled down b/c of viewport scaling
+            clientHeight = document.documentElement.clientHeight;
+        }
+        if (document.documentElement.scrollLeft) {
+            // scrolled left b/c of viewport scaling
+            clientWidth = document.documentElement.clientWidth;
+        }
     }
     if (this.worldCanvas.width !== clientWidth) {
         this.worldCanvas.width = clientWidth;
