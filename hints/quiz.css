@@ -4,11 +4,6 @@ html, body {
     width: 100%;
 }
 
-#quiz-bar {
-    background-color: #474747;
-    height: 40px;
-}
-
 #world {
     height: 100%;
     flex: 1, 1, auto;
@@ -22,6 +17,11 @@ html, body {
     background-color: blue;
 }
 
+#quiz-bar {
+    background-color: #474747;
+    height: 40px;
+}
+
 #quiz-title {
     float: left;
     height: 100%;
@@ -29,6 +29,10 @@ html, body {
     margin-left: 10px;
     margin-right: 10px;
     color: white;
+}
+
+.ui-dialog-titlebar-close {
+    visibility: hidden;
 }
 
 #quiz-buttons {
