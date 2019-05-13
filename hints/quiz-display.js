@@ -9,15 +9,35 @@ function QuizDisplay() {
 
 QuizDisplay.prototype.initDisplay = function() {
     console.log("init quiz display");
-    var quizURLs = this.assignment.quizURLs;
 
-    if (quizURLs == null) return;
+    var container = document.getElementById("container");
+    var canvas = document.getElementById("world");
+    var quizBarDiv = document.createElement("div");
+    var quizTitleDiv = document.createElement("div");
+    var quizButtonsDiv = document.createElement("div");
+
+    quizBarDiv.setAttribute("id", "quiz-bar");
+    quizTitleDiv.setAttribute("id", "quiz-title");
+    quizTitleDiv.innerText = window.defaultQuizTitle;
+    quizButtonsDiv.setAttribute("id", "quiz-buttons");
+    quizBarDiv.appendChild(quizTitleDiv);
+    quizBarDiv.appendChild(quizButtonsDiv);
+    container.insertBefore(quizBarDiv, canvas);
+
+    this.quizBarDiv = quizBarDiv
+    this.quizTitleDiv = quizTitleDiv;
+    this.quizButtonsDiv = quizButtonsDiv;
+
+    var assignment = Assignment.get();
+    if (assignment.quizURLs) {
+        this.loadQuizButtons(assignment.quizURLs);
+    }
+}
+
+QuizDisplay.prototype.loadQuizButtons = function(quizURLs) {
+    this.removeAllButtons();
 
     var myself = this;
-    this.surveyAttempted = [];
-    this.surveyButtons = [];
-    var goalbar = document.getElementById("goalbar");
-    var buttonIndex = 0;
 
     Object.keys(quizURLs).forEach(function(key) {
         var button = document.createElement("input");
@@ -25,44 +45,44 @@ QuizDisplay.prototype.initDisplay = function() {
         button.setAttribute("class", "button");
         button.setAttribute("value", key);
         button.setAttribute("onclick", "showSurvey(this)");
-        button.setAttribute("button-index", buttonIndex++);
-        goalbar.appendChild(button);
-        myself.surveyAttempted.push(false);
-        myself.surveyButtons.push(button);
+        button.quizURL = quizURLs[key];
+        button.clicked = false;
+        myself.quizButtonsDiv.appendChild(button);
     });
 }
 
+QuizDisplay.prototype.removeAllButtons = function() {
+    while (this.quizButtonsDiv.hasChildNodes()) {
+        var node = this.quizButtonsDiv.childNodes[0];
+        this.quizButtonsDiv.removeChild(node);
+    }
+}
+
 function showSurvey(button) {
-    console.log("show survey clicked");
+    console.log("show survey clicked: " + button.value);
     var response = confirm("Are you sure you want to open " + button.value + "? \n You ONLY have 1 attempt.");
 
     if (!response) return;
 
-    var quizURLs = Assignment.get().quizURLs;
-    if (quizURLs == null) return;
+    button.clicked = true;
+    window.quizDisplay.disableButtons();
 
-
-    var quizDisplay = window.quizDisplay;
-
-    quizDisplay.disableButtons();
-    quizDisplay.surveyAttempted[button.getAttribute("button-index")] = true;
-
-    SurveyDialog.show(quizURLs[button.value], function() {
-        console.log("survey complete");
+    SurveyDialog.show(button.quizURL, function() {
+        console.log("survey complete" + button.value);
         quizDisplay.enableButtons();
     }, false);
 }
 
 QuizDisplay.prototype.enableButtons = function() {
-    for (var i = 0; i < this.surveyAttempted.length; i++) {
-        if (!this.surveyAttempted[i]) {
-            this.surveyButtons[i].disabled = false;
+    this.quizButtonsDiv.childNodes.forEach(function(child) {
+        if (!child.clicked) {
+            child.disabled = false;
         }
-    }
+    });
 }
 
 QuizDisplay.prototype.disableButtons = function() {
-    this.surveyButtons.forEach(function(button) {
+    this.quizButtonsDiv.childNodes.forEach(function(button) {
         button.disabled = true;
     });
 }
