@@ -5,20 +5,22 @@ html, body {
 }
 
 #world {
-    height: 100%;
-    flex: 1, 1, auto;
-    background-color: green;
+    position: absolute;
+    top: 40px;
+    height: calc(100% - 40px);
+    width:100%;
 }
 
 #container {
     height: 100%;
-    display: flex;
-    flex-direction: column;
     background-color: blue;
 }
 
 #quiz-bar {
+    position: absolute;
     background-color: #474747;
+    top: 0;
+    width: 100%;
     height: 40px;
 }
 

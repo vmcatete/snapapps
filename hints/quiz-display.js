@@ -141,8 +141,8 @@ extend(XML_Element, 'parseString', function(base, string) {
 WorldMorph.prototype.fillPage = function () {
     var fillParent = true;
 
-    var clientHeight = (fillParent ? this.worldCanvas.offsetHeight :
-            window.innerHeight) - 40,
+    var clientHeight = fillParent ? this.worldCanvas.offsetHeight :
+            window.innerHeight,
         clientWidth = fillParent ? this.worldCanvas.offsetWidth :
             window.innerWidth,
         myself = this;
