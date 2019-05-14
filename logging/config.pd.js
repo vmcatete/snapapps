@@ -11,8 +11,9 @@ window.assignments = {
         name: 'Day 1',
         hint: 'coding session',
         quizURLs: {
-            quiz1: 'https://ncsu.qualtrics.com/jfe/form/SV_7NXEVgEDMpX2zxX',
-            quiz2: 'https://ncsu.qualtrics.com/jfe/form/SV_7ail5FmXLAGPjvL'
+            'Explay/Modify Quiz': 'https://ncsu.qualtrics.com/jfe/form/SV_9vPJ82JDCWM13cp',
+            'Buggy Code Quiz': 'https://ncsu.qualtrics.com/jfe/form/SV_06aIH6ORtHqGfAx',
+            'Parsons Problem Quiz': 'https://ncsu.qualtrics.com/jfe/form/SV_cUt9X0zTUJNnY6F'
         }
     },
     'test': {
