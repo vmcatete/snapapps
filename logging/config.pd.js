@@ -52,7 +52,7 @@ window.unityID = {
 // Specify the login header's logo and title text
 window.loginHeader = {
     logo: 'login/NCStateLogoWhite.png',
-    description: 'CSC 200 | Introduction To Computers and Their Uses'
+    description: 'Infusing Computing Professional Development'
 };
 
 // Set the quiz-bar title
