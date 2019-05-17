@@ -188,14 +188,12 @@
 					'new': window.allowNewUser ? $('#input-new').prop('checked') : false,
 				}, function(data, status) {
 					var response;
-					console.log(data);
 					try {
 						response = JSON.parse(data);
 					} catch(e) {
 					    skipLogIn(true);
 						return;
 					}
-					console.log(response);
 					if (response.newUser || response.newUserPartner) {
 						if (response.newUser) {
 							$('#display-id').html(id);
