@@ -79,6 +79,11 @@
 					select.add(option);
 				}
 			}
+
+			if (window.isPairProgramming) {
+				$("#input-id").after('<input id="input-partner-id" name="partner-id" placeholder="Enter your partner\'s ID" required pattern="[A-Za-z0-9_]+">');
+			}
+
 			// Adding new user notification based on if new user is allowed
 			if (window.allowNewUser) {
 				$('#confirm-new').append('<p class="alert">\
@@ -159,6 +164,59 @@
 				};
 			}
 			function tryLogin() {
+				if (window.isPairProgramming) {
+					return tryPairLogin();
+				}
+				else {
+					return trySingleLogin();
+				}
+			}
+
+			function tryPairLogin() {
+				// Get the id and ensure it has a value
+				var id = $('#input-id').val().trim();
+				var partner_id = $('#input-partner-id').val().trim();
+
+				if (id.length === 0) return;
+
+				// Defocus the login input so Chrome will hide autocomplete
+				$('#input-id').blur();
+				$('#display-id').html(id);
+				$.post('login/login.php', {
+					'id': id,
+					'partner_id': partner_id,
+					'new': window.allowNewUser ? $('#input-new').prop('checked') : false,
+				}, function(data, status) {
+					var response;
+					console.log(data);
+					try {
+						response = JSON.parse(data);
+					} catch(e) {
+					    skipLogIn(true);
+						return;
+					}
+					console.log(response);
+					if (response.newUser || response.newUserPartner) {
+						if (response.newUser) {
+							$('#display-id').html(id);
+						}
+						else if (response.newUserPartner) {
+							$('#display-id').html(partner_id);
+						}
+						$('#confirm-new').removeClass('getFrames2');
+						$('#confirm-new').addClass('getFrames');
+						$("#confirm-new").css("margin-bottom", "30px");
+						return;
+					}
+					$('#display-id-loggedIN').html(id + '/' + partner_id);
+					setUserID(id + '/' + partner_id);
+				}).fail(function() {
+					skipLogIn(true);
+				});
+				return false;
+			}
+
+			function trySingleLogin() {
 				// Get the id and ensure it has a value
 				var id = $('#input-id').val().trim();
 				if (id.length === 0) return;
@@ -189,6 +247,7 @@
 				});
 				return false;
 			}
+
 			$('#form-flex-Parent').submit(tryLogin);
 			$('#form-assignment')[0].action += document.location.hash;
 			if (!window.requireLogin) {

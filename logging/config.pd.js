@@ -35,15 +35,18 @@ window.allowChangeAssignment = false;
 window.requireLogin = true;
 
 // If true, allow new user to login
-window.allowNewUser = true;
+window.allowNewUser = false;
+
+// If true, if in pair
+window.isPairProgramming = true;
 
 // Specify to override the default Snap cloud URL
 // window.snapCloudURL = 'https://snap.apps.miosoft.com/SnapCloud';
 
 // Specify login instructions such as which login ID to use.
 window.unityID = {
-    instruction: 'Sign in with your first name',
-    hint: '( This is the same as your first name )'
+    instruction: 'Sign in with your pre-assigned ID',
+    hint: '( This was sent to you via email )'
 }
 
 // Specify the login header's logo and title text

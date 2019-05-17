@@ -14,5 +14,5 @@ $salt = "random static salt of at least 22 characters";
 $hashUserID = false;
 
 // Choose a user table, could be the same as the "trace" table if allow new user
-$user_table = "trace";
+$user_table = "users";
 ?>
