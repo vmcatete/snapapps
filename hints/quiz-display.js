@@ -1,15 +1,26 @@
-require('../logging/survey-dialog.js');
+require('../logging/survey-dialog-old.js/index.js');
 require('../logging/config.js');
 
 function QuizDisplay() {
     this.assignment = Assignment.get();
+
+    this.quizDialog = new SurveyDialog('quiz', 'Questions');
+
     window.quizDisplay = this;
-    console.log(this.assignment);
 }
 
 QuizDisplay.prototype.initDisplay = function() {
     console.log("init quiz display");
 
+    this.createQuizBar();
+
+    var assignment = Assignment.get();
+    if (assignment.quizURLs) {
+        this.loadQuizButtons(assignment.quizURLs);
+    }
+}
+
+QuizDisplay.prototype.createQuizBar = function() {
     var container = document.getElementById("container");
     var canvas = document.getElementById("world");
     var quizBarDiv = document.createElement("div");
@@ -27,11 +38,6 @@ QuizDisplay.prototype.initDisplay = function() {
     this.quizBarDiv = quizBarDiv
     this.quizTitleDiv = quizTitleDiv;
     this.quizButtonsDiv = quizButtonsDiv;
-
-    var assignment = Assignment.get();
-    if (assignment.quizURLs) {
-        this.loadQuizButtons(assignment.quizURLs);
-    }
 }
 
 QuizDisplay.prototype.loadQuizButtons = function(quizURLs) {
@@ -44,7 +50,7 @@ QuizDisplay.prototype.loadQuizButtons = function(quizURLs) {
         button.setAttribute("type","button");
         button.setAttribute("class", "button");
         button.setAttribute("value", key);
-        button.setAttribute("onclick", "showSurvey(this)");
+        button.setAttribute("onclick", "window.quizDisplay.showSurvey(this)");
         button.quizURL = quizURLs[key];
         button.clicked = false;
         myself.quizButtonsDiv.appendChild(button);
@@ -58,18 +64,20 @@ QuizDisplay.prototype.removeAllButtons = function() {
     }
 }
 
-function showSurvey(button) {
+QuizDisplay.prototype.showSurvey = function(button) {
     console.log("show survey clicked: " + button.value);
-    var response = confirm("Are you sure you want to open " + button.value + "? \n You ONLY have 1 attempt.");
 
+    var myself = this;
+
+    var response = confirm("Are you sure you want to open " + button.value + "? \n You ONLY have 1 attempt.");
     if (!response) return;
 
     button.clicked = true;
-    window.quizDisplay.disableButtons();
+    this.disableButtons();
 
-    SurveyDialog.show(button.quizURL, function() {
+    this.quizDialog.show(button.quizURL, function() {
         console.log("survey complete" + button.value);
-        quizDisplay.enableButtons();
+        myself.enableButtons();
     }, false);
 }
 
