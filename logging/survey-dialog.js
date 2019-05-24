@@ -43,7 +43,7 @@ SurveyDialog.prototype.createDialogDiv = function() {
     body.append(divDialog);
 }
 
-SurveyDialog.prototype.show = function(baseURL, callback, fullscreen) {
+SurveyDialog.prototype.show = function(baseURL, callback, fullscreen, allowClose = false) {
     var myself = this;
 
     // In case there's a latent callback, go ahead and call it
@@ -73,7 +73,24 @@ SurveyDialog.prototype.show = function(baseURL, callback, fullscreen) {
     });
     $('#' + this.idIframe).attr('src', url);
     $('#' + this.idDialog).dialog( 'open' );
+
+    this.allowClose(allowClose);
 };
+
+SurveyDialog.prototype.allowClose = function(allowClose) {
+    if (allowClose != true && allowClose != false) return;
+    var visibility = 'hidden';
+    if (allowClose) {
+        visibility = 'visible';
+    }
+    document.getElementById(this.idDialog).parentElement.getElementsByClassName('ui-dialog-titlebar-close')[0].style.visibility = visibility;
+}
+
+SurveyDialog.prototype.setOption = function(key, value) {
+    // No Objects allowed
+    if (Object(key)  === key || Object(value) === value) return;
+    $('#' + this.dialogID).dialog('option', key, value);
+}
 
 SurveyDialog.prototype.setParam = function(key, value) {
     // No Objects allowed

@@ -33,9 +33,9 @@ html, body {
     color: white;
 }
 
-.ui-dialog-titlebar-close {
+/* .ui-dialog-titlebar-close {
     visibility: hidden;
-}
+} */
 
 #quiz-buttons {
     height: 100%;
