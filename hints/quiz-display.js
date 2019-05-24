@@ -13,6 +13,7 @@ QuizDisplay.prototype.initDisplay = function() {
     console.log("init quiz display");
 
     this.createQuizBar();
+    this.loadHelpButtons();
 
     var assignment = Assignment.get();
     if (assignment.quizURLs) {
@@ -25,19 +26,77 @@ QuizDisplay.prototype.createQuizBar = function() {
     var canvas = document.getElementById("world");
     var quizBarDiv = document.createElement("div");
     var quizTitleDiv = document.createElement("div");
+    var helpDiv = document.createElement("div");
     var quizButtonsDiv = document.createElement("div");
 
     quizBarDiv.setAttribute("id", "quiz-bar");
     quizTitleDiv.setAttribute("id", "quiz-title");
     quizTitleDiv.innerText = window.defaultQuizTitle;
     quizButtonsDiv.setAttribute("id", "quiz-buttons");
+    helpDiv.setAttribute("id", "help");
     quizBarDiv.appendChild(quizTitleDiv);
     quizBarDiv.appendChild(quizButtonsDiv);
+    quizBarDiv.appendChild(helpDiv);
     container.insertBefore(quizBarDiv, canvas);
 
     this.quizBarDiv = quizBarDiv
     this.quizTitleDiv = quizTitleDiv;
     this.quizButtonsDiv = quizButtonsDiv;
+    this.helpDiv = helpDiv;
+}
+
+QuizDisplay.prototype.loadHelpButtons = function() {
+    var needHelpButton = document.createElement("input");
+    var gotHelpButton = document.createElement("input");
+    var cancelHelpButton = document.createElement("input");
+
+    needHelpButton.setAttribute("value", "I need help");
+    needHelpButton.setAttribute("id", "need-help");
+    needHelpButton.setAttribute("type", "button");
+    needHelpButton.setAttribute("class", "help-button");
+    needHelpButton.setAttribute("onclick", "window.quizDisplay.helpButtonClicked(this)");
+
+    gotHelpButton.setAttribute("value", "I got help");
+    gotHelpButton.setAttribute("id", "got-help");
+    gotHelpButton.setAttribute("type", "button");
+    gotHelpButton.setAttribute("class", "help-button");
+    gotHelpButton.setAttribute("onclick", "window.quizDisplay.helpButtonClicked(this)");
+
+
+    cancelHelpButton.setAttribute("value", "Figured out myself");
+    cancelHelpButton.setAttribute("id", "cancel-help");
+    cancelHelpButton.setAttribute("type", "button");
+    cancelHelpButton.setAttribute("class", "help-button");
+    cancelHelpButton.setAttribute("onclick", "window.quizDisplay.helpButtonClicked(this)");
+
+
+    this.helpDiv.appendChild(needHelpButton);
+    this.helpDiv.appendChild(gotHelpButton);
+    this.helpDiv.appendChild(cancelHelpButton);
+
+    $('#got-help').hide();
+    $('#cancel-help').hide();
+}
+
+QuizDisplay.prototype.helpButtonClicked = function(button) {
+    if (button.getAttribute("id") == "need-help") {
+        console.log("need-help clicked");
+        $('#need-help').hide();
+        $('#cancel-help').show();
+        $('#got-help').show();
+    }
+    else if (button.getAttribute("id") == "got-help") {
+        console.log("got-help clicked");
+        $('#need-help').show();
+        $('#got-help').hide();
+        $('#cancel-help').hide();
+    }
+    else if (button.getAttribute("id") == "cancel-help") {
+        console.log("cancel-help clicked");
+        $('#need-help').show();
+        $('#got-help').hide();
+        $('#cancel-help').hide();
+    }
 }
 
 QuizDisplay.prototype.loadQuizButtons = function(quizURLs) {
@@ -48,7 +107,7 @@ QuizDisplay.prototype.loadQuizButtons = function(quizURLs) {
     Object.keys(quizURLs).forEach(function(key) {
         var button = document.createElement("input");
         button.setAttribute("type","button");
-        button.setAttribute("class", "button");
+        button.setAttribute("class", "quiz-button");
         button.setAttribute("value", key);
         button.setAttribute("onclick", "window.quizDisplay.showSurvey(this)");
         button.quizURL = quizURLs[key];
