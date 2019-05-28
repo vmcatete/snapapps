@@ -11,7 +11,6 @@ function SurveyDialog(id, title) {
     this.eventID = null;
     this.params = {};
 
-    window.addEventListener('message', this.receiveMessage);
     $(document).ready(function() {
         myself.createDialogDiv();
         $('#' + myself.idDialog).dialog({

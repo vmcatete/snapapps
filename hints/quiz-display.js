@@ -2,11 +2,17 @@ require('../logging/survey-dialog-old.js/index.js');
 require('../logging/config.js');
 
 function QuizDisplay() {
+    var myself = this;
+
     this.assignment = Assignment.get();
 
     this.quizDialog = new SurveyDialog('quiz', 'Questions');
 
     window.quizDisplay = this;
+
+    window.addEventListener('message', function(event) {
+        myself.quizDialog.receiveMessage(event);
+    });
 }
 
 QuizDisplay.prototype.initDisplay = function() {
