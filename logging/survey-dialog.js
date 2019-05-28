@@ -85,6 +85,7 @@ SurveyDialog.prototype.receiveMessage = function(event) {
     if (event.data != 'closeQSIWindow') return;
     var eventID = event.data.eventID;
     if (eventID != this.eventID) return;
+    Trace.log("SurveyDialog.surveySubmitted", this.surveyInfo);
     this.close();
 };
 
@@ -92,5 +93,8 @@ SurveyDialog.prototype.close = function() {
     Trace.log('SurveyDialog.close', SurveyDialog.eventID);
     $('#' + this.idDialog).dialog( 'close' );
     if (this.callback) this.callback();
+    Trace.log("SurveyDialog.dialogClosed", this.surveyInfo);
+
+    this.surveyInfo = "";
     this.callback = null;
 };

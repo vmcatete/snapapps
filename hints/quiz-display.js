@@ -16,8 +16,6 @@ function QuizDisplay() {
 }
 
 QuizDisplay.prototype.initDisplay = function() {
-    console.log("init quiz display");
-
     this.createQuizBar();
     this.loadHelpButtons();
 
@@ -120,6 +118,8 @@ QuizDisplay.prototype.loadQuizButtons = function(quizURLs) {
         button.clicked = false;
         myself.quizButtonsDiv.appendChild(button);
     });
+
+    Trace.log("QuizDisplay.loadQuizButtons", quizURLs);
 }
 
 QuizDisplay.prototype.removeAllButtons = function() {
@@ -130,12 +130,15 @@ QuizDisplay.prototype.removeAllButtons = function() {
 }
 
 QuizDisplay.prototype.showSurvey = function(button) {
-    console.log("show survey clicked: " + button.value);
+    Trace.log("QuizDisplay.quizButtonClicked", button.value);
 
     var myself = this;
 
     var response = confirm("Are you sure you want to open " + button.value + "? \n You ONLY have 1 attempt.");
-    if (!response) return;
+    if (!response) {
+        Trace.log("QuizDisplay.quizCanceled", button.value);
+        return;
+    }
 
     button.clicked = true;
     this.disableButtons();
