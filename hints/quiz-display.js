@@ -204,12 +204,6 @@ QuizDisplay.prototype.hintDialogShown = function() {
 
 };
 
-extend(XML_Element, 'parseString', function(base, string) {
-    base.call(this, string);
-
-    console.log(this);
-
-});
 
 WorldMorph.prototype.fillPage = function () {
     var fillParent = true;
