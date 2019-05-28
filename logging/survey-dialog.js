@@ -10,6 +10,7 @@ function SurveyDialog(id, title) {
     this.callback = null;
     this.eventID = null;
     this.params = {};
+    this.surveyInfo = "";
 
     $(document).ready(function() {
         myself.createDialogDiv();
@@ -42,19 +43,17 @@ SurveyDialog.prototype.createDialogDiv = function() {
     body.append(divDialog);
 }
 
-SurveyDialog.prototype.show = function(baseURL, callback, fullscreen) {
+SurveyDialog.prototype.show = function(baseURL, callback, surveyInfo) {
     var myself = this;
 
     // In case there's a latent callback, go ahead and call it
     if (this.callback) this.callback();
     this.callback = callback;
-    if (fullscreen) {
-        $('#' + this.dialogID).dialog('option', 'width', '80%');
-        $('#' + this.dialogID).dialog('option', 'height', window.innerHeight * 0.75);
-    } else {
-        $('#' + this.dialogID).dialog('option', 'width', 700);
-        $('#' + this.dialogID).dialog('option', 'height', 625);
-    }
+
+    this.surveyInfo = surveyInfo;
+
+    $('#' + this.dialogID).dialog('option', 'width', 700);
+    $('#' + this.dialogID).dialog('option', 'height', 625);
 
     // log information
     var url = baseURL;
@@ -68,7 +67,7 @@ SurveyDialog.prototype.show = function(baseURL, callback, fullscreen) {
     Trace.log('SurveyDialog.show', {
         eventID: myself.eventID,
         url: url,
-        fullscreen: fullscreen,
+        surveyInfo: surveyInfo,
     });
     $('#' + this.idIframe).attr('src', url);
     $('#' + this.idDialog).dialog( 'open' );

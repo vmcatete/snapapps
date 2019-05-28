@@ -143,7 +143,7 @@ QuizDisplay.prototype.showSurvey = function(button) {
     this.quizDialog.show(button.quizURL, function() {
         console.log("survey complete" + button.value);
         myself.enableButtons();
-    }, false);
+    }, button.value);
 }
 
 QuizDisplay.prototype.enableButtons = function() {
