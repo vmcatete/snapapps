@@ -8,6 +8,7 @@ function QuizDisplay() {
 
     this.quizDialog = new SurveyDialog('quiz', 'Questions');
     this.helpDialog = new SurveyDialog('help', 'Help');
+    this.helpDialog.surveyURL = "https://ncsu.qualtrics.com/jfe/form/SV_4Tq1ISyYu2wgsHH" + "?UserID=" + window.userID;
 
     window.quizDisplay = this;
 
@@ -113,8 +114,10 @@ QuizDisplay.prototype.helpButtonClicked = function(button) {
     }
     else if (button.getAttribute("id") == "end-help") {
         console.log("end-help clicked");
-        $('#end-help').hide();
-        $('#need-help').show();
+        this.helpDialog.show(this.helpDialog.surveyURL, function() {
+            $('#end-help').hide();
+            $('#need-help').show();
+        }, "help-survey");
     }
 }
 
@@ -128,7 +131,7 @@ QuizDisplay.prototype.loadQuizButtons = function(quizURLs) {
         button.setAttribute("type","button");
         button.setAttribute("class", "quiz-button");
         button.setAttribute("value", key);
-        button.setAttribute("onclick", "window.quizDisplay.showQuiz(this)");
+        button.setAttribute("onclick", "window.quizDisplay.showSurvey(this)");
         button.quizURL = quizURLs[key];
         button.clicked = false;
         myself.quizButtonsDiv.appendChild(button);

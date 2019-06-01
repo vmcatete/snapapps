@@ -72,7 +72,7 @@ SurveyDialog.prototype.show = function(baseURL, callback, surveyInfo) {
     $('#' + this.idIframe).attr('src', url);
     $('#' + this.idDialog).dialog( 'open' );
 
-    this.allowClose(allowClose);
+    this.allowClose(false);
 };
 
 SurveyDialog.prototype.allowClose = function(allowClose) {
