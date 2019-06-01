@@ -13,6 +13,7 @@ function QuizDisplay() {
 
     window.addEventListener('message', function(event) {
         myself.quizDialog.receiveMessage(event);
+        myself.helpDialog.receiveMessage(event);
     });
 }
 
@@ -52,8 +53,9 @@ QuizDisplay.prototype.createQuizBar = function() {
 
 QuizDisplay.prototype.loadHelpButtons = function() {
     var needHelpButton = document.createElement("input");
-    var gotHelpButton = document.createElement("input");
+    var startHelpButton = document.createElement("input");
     var cancelHelpButton = document.createElement("input");
+    var endHelpButton = document.createElement("input");
 
     needHelpButton.setAttribute("value", "I need help");
     needHelpButton.setAttribute("id", "need-help");
@@ -61,26 +63,33 @@ QuizDisplay.prototype.loadHelpButtons = function() {
     needHelpButton.setAttribute("class", "help-button");
     needHelpButton.setAttribute("onclick", "window.quizDisplay.helpButtonClicked(this)");
 
-    gotHelpButton.setAttribute("value", "I got help");
-    gotHelpButton.setAttribute("id", "got-help");
-    gotHelpButton.setAttribute("type", "button");
-    gotHelpButton.setAttribute("class", "help-button");
-    gotHelpButton.setAttribute("onclick", "window.quizDisplay.helpButtonClicked(this)");
+    startHelpButton.setAttribute("value", "Help arrived");
+    startHelpButton.setAttribute("id", "start-help");
+    startHelpButton.setAttribute("type", "button");
+    startHelpButton.setAttribute("class", "help-button");
+    startHelpButton.setAttribute("onclick", "window.quizDisplay.helpButtonClicked(this)");
 
 
-    cancelHelpButton.setAttribute("value", "Figured out myself");
+    cancelHelpButton.setAttribute("value", "Cancel");
     cancelHelpButton.setAttribute("id", "cancel-help");
     cancelHelpButton.setAttribute("type", "button");
     cancelHelpButton.setAttribute("class", "help-button");
     cancelHelpButton.setAttribute("onclick", "window.quizDisplay.helpButtonClicked(this)");
 
+    endHelpButton.setAttribute("value", "Help finished");
+    endHelpButton.setAttribute("id", "end-help");
+    endHelpButton.setAttribute("type", "button");
+    endHelpButton.setAttribute("class", "help-button");
+    endHelpButton.setAttribute("onclick", "window.quizDisplay.helpButtonClicked(this)");
 
     this.helpDiv.appendChild(needHelpButton);
-    this.helpDiv.appendChild(gotHelpButton);
+    this.helpDiv.appendChild(startHelpButton);
     this.helpDiv.appendChild(cancelHelpButton);
+    this.helpDiv.appendChild(endHelpButton);
 
-    $('#got-help').hide();
+    $('#start-help').hide();
     $('#cancel-help').hide();
+    $('#end-help').hide();
 }
 
 QuizDisplay.prototype.helpButtonClicked = function(button) {
@@ -88,19 +97,24 @@ QuizDisplay.prototype.helpButtonClicked = function(button) {
         console.log("need-help clicked");
         $('#need-help').hide();
         $('#cancel-help').show();
-        $('#got-help').show();
+        $('#start-help').show();
     }
-    else if (button.getAttribute("id") == "got-help") {
-        console.log("got-help clicked");
-        $('#need-help').show();
-        $('#got-help').hide();
+    else if (button.getAttribute("id") == "start-help") {
+        console.log("start-help clicked");
+        $('#start-help').hide();
         $('#cancel-help').hide();
+        $('#end-help').show();
     }
     else if (button.getAttribute("id") == "cancel-help") {
         console.log("cancel-help clicked");
-        $('#need-help').show();
-        $('#got-help').hide();
+        $('#start-help').hide();
         $('#cancel-help').hide();
+        $('#need-help').show();
+    }
+    else if (button.getAttribute("id") == "end-help") {
+        console.log("end-help clicked");
+        $('#end-help').hide();
+        $('#need-help').show();
     }
 }
 
