@@ -2,12 +2,13 @@
 // A list of assignments that users can select from when using Snap
 // The assignmentID will be logged with each statement
 // 'test' and 'view' will not show up on the selection menu
+// Assignment name needs to be the same as example name in EXAMPLES file
 window.assignments = {
     'none': {
         name: 'None',
         hint: 'just using Snap',
     },
-    'Day1': {
+    'Day1Starter': {
         name: 'Day 1',
         hint: 'coding session',
         quizURLs: {
@@ -15,6 +16,10 @@ window.assignments = {
             'Buggy Code Quiz': 'https://ncsu.qualtrics.com/jfe/form/SV_06aIH6ORtHqGfAx',
             'Parsons Problem Quiz': 'https://ncsu.qualtrics.com/jfe/form/SV_cUt9X0zTUJNnY6F'
         }
+    },
+    'prePD': {
+        name: 'Pre-PD work',
+        hint: 'coding session',
     },
     'test': {
         name: 'Testing',

@@ -64,6 +64,7 @@
 		<script type="text/javascript" src="hints/snap-display.js?v=2.4.9"></script>
 		<script type="text/javascript" src="hints/quiz-display.js"></script>
 		<script type="text/javascript" src="hints/main.js?v=2.4.9"></script>
+		<script type="text/javascript" src="logging/changesToGui.js"></script>
 		<!-- End auto-generated script tags -->
 
 		<script type="text/javascript">
@@ -74,6 +75,14 @@
                 world.worldCanvas.focus();
 				ide = new IDE_Morph();
 				ide.openIn(world);
+
+				// preload starter code
+				ide.controlBar.updateLabel();
+				var assignmentID = Assignment.getID();
+				if (assignmentID) {
+					ide.loadAssignment(assignmentID);
+				}
+
         		loop();
 				if (window.onWorldLoaded) {
 					window.onWorldLoaded();
