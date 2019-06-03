@@ -95,25 +95,25 @@ QuizDisplay.prototype.loadHelpButtons = function() {
 
 QuizDisplay.prototype.helpButtonClicked = function(button) {
     if (button.getAttribute("id") == "need-help") {
-        console.log("need-help clicked");
+        Trace.log("QuizDisplay.helpButtonClicked", "need-help");
         $('#need-help').hide();
         $('#cancel-help').show();
         $('#start-help').show();
     }
     else if (button.getAttribute("id") == "start-help") {
-        console.log("start-help clicked");
+        Trace.log("QuizDisplay.helpButtonClicked", "start-help");
         $('#start-help').hide();
         $('#cancel-help').hide();
         $('#end-help').show();
     }
     else if (button.getAttribute("id") == "cancel-help") {
-        console.log("cancel-help clicked");
+        Trace.log("QuizDisplay.helpButtonClicked", "cancel-help");
         $('#start-help').hide();
         $('#cancel-help').hide();
         $('#need-help').show();
     }
     else if (button.getAttribute("id") == "end-help") {
-        console.log("end-help clicked");
+        Trace.log("QuizDisplay.helpButtonClicked", "end-help");
         this.helpDialog.show(this.helpDialog.surveyURL, function() {
             $('#end-help').hide();
             $('#need-help').show();

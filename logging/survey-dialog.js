@@ -103,6 +103,9 @@ SurveyDialog.prototype.receiveMessage = function(event) {
     var eventID = event.data.eventID;
     if (eventID != this.eventID) return;
     Trace.log("SurveyDialog.surveySubmitted", this.surveyInfo);
+    console.log(event);
+    console.log(event.data);
+    console.log(event.data.userID);
     this.close();
 };
 
