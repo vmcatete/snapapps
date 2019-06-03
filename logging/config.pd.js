@@ -4,52 +4,29 @@
 // 'test' and 'view' will not show up on the selection menu
 // Assignment name needs to be the same as example name in EXAMPLES file
 window.assignments = {
-    // 'epidemicEnv': {
-    //     name: 'Epidemic Environment Factors',
-    //     hint: 'Effect of the Environment'
-    // },
-    // 'epidemic2Starter': {
-    //     name: 'Epidemic Day 2 Starter',
-    //     hint: 'Topic for Day 2',
-    // },
-    // 'cellularTutorialStarter': {
-    //     name: 'Cellular Tutorial Starter',
-    //     hint: 'Tutorial Starter Kit',
-    // },
-    // 'epidemic2Final': {
-    //     name: 'Epidemic Day 2 Final',
-    //     hint: 'Topic for Day 2',
-    // },
-    // 'epidemic3Starter': {
-    //     name: 'Epidemic Day 3 Starter',
-    //     hint: 'Topic for Day 3',
-    // },
-    // 'epidemic3Final': {
-    //     name: 'Epidemic Day 3 Final',
-    //     hint: 'Topic for Day 3',
-    // },
-    // 'epidemic5Starter': {
-    //     name: 'Epidemic Day 5 Starter',
-    //     hint: 'Topic for Day 5',
-    // },
-    // 'epidemic5Final': {
-    //     name: 'Epidemic Day 5 Final',
-    //     hint: 'Topic for Day 5',
-    // },
-    // 'lastSaved': {
-    //     name: 'Last Saved Project',
-    //     hint: 'The last time you pressed save',
-    // },
     'none': {
         name: 'None',
-        hint: 'Just using cellular',
+        hint: 'just using Snap',
+    },
+    'Day1Starter': {
+        name: 'Day 1',
+        hint: 'coding session',
+        quizURLs: {
+            'Explay/Modify Quiz': 'https://ncsu.qualtrics.com/jfe/form/SV_9vPJ82JDCWM13cp',
+            'Buggy Code Quiz': 'https://ncsu.qualtrics.com/jfe/form/SV_06aIH6ORtHqGfAx',
+            'Parsons Problem Quiz': 'https://ncsu.qualtrics.com/jfe/form/SV_cUt9X0zTUJNnY6F'
+        }
+    },
+    'prePD': {
+        name: 'Pre-PD work',
+        hint: 'coding session',
     },
     'test': {
         name: 'Testing',
     },
     'view': {
         name: 'Viewing',
-    }
+    },
 };
 
 // If true, requires the Snap users to select an assignment before
@@ -57,7 +34,7 @@ window.assignments = {
 // snap.html?assignment=id
 window.requireAssignment = true;
 // Allows the user to change their assignment by clicking on project title
-window.allowChangeAssignment = true;
+window.allowChangeAssignment = false;
 
 // If true, users are required to login before they can use the system
 window.requireLogin = true;
@@ -65,14 +42,26 @@ window.requireLogin = true;
 // If true, allow new user to login
 window.allowNewUser = false;
 
+// If true, if in pair
+window.isPairProgramming = true;
+
 // Specify to override the default Snap cloud URL
 // window.snapCloudURL = 'https://snap.apps.miosoft.com/SnapCloud';
+
+// Specify login instructions such as which login ID to use.
+window.unityID = {
+    instruction: 'Sign in with your pre-assigned ID',
+    hint: '( This was sent to you via email )'
+}
 
 // Specify the login header's logo and title text
 window.loginHeader = {
     logo: 'login/NCStateLogoWhite.png',
-    description: 'Epidemics Simulation Activities'
+    description: 'Infusing Computing Professional Development'
 };
+
+// Set the quiz-bar title
+window.defaultQuizTitle = "Summer Quiz:"
 
 // Create the logger you want to use on this snap deployment
 window.createLogger = function(assignmentID) {
