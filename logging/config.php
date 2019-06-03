@@ -1,9 +1,9 @@
 <?php
 
 $enable_viewer = true;
-$db = "snap";
+$db = "cellular";
 $user = "root";
-$password = "testing123";
+$password = "root";
 $host = "localhost";
 $table = "trace";
 // Note: don't lose this string! You must keep it the same or your users
