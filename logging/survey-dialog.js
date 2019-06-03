@@ -43,14 +43,14 @@ SurveyDialog.prototype.createDialogDiv = function() {
     body.append(divDialog);
 }
 
-SurveyDialog.prototype.show = function(baseURL, callback, surveyInfo) {
+SurveyDialog.prototype.show = function(baseURL, callback, surveyInfo, eventID) {
     var myself = this;
 
     // In case there's a latent callback, go ahead and call it
     if (this.callback) this.callback();
     this.callback = callback;
-
     this.surveyInfo = surveyInfo;
+    this.eventID = eventID;
 
     $('#' + this.dialogID).dialog('option', 'width', 700);
     $('#' + this.dialogID).dialog('option', 'height', 625);
@@ -58,7 +58,6 @@ SurveyDialog.prototype.show = function(baseURL, callback, surveyInfo) {
     // log information
     var url = baseURL;
     url += '?userID=' + window.userID;
-    url += '&assignmentID=' + Assignment.getID();
     url += '&eventID=' + this.eventID;
     Object.keys(myself.params).forEach(function(key) {
         var value = myself.params[key];
@@ -98,14 +97,11 @@ SurveyDialog.prototype.setParam = function(key, value) {
 
 SurveyDialog.prototype.receiveMessage = function(event) {
     if (!event || !event.data) return;
-    // if (event.data.message != 'survey-complete') return;
-    if (event.data != 'closeQSIWindow') return;
+    if (event.data.message != 'survey-complete') return;
     var eventID = event.data.eventID;
     if (eventID != this.eventID) return;
     Trace.log("SurveyDialog.surveySubmitted", this.surveyInfo);
-    console.log(event);
-    console.log(event.data);
-    console.log(event.data.userID);
+    console.log(eventID);
     this.close();
 };
 
