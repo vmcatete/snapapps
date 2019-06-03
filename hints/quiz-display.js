@@ -1,4 +1,3 @@
-require('../logging/survey-dialog-old.js/index.js');
 require('../logging/config.js');
 
 function QuizDisplay() {
