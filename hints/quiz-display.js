@@ -1,4 +1,3 @@
-require('../logging/survey-dialog-old.js/index.js');
 require('../logging/config.js');
 
 function QuizDisplay() {
@@ -8,7 +7,7 @@ function QuizDisplay() {
 
     this.quizDialog = new SurveyDialog('quiz', 'Questions');
     this.helpDialog = new SurveyDialog('help', 'Help');
-    this.helpDialog.surveyURL = "https://ncsu.qualtrics.com/jfe/form/SV_4Tq1ISyYu2wgsHH" + "?UserID=" + window.userID;
+    this.helpDialog.surveyURL = "https://ncsu.qualtrics.com/jfe/form/SV_4Tq1ISyYu2wgsHH";
 
     window.quizDisplay = this;
 
@@ -117,7 +116,7 @@ QuizDisplay.prototype.helpButtonClicked = function(button) {
         this.helpDialog.show(this.helpDialog.surveyURL, function() {
             $('#end-help').hide();
             $('#need-help').show();
-        }, "help-survey");
+        }, "help-survey", newGuid());
     }
 }
 
@@ -164,7 +163,7 @@ QuizDisplay.prototype.showSurvey = function(button) {
     this.quizDialog.show(button.quizURL, function() {
         console.log("survey complete" + button.value);
         myself.enableButtons();
-    }, button.value);
+    }, button.value, newGuid());
 }
 
 QuizDisplay.prototype.enableButtons = function() {
