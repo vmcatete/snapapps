@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2019 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2017-September-05';
+modules.locale = '2019-January-21';
 
 // Global stuff
 
@@ -156,11 +156,11 @@ SnapTranslator.dict.de = {
     'language_name':
         'Deutsch',
     'language_translator':
-        'Jens M\u00F6nig',
+        'Jens M\u00F6nig, Jadga H\u00fcgle',
     'translator_e-mail':
-        'jens@moenig.org',
+        'jens@moenig.org, jadga.huegle@sap.com',
     'last_changed':
-        '2017-09-05'
+        '2019-01-15'
 };
 
 SnapTranslator.dict.it = {
@@ -182,7 +182,7 @@ SnapTranslator.dict.ja = {
     'translator_e-mail':
         'abee@squeakland.jp',
     'last_changed':
-        '2012-04-02'
+        '2018-10-23'
 };
 
 SnapTranslator.dict.ja_HIRA = {
@@ -193,7 +193,7 @@ SnapTranslator.dict.ja_HIRA = {
     'translator_e-mail':
         'abee@squeakland.jp',
     'last_changed':
-        '2012-04-02'
+        '2018-10-23'
 };
 
 SnapTranslator.dict.ko = {
@@ -215,7 +215,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2016-10-30'
+        '2018-05-20'
 };
 
 SnapTranslator.dict.cs = {
@@ -237,7 +237,7 @@ SnapTranslator.dict.zh_CN = {
     'translator_e-mail':
         'ubertao@qq.com/djh@rhjxx.cn',
     'last_changed':
-        '2016-05-09'
+        '2019-01-11'
 };
 
 SnapTranslator.dict.eo = {
@@ -246,9 +246,9 @@ SnapTranslator.dict.eo = {
     'language_translator':
         'Sebastian Cyprych',
     'translator_e-mail':
-        'scy(ĉe)epf.pl',
+        'sebacyp(heliko)gmail(punkto)com',
     'last_changed':
-        '2012-11-11'
+        '2017-10-01'
 };
 
 SnapTranslator.dict.fr = {
@@ -281,18 +281,18 @@ SnapTranslator.dict.ru = {
     'translator_e-mail':
         'svetlanap@berkeley.edu, tema@school830.ru',
     'last_changed':
-        '2017-09-01'
+        '2018-02-05'
 };
 
 SnapTranslator.dict.es = {
     'language_name':
         'Espa\u00F1ol',
     'language_translator':
-        'V\u00EDctor Manuel Muratalla Morales',
+        'V\u00EDctor Manuel Muratalla Morales / Cristi\u00E1n Rizzi Iribarren / Alfonso Ruzafa',
     'translator_e-mail':
-        'victor.muratalla@yahoo.com',
+        'victor.muratalla@yahoo.com / rizzi.cristian@gmail.com',
     'last_changed':
-        '2013-03-25'
+        '2018-02-19'
 };
 
 SnapTranslator.dict.nl = {
@@ -314,7 +314,7 @@ SnapTranslator.dict.pl = {
     'translator_e-mail':
         'witek@oeiizk.waw.pl',
     'last_changed':
-        '2016-11-14'
+        '2017-11-09'
 };
 
 SnapTranslator.dict.zh_TW = {
@@ -354,11 +354,11 @@ SnapTranslator.dict.el = {
     'language_name':
         'Ελληνικά',
     'language_translator':
-        'Ino Samaras',
+        'Ino Samaras , Alexandros Prekates',
     'translator_e-mail':
-        'ino.samaras@berkeley.edu',
+        'ino.samaras@berkeley.edu , aprekates@sch.gr',
     'last_changed':
-        '2013-09-16'
+        '2019-01-17'
 };
 
 SnapTranslator.dict.ca = {
@@ -367,9 +367,20 @@ SnapTranslator.dict.ca = {
     'language_translator':
         'Bernat Romagosa Carrasquer, Joan Guillén i Pelegay',
     'translator_e-mail':
-        'bernat@arduino.org, jguille2@xtec.cat',
+        'bernat@snap4arduino.rocks, jguille2@xtec.cat',
     'last_changed':
-        '2017-01-09'
+        '2018-06-16'
+};
+
+SnapTranslator.dict.ca_VA = {
+    'language_name':
+    	'Català - Valencià',
+    'language_translator':
+        'Bernat Romagosa Carrasquer, Joan Guillén i Pelegay, Pilar Embid',
+    'translator_e-mail':
+        'bernat@snap4arduino.rocks, jguille2@xtec.cat, embid_mar@gva.es',
+    'last_changed':
+        '2018-02-08'
 };
 
 SnapTranslator.dict.fi = {
@@ -464,11 +475,11 @@ SnapTranslator.dict.tr = {
     'language_name':
         'Türkçe',
     'language_translator':
-        'Hakan Atas',
+        'Hakan Atas, www.3drobolab.com',
     'translator_e-mail':
-        'hakanatas@gmail.com',
+        'hakanatas@gmail.com, mustafaipekbayrak@gmail.com',
     'last_changed':
-        '2015-7-27'
+        '2019-01-11'
 };
 
 SnapTranslator.dict.hu = {
@@ -541,11 +552,11 @@ SnapTranslator.dict.id = {
     'language_name':
         'Bahasa Indonesia',
     'language_translator':
-        'Alexander Raphael Liu',
+        'Alexander Raphael Liu, Emmanuella Rumanti',
     'translator_e-mail':
         'raphaxander@gmail.com',
     'last_changed':
-        '2016-5-2'
+        '2019-01-21'
 };
 
 SnapTranslator.dict.et = {
@@ -568,4 +579,26 @@ SnapTranslator.dict.gl = {
         '',
     'last_changed':
         '2016-11-09'
+};
+
+SnapTranslator.dict.eu = {
+    'language_name':
+        'Euskara',
+    'language_translator':
+        'Asier Iturralde Sarasola',
+    'translator_e-mail':
+        'aiturralde@iametza.eus',
+    'last_changed':
+        '2018-06-26'
+};
+
+SnapTranslator.dict.ua = {
+    'language_name':
+        'Українська',
+    'language_translator':
+        'Serhiy Kryzhanovsky',
+    'translator_e-mail':
+        'kseryj@gmail.com',
+    'last_changed':
+        '2018-10-14'
 };

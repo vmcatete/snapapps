@@ -60,14 +60,14 @@ if ($enable_viewer) {
 
     // Convert the javascript literal object into JSON:
     // Add quotes around keys
-    $config = preg_replace('/([a-zA-Z_]+)([ ]*:)/', "'$1'$2",
+    $config = preg_replace('/^(\s*)([a-zA-Z_]+)([ ]*:)/m', "$1'$2'$3",
         $config);
     // Convert single quotes to double
     $config = preg_replace("/'([^']*)'/", '"$1"', $config);
     // Remove additional commas
     $config = preg_replace('/,([\s|\n]*})/', "$1", $config);
 	// Remove comments
-    $config = preg_replace('/\/\/.*/', "", $config);
+    $config = preg_replace('/^([^"\n]|"[^"\n]*")*\/\/.*$/m', "$1", $config);
 
     // Convert to a PHP associative array
     $assignments = json_decode($config, true);
@@ -93,7 +93,7 @@ if ($enable_viewer) {
     }
 
 	$query =
-"SELECT RIGHT(userID, 10) AS userID $columns FROM (
+"SELECT userID $columns FROM (
   SELECT COUNT(*) AS n, SUM(message='IDE.exportProject' OR message='ProjectDialogMorph.shareThisProject') > 0 AS exported,
     SUM(message = 'HighlightDisplay.checkMyWork') AS hintChecks, SUM(message LIKE 'SnapDisplay.show%Hint') AS hintDialogs,
 	SUM(message = 'Error') AS errors,
@@ -113,17 +113,17 @@ ORDER BY MIN(start) ASC";
 	echo "<thead><th>User Hash</th>";
 	foreach ($keys as $key) {
 		$name = $assignments[$key]['name'];
-		$title = $assignments[$key]['hint'];
+		$title = array_key_exists('hint', $assignments[$key]) ?
+			$assignments[$key]['hint'] : '';
 		echo "<th title='$title'>$key</th>";
 	}
 	echo "</thead>";
 	$columns = array("userID");
 	while($row = mysqli_fetch_array($result)) {
 		echo "<tr>";
-		foreach ($columns as $column) {
-			$value = $row[$column];
-			echo "<td>$value</td>";
-		}
+		$userID = $row['userID'];
+		$shortUID = substr($userID, max(0, strlen($userID) - 10));
+		echo "<td>$shortUID</td>";
 		foreach ($keys as $key) {
 			$projects = $row[$key];
 			if ($projects == null) {
@@ -167,7 +167,8 @@ ORDER BY MIN(start) ASC";
 				$br = true;
 
 				$text = substr($project, 0, 4);
-				$link = "display.php?id=$project&assignment=$key";
+				$encodedUserID = urlencode($userID);
+				$link = "display.php?id=$project&assignment=$key&userID=$encodedUserID";
 				echo "<a href='$link' target='_blank'>$text</a>";
 			}
 			echo "</td>";

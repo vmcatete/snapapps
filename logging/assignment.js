@@ -16,6 +16,7 @@ Assignment.initOrRedirect = function() {
     if (window.requireAssignment && (!window.assignments ||
             !window.assignments[assignmentID])) {
         // redirect if no assignment is listed
+        redirectURL += window.location.hash;
         window.location.replace(redirectURL);
         return false;
     }
@@ -29,6 +30,7 @@ Assignment.initOrRedirect = function() {
         if (window.assignmentID) {
             redirectURL += '?assignment=' + window.assignmentID;
         }
+        redirectURL += window.location.hash;
         // redirect if the user isn't logged in
         window.location.replace(redirectURL);
         return false;
@@ -137,8 +139,10 @@ extend(IDE_Morph, 'createControlBar', function(baseCreate) {
         if (!assignment) return;
         // A bit of a crude approximation, but it's not worth measuring exactly
         var maxLength = Math.max(0, (ide.spriteEditor.width() / 6) - 35);
-        var text = assignment.name + ' (' + assignment.hint + ')';
-
+        var text = this.label.text;
+        if (Assignment.getID() !== 'none' && (maxLength - text.length) > 5) {
+            text += ' - ' + assignment.name;
+        }
         if (text.length > maxLength) {
             text = text.slice(0, maxLength) + '...';
         }
@@ -171,7 +175,7 @@ extend(IDE_Morph, 'createControlBar', function(baseCreate) {
                 }
                 menu.addItem(name, function() {
                     ide.confirm("Are you sure you want to open a new project? Unsaved changes will be lost.",
-                    "New Project?", 
+                    "New Project?",
                     function() {
                         ide.loadAssignment(key);
                     }, null, null, key === Assignment.getID());

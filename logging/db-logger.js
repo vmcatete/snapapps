@@ -15,15 +15,14 @@ DBLogger.prototype.storeMessages = function(logs) {
         'logs': logs,
     };
     // Approximate max length of a TEXT field in MySQL
-    var maxCodeLength = 16777000;
+    var maxCodeLength = 65000;
     var maxMessageLength = 64;
     logs.forEach(function(log) {
-        if (log.code && JSON.stringify(log.code).length > maxCodeLength) {
+        if (log.code && log.code.length > maxCodeLength) {
             Trace.logErrorMessageLater(
-                'Attempted to log code with length > ' + maxCodeLength + '. ' +
-                'Log was truncated.');
-            // divide by 2, since the JSON encoding can add length
-            log.code = log.code.substring(0, maxCodeLength / 2);
+                'Attempted to log code with length ' + log.code.length +
+                ' > ' + maxCodeLength + '. ' + 'Log was truncated.');
+            log.code = log.code.substring(0, maxCodeLength);
         }
         if (log.message && log.message.length > maxMessageLength) {
             this.logErrorMessageLater('Log messages must be < 64 characters: ' +

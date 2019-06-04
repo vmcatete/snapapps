@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2017-September-08';
+modules.widgets = '2018-February-08';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -168,7 +168,7 @@ PushButtonMorph.prototype.init = function (
     this.hint = hint || null;
     this.template = template || null; // for pre-computed backbrounds
     // if a template is specified, its background images are used as cache
-    this.enabled = true;
+    this.isDisabled = false;
 
     // initialize inherited properties:
     TriggerMorph.uber.init.call(this);
@@ -205,11 +205,10 @@ PushButtonMorph.prototype.mouseDownLeft = function () {
 };
 
 PushButtonMorph.prototype.mouseClickLeft = function () {
-    if (this.enabled) {
-        PushButtonMorph.uber.mouseClickLeft.call(this);
-        if (this.label) {
-            this.label.setCenter(this.center());
-        }
+    if (this.isDisabled) {return; }
+    PushButtonMorph.uber.mouseClickLeft.call(this);
+    if (this.label) {
+        this.label.setCenter(this.center());
     }
 };
 
@@ -485,17 +484,19 @@ PushButtonMorph.prototype.createLabel = function () {
 // PushButtonMorph states
 
 PushButtonMorph.prototype.disable = function () {
-    this.enabled = false;
+    this.isDisabled = true;
     this.forAllChildren(function (child) {
         child.alpha = 0.3;
     });
+    this.changed();
 };
 
 PushButtonMorph.prototype.enable = function () {
-    this.enabled = true;
+    this.isDisabled = false;
     this.forAllChildren(function (child) {
         child.alpha = 1;
     });
+    this.changed();
 };
 
 // ToggleButtonMorph ///////////////////////////////////////////////////////
@@ -2074,6 +2075,10 @@ DialogBoxMorph.prototype.promptCredentials = function (
         emlLabel = labelText('foo');
         inp.add(emlLabel);
         inp.add(eml);
+        inp.add(labelText('Password:'));
+        inp.add(pw1);
+        inp.add(labelText('Repeat Password:'));
+        inp.add(pw2);
     }
 
     if (purpose === 'login') {
@@ -2090,7 +2095,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
         inp.add(pw2);
     }
 
-    if (purpose === 'resetPassword') {
+    if (purpose === 'resetPassword' || purpose === 'resendVerification') {
         inp.add(labelText('User name:'));
         inp.add(usr);
     }
@@ -2181,10 +2186,10 @@ DialogBoxMorph.prototype.promptCredentials = function (
         if (purpose === 'login') {
             checklist = [usr, pw1];
         } else if (purpose === 'signup') {
-            checklist = [usr, bmn, byr, eml];
+            checklist = [usr, bmn, byr, eml, pw1, pw2];
         } else if (purpose === 'changePassword') {
             checklist = [opw, pw1, pw2];
-        } else if (purpose === 'resetPassword') {
+        } else if (purpose === 'resetPassword' || purpose === 'resendVerification') {
             checklist = [usr];
         }
 
@@ -2204,12 +2209,12 @@ DialogBoxMorph.prototype.promptCredentials = function (
                 return false;
             }
             if (em.indexOf(' ') > -1 || em.indexOf('@') === -1
-                    || em.indexOf('.') === -1) {
+                    || em.indexOf('.') === -1 || em.length < 5) {
                 indicate(eml, 'please provide a valid\nemail address');
                 return false;
             }
         }
-        if (purpose === 'changePassword') {
+        if (purpose === 'changePassword' || purpose === 'signup') {
             if (pw1.getValue().length < 6) {
                 indicate(pw1, 'password must be six\ncharacters or longer');
                 return false;
@@ -2237,7 +2242,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
     this.edit = function () {
         if (purpose === 'changePassword') {
             opw.edit();
-        } else { // 'signup', 'login', 'resetPassword'
+        } else { // 'signup', 'login', 'resetPassword', 'resendVerification'
             usr.edit();
         }
     };
@@ -2248,6 +2253,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
             email: eml.getValue(),
             oldpassword: opw.getValue(),
             password: pw1.getValue(),
+            passwordRepeat: pw2.getValue(),
             choice: agree
         };
     };
@@ -3335,7 +3341,7 @@ InputFieldMorph.prototype.drawRectBorder = function (context) {
 };
 
 // PianoMenuMorph //////////////////////////////////////////////////////
-/* 
+/*
     I am a menu that looks like a piano keyboard.
 */
 

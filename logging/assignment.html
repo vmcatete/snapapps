@@ -1,5 +1,3 @@
-<!doctype html>
-
 <html>
 	<head>
 		<meta charset="UTF-8">
@@ -21,8 +19,8 @@
 							<div class="belt">
 							    <div class="state state-1">
 									<div>
-										<h1>Sign in with your assigned ID</h1>
-										<div id="unityID-hint"> ( This is the same id for your surveys )</div>
+										<h1 id="unityID-instruction">Sign in with your Unity ID</h1>
+										<div id="unityID-hint"> ( This is the ID in your email address )</div>
 									</div>
 									<div id="form-id">
 										<form id="form-flex-Parent">
@@ -57,10 +55,12 @@
 		<script type="text/javascript" src="../isnap/lib/jquery.cookie.js"></script>
 
 		<script type="text/javascript">
+			// Adding custom login ID instruction
+			$('#unityID-instruction').text(window.unityID.instruction);
+			$('#unityID-hint').text(window.unityID.hint);
+
 			var ID_COOKIE = 'snapIDHash', COOKIE_PATH = '/';
-
 			var preselectedAssignment = getSearchParameters()['assignment'];
-
 			var assignments = window.assignments;
 			var select = document.getElementById("assignment");
 			for (var key in assignments) {
@@ -80,6 +80,10 @@
 				}
 			}
 
+			if (window.isPairProgramming) {
+				$("#input-id").after('<input id="input-partner-id" name="partner-id" placeholder="Enter your partner\'s ID" required pattern="[A-Za-z0-9_]+">');
+			}
+
 			// Adding new user notification based on if new user is allowed
 			if (window.allowNewUser) {
 				$('#confirm-new').append('<p class="alert">\
@@ -96,7 +100,6 @@
 													We have not seen this user ID "<span id="display-id"></span>" before. Please try again.\
 												</p>');
 			}
-
 			// Set the logo and description from the config file
 			var headerLogo = document.getElementById("headerLogo");
 			var headerDescription = document.getElementById("courseName");
@@ -113,15 +116,12 @@
 						window.loginHeader.description;
 				}
 			}
-
 			if (!navigator.cookieEnabled) {
 				// TODO: handle cookies not available!
 				// There's no other way to pass this information from one page
 				// to another, so we'll need them enabled. Again, maybe
 				// have an emergency option to disable
 			}
-
-
 			function setUserID(id) {
 				if (!id) return;
 				window.userID = id;
@@ -137,7 +137,6 @@
 				$('#assignment,#assignmentGObutton').prop('disabled', false);
 				// $('#assignment').focus();
 			}
-
 			function skipLogIn(warn){
 			    setUserID('none');
 				$('#signed-in-as').addClass('hidden');
@@ -146,7 +145,6 @@
 					$('#needsCookiesEnabled').addClass('getFlex');
 				}
 			}
-
 			function logout() {
 				$.removeCookie(ID_COOKIE, { path: COOKIE_PATH });
 				$('.belt-container').removeClass('is-transitioned');
@@ -159,22 +157,69 @@
 				$('#assignment,#assignmentGObutton').prop('disabled', true);
 				$('#input-id').focus();
 			}
-
 			if (!String.prototype.trim) {
 				String.prototype.trim = function () {
 					return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,
 						'');
 				};
 			}
-
 			function tryLogin() {
+				if (window.isPairProgramming) {
+					return tryPairLogin();
+				}
+				else {
+					return trySingleLogin();
+				}
+			}
+
+			function tryPairLogin() {
 				// Get the id and ensure it has a value
 				var id = $('#input-id').val().trim();
+				var partner_id = $('#input-partner-id').val().trim();
+
 				if (id.length === 0) return;
 
 				// Defocus the login input so Chrome will hide autocomplete
 				$('#input-id').blur();
+				$('#display-id').html(id);
+				$.post('login/login.php', {
+					'id': id,
+					'partner_id': partner_id,
+					'new': window.allowNewUser ? $('#input-new').prop('checked') : false,
+				}, function(data, status) {
+					var response;
+					try {
+						response = JSON.parse(data);
+					} catch(e) {
+					    skipLogIn(true);
+						return;
+					}
+					if (response.newUser || response.newUserPartner) {
+						if (response.newUser) {
+							$('#display-id').html(id);
+						}
+						else if (response.newUserPartner) {
+							$('#display-id').html(partner_id);
+						}
+						$('#confirm-new').removeClass('getFrames2');
+						$('#confirm-new').addClass('getFrames');
+						$("#confirm-new").css("margin-bottom", "30px");
+						return;
+					}
+					$('#display-id-loggedIN').html(id + '/' + partner_id);
+					setUserID(id + '/' + partner_id);
+				}).fail(function() {
+					skipLogIn(true);
+				});
+				return false;
+			}
 
+			function trySingleLogin() {
+				// Get the id and ensure it has a value
+				var id = $('#input-id').val().trim();
+				if (id.length === 0) return;
+				// Defocus the login input so Chrome will hide autocomplete
+				$('#input-id').blur();
 				$('#display-id').html(id);
 				$.post('login/login.php', {
 					'id': id,
@@ -203,7 +248,6 @@
 
 			$('#form-flex-Parent').submit(tryLogin);
 			$('#form-assignment')[0].action += document.location.hash;
-
 			if (!window.requireLogin) {
 				$('#back-arrow').css('visibility', 'hidden');
 				$('.belt, .state').css('transition', 'none');

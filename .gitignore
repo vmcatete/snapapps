@@ -2,6 +2,10 @@
 build
 node_modules
 *.swp
+*.htpasswd
+*.htaccess
+isnap.min.js*
+snap.min.js*
 .tern-port
 config.js
 config.php

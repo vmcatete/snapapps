@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2017-09-05', // this, too, will appear in the Translators tab
+        '2018-03-03', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -445,6 +445,10 @@ SnapTranslator.dict.de = {
         'vom Mauszeiger betreten',
     'mouse-departed':
         'vom Mauszeiger verlassen',
+    'scrolled-down':
+    	'nach unten gescrollt',
+    'scrolled-up':
+        'nach oben gescrollt',
     'when %b':
         'Wenn %b',
     'when I receive %msgHat':
@@ -513,10 +517,10 @@ SnapTranslator.dict.de = {
         'selbst',
     'delete this clone':
         'entferne diesen Klon',
-    'tell %spr to %cl':
-        'lasse %spr tun %cl',
-    'ask %spr for %repRing':
-        'frage %spr nach %repRing',
+    'tell %spr to %cmdRing %inputs':
+        'lasse %spr %cmdRing tun %inputs',
+    'ask %spr for %repRing %inputs':
+        'frage %spr nach %repRing %inputs',
 
     // sensing:
     'touching %col ?':
@@ -539,8 +543,10 @@ SnapTranslator.dict.de = {
         'Maustaste gedr\u00fcckt?',
     'key %key pressed?':
         'Taste %key gedr\u00fcckt?',
-    'distance to %dst':
-        'Entfernung von %dst',
+    '%rel to %dst':
+        '%rel zu %dst',
+    'distance':
+    	'Entfernung',
     'reset timer':
         'starte Stoppuhr neu',
     'timer':
@@ -622,6 +628,8 @@ SnapTranslator.dict.de = {
         'ist %s identisch mit %s ?',
     'JavaScript function ( %mult%s ) { %code }':
         'JavaScript Funktion ( %mult%s ) { %code }',
+    'compile %repRing':
+    	'kompiliere %repRing',
 
     'type of %s':
         'Typ von %s',
@@ -909,6 +917,8 @@ SnapTranslator.dict.de = {
         'Hilfe',
 
     // palette:
+    'find blocks':
+        'Blöcke finden',
     'hide primitives':
         'Basisbl\u00f6cke ausblenden',
     'show primitives':
@@ -961,6 +971,8 @@ SnapTranslator.dict.de = {
         'Angelpunkt',
     'edit the costume\'s\nrotation center':
         'Drehpunkt des Kostüms\nanzeigen und verschieben',
+    'rotate':
+    	'Drehen',
     'detach from':
         'Abtrennen von',
     'detach all parts':
@@ -997,6 +1009,8 @@ SnapTranslator.dict.de = {
         'Setzen des letzten Blocks\nwiderrufen',
     'redrop':
         'Wiederherstellen',
+    'use the keyboard\nto enter blocks':
+    	'Blöcke per Tastatur\neingeben',
     'scripts pic...':
         'Bild aller Skripte...',
     'open a new window\nwith a picture of all scripts':
@@ -1082,6 +1096,8 @@ SnapTranslator.dict.de = {
         'Unbenannt',
     'Open Project':
         'Project \u00f6ffnen',
+    'Open':
+        '\u00d6ffnen',
     '(empty)':
         '(leer)',
     'Saved!':
@@ -1153,8 +1169,8 @@ SnapTranslator.dict.de = {
     // block editor
     'Block Editor':
         'Blockeditor',
-    'Method':
-        'Methode',
+    'Method Editor':
+        'Methodeneditor',
     'Apply':
         'Anwenden',
 
