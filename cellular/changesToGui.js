@@ -505,7 +505,7 @@ SpriteIconMorph.prototype.fixLayout = function () {
                     if (stageChildren[i] instanceof SpriteMorph
                         && stageChildren[i].parentSprite == this.object)
                         numClones++;
-         
+
                 this.duplicator.setContents(numClones);
             }
         }
@@ -551,73 +551,73 @@ IDE_Morph.prototype._snapapps_showStageSizeOptions = false;
  *************************************************************/
 // Change saving feature to save to the last_saved table
 
-IDE_Morph.prototype.save = function() {
-    this.source = 'cloud';
-    
-    if (window.assignmentID) {
-        this.saveProject(window.assignmentID, "last_saved");
-    } else {
-        this.showMessage("You need to set a project name first.", 2);
-    }
-}
+// IDE_Morph.prototype.save = function() {
+//     this.source = 'cloud';
 
-IDE_Morph.prototype.saveProject = function (name, table) {
-    Trace.log('IDE.saveProject', name);
-    var myself = this;
-    this.nextSteps([
-        function () {
-            if (table === "last_saved") {
-                myself.showMessage('Saving...');
-            }
-        },
-        function () {
-            myself.rawSaveProject(name, table);
-        }
-    ]);
-};
+//     if (window.assignmentID) {
+//         this.saveProject(window.assignmentID, "last_saved");
+//     } else {
+//         this.showMessage("You need to set a project name first.", 2);
+//     }
+// }
 
-IDE_Morph.prototype.rawSaveProject = function (name, table) {
-    var myself = this;
-    
-    if (name) {
-        // do not mess with project name since it's already set
-        // this.setProjectName(name);
+// IDE_Morph.prototype.saveProject = function (name, table) {
+//     Trace.log('IDE.saveProject', name);
+//     var myself = this;
+//     this.nextSteps([
+//         function () {
+//             if (table === "last_saved") {
+//                 myself.showMessage('Saving...');
+//             }
+//         },
+//         function () {
+//             myself.rawSaveProject(name, table);
+//         }
+//     ]);
+// };
 
-        if (Process.prototype.isCatchingErrors) {
-            try {
-                var xhr = new XMLHttpRequest();
-                var projectInfo = {
-                    'userID': window.userID,
-                    'time': Date.now(),
-                    'assignmentID': Assignment.getID(),
-                    'data': myself.serializer.serialize(myself.stage),
-                    'table': table
-                };
+// IDE_Morph.prototype.rawSaveProject = function (name, table) {
+//     var myself = this;
 
-                xhr.onreadystatechange = function() {
-                    if (table === "last_saved") {
-                        if (xhr.status === 200) {
-                            myself.showMessage('Saved!', 1);
-                        }
-                        else if (xhr.status > 0) {
-                            myself.showMessage('Failed to save: ' + xhr.responseText);
-                            Trace.logErrorMessage(xhr.responseText);
-                        }
-                    }
-                }
-                xhr.open('POST', 'logging/login/saveProject.php', true); 
-                xhr.send(JSON.stringify(projectInfo));
-            } catch (err) {
-                myself.showMessage('Save failed: ' + err);
-                Trace.logError(err);
-            }
-        } else {
-            
-            // console.log("Not in try block: \n" + this.serializer.serialize(this.stage));
-            // myself.showMessage('Saved!', 1);
-        }
-    }
-};
+//     if (name) {
+//         // do not mess with project name since it's already set
+//         // this.setProjectName(name);
+
+//         if (Process.prototype.isCatchingErrors) {
+//             try {
+//                 var xhr = new XMLHttpRequest();
+//                 var projectInfo = {
+//                     'userID': window.userID,
+//                     'time': Date.now(),
+//                     'assignmentID': Assignment.getID(),
+//                     'data': myself.serializer.serialize(myself.stage),
+//                     'table': table
+//                 };
+
+//                 xhr.onreadystatechange = function() {
+//                     if (table === "last_saved") {
+//                         if (xhr.status === 200) {
+//                             myself.showMessage('Saved!', 1);
+//                         }
+//                         else if (xhr.status > 0) {
+//                             myself.showMessage('Failed to save: ' + xhr.responseText);
+//                             Trace.logErrorMessage(xhr.responseText);
+//                         }
+//                     }
+//                 }
+//                 xhr.open('POST', 'logging/login/saveProject.php', true);
+//                 xhr.send(JSON.stringify(projectInfo));
+//             } catch (err) {
+//                 myself.showMessage('Save failed: ' + err);
+//                 Trace.logError(err);
+//             }
+//         } else {
+
+//             // console.log("Not in try block: \n" + this.serializer.serialize(this.stage));
+//             // myself.showMessage('Saved!', 1);
+//         }
+//     }
+// };
 
 IDE_Morph.prototype.loadExampleProject = function(name) {
     Trace.log("IDE.loadExampleProject", name);
@@ -630,7 +630,7 @@ IDE_Morph.prototype.loadExampleProject = function(name) {
             resourceURL = ide.resourceURL('Examples', example.fileName);
         }
     });
-    
+
     if (resourceURL) {
         ide.openProjectString(ide.getURL(resourceURL));
     }
@@ -645,7 +645,7 @@ IDE_Morph.prototype.loadLastSavedProject = function(userID) {
     if (!userID) return;
 
     var myself = this;
-    
+
     if (Process.prototype.isCatchingErrors) {
         try {
             var xhr = new XMLHttpRequest();
@@ -670,14 +670,14 @@ IDE_Morph.prototype.loadLastSavedProject = function(userID) {
                     }
                 }
             }
-            xhr.open('POST', 'logging/login/getProject.php', true); 
+            xhr.open('POST', 'logging/login/getProject.php', true);
             xhr.send(JSON.stringify(projectInfo));
         } catch (err) {
             myself.showMessage('Load saved project failed: ' + err);
             Trace.logError(err);
         }
     } else {
-        
+
         // console.log("Not in try block: \n" + this.serializer.serialize(this.stage));
         // myself.showMessage('Saved!', 1);
     }
