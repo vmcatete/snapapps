@@ -2768,7 +2768,7 @@ IDE_Morph.prototype.cloudMenu = function () {
         menu.addItem(
             'open shared project from cloud...',
             function () {
-                myself.prompt('Author nameâ€?', function (usr) {
+                myself.prompt('Author nameï¿½?', function (usr) {
                     myself.prompt('Project name...', function (prj) {
                         myself.showMessage(
                             'Fetching project\nfrom the cloud...'
@@ -3339,63 +3339,63 @@ IDE_Morph.prototype.projectMenu = function () {
         );
     }
 
-    menu.addLine();
-    menu.addItem(
-        'Import tools',
-        function () {
-            if (location.protocol === 'file:') {
-                myself.importLocalFile();
-                return;
-            }
-            myself.getURL(
-                myself.resourceURL('libraries', 'tools.xml'),
-                function (txt) {
-                    myself.droppedText(txt, 'tools');
-                }
-            );
-        },
-        'load the official library of\npowerful blocks'
-    );
-    menu.addItem(
-        'Libraries...',
-        function() {
-            if (location.protocol === 'file:') {
-                myself.importLocalFile();
-                return;
-            }
-            myself.getURL(
-                myself.resourceURL('libraries', 'LIBRARIES'),
-                function (txt) {
-                    var libraries = myself.parseResourceFile(txt);
-                    new LibraryImportDialogMorph(myself, libraries).popUp();
-                }
-            );
-        },
-        'Select categories of additional blocks to add to this project.'
-    );
+    // menu.addLine();
+    // menu.addItem(
+    //     'Import tools',
+    //     function () {
+    //         if (location.protocol === 'file:') {
+    //             myself.importLocalFile();
+    //             return;
+    //         }
+    //         myself.getURL(
+    //             myself.resourceURL('libraries', 'tools.xml'),
+    //             function (txt) {
+    //                 myself.droppedText(txt, 'tools');
+    //             }
+    //         );
+    //     },
+    //     'load the official library of\npowerful blocks'
+    // );
+    // menu.addItem(
+    //     'Libraries...',
+    //     function() {
+    //         if (location.protocol === 'file:') {
+    //             myself.importLocalFile();
+    //             return;
+    //         }
+    //         myself.getURL(
+    //             myself.resourceURL('libraries', 'LIBRARIES'),
+    //             function (txt) {
+    //                 var libraries = myself.parseResourceFile(txt);
+    //                 new LibraryImportDialogMorph(myself, libraries).popUp();
+    //             }
+    //         );
+    //     },
+    //     'Select categories of additional blocks to add to this project.'
+    // );
 
-    menu.addItem(
-        localize(graphicsName) + '...',
-        function () {
-            if (location.protocol === 'file:') {
-                myself.importLocalFile();
-                return;
-            }
-            myself.importMedia(graphicsName);
-        },
-        'Select a costume from the media library'
-    );
-    menu.addItem(
-        localize('Sounds') + '...',
-        function () {
-            if (location.protocol === 'file:') {
-                myself.importLocalFile();
-                return;
-            }
-            myself.importMedia('Sounds');
-        },
-        'Select a sound from the media library'
-    );
+    // menu.addItem(
+    //     localize(graphicsName) + '...',
+    //     function () {
+    //         if (location.protocol === 'file:') {
+    //             myself.importLocalFile();
+    //             return;
+    //         }
+    //         myself.importMedia(graphicsName);
+    //     },
+    //     'Select a costume from the media library'
+    // );
+    // menu.addItem(
+    //     localize('Sounds') + '...',
+    //     function () {
+    //         if (location.protocol === 'file:') {
+    //             myself.importLocalFile();
+    //             return;
+    //         }
+    //         myself.importMedia('Sounds');
+    //     },
+    //     'Select a sound from the media library'
+    // );
 
     this.projectMenuSnapAppsModifier(menu);
     menu.popup(world, pos);
