@@ -114,12 +114,20 @@ QuizDisplay.prototype.helpButtonClicked = function(button) {
         $('#need-help').show();
     }
     else if (button.getAttribute("id") == "end-help") {
-        Trace.log("QuizDisplay.helpButtonClicked", "end-help");
-        this.helpDialog.show(this.helpDialog.surveyURL, function() {
-            $('#end-help').hide();
-            $('#need-help').show();
-        }, "help-survey", newGuid());
+        this.showHelpSurvey();
     }
+}
+
+QuizDisplay.prototype.showHelpSurvey = function() {
+    Trace.log("QuizDisplay.helpButtonClicked", "end-help");
+
+    this.helpDialog.show(this.helpDialog.surveyURL, function() {
+        $('#end-help').hide();
+        $('#need-help').show();
+    }, "help-survey", newGuid());
+
+    $('#dialog-help').parent()[0].style.left = "calc(100% - 710px)";
+    $('#dialog-help').parent()[0].style.top = "40px";
 }
 
 QuizDisplay.prototype.loadQuizButtons = function(quizURLs) {
