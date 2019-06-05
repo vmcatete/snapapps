@@ -25,6 +25,8 @@ QuizDisplay.prototype.initDisplay = function() {
     if (assignment.quizURLs) {
         this.loadQuizButtons(assignment.quizURLs);
     }
+
+    this.updateFillPageFunction();
 }
 
 QuizDisplay.prototype.createQuizBar = function() {
@@ -224,42 +226,42 @@ QuizDisplay.prototype.hintDialogShown = function() {
 
 };
 
+QuizDisplay.prototype.updateFillPageFunction = function() {
+    WorldMorph.prototype.fillPage = function () {
+        var clientHeight = window.innerHeight - 40,
+            clientWidth = window.innerWidth,
+            myself = this;
 
-WorldMorph.prototype.fillPage = function () {
-    var fillParent = true;
+        this.worldCanvas.style.position = "absolute";
+        this.worldCanvas.style.top = "40px";
+        this.worldCanvas.style.left = "0px";
+        this.worldCanvas.style.right = "0px";
+        this.worldCanvas.style.width = "100%";
+        this.worldCanvas.style.height = "calc(100% - 40px)";
 
-    var clientHeight = fillParent ? this.worldCanvas.offsetHeight :
-            window.innerHeight,
-        clientWidth = fillParent ? this.worldCanvas.offsetWidth :
-            window.innerWidth,
-        myself = this;
-
-    if (!fillParent) {
-            this.worldCanvas.style.position = "absolute";
-            this.worldCanvas.style.left = "0px";
-            this.worldCanvas.style.right = "0px";
-            this.worldCanvas.style.width = "100%";
-            this.worldCanvas.style.height = "100%";
         if (document.documentElement.scrollTop) {
             // scrolled down b/c of viewport scaling
-            clientHeight = document.documentElement.clientHeight;
+            clientHeight = document.documentElement.clientHeight - 40;
         }
         if (document.documentElement.scrollLeft) {
             // scrolled left b/c of viewport scaling
             clientWidth = document.documentElement.clientWidth;
         }
-    }
-    if (this.worldCanvas.width !== clientWidth) {
-        this.worldCanvas.width = clientWidth;
-        this.setWidth(clientWidth);
-    }
-    if (this.worldCanvas.height !== clientHeight) {
-        this.worldCanvas.height = clientHeight;
-        this.setHeight(clientHeight);
-    }
-    this.children.forEach(function (child) {
-        if (child.reactToWorldResize) {
-            child.reactToWorldResize(myself.bounds.copy());
+        if (this.worldCanvas.width !== clientWidth) {
+            this.worldCanvas.width = clientWidth;
+            this.setWidth(clientWidth);
         }
-    });
-};
+        if (this.worldCanvas.height !== clientHeight) {
+            this.worldCanvas.height = clientHeight;
+            this.setHeight(clientHeight);
+        }
+        this.children.forEach(function (child) {
+            if (child.reactToWorldResize) {
+                child.reactToWorldResize(myself.bounds.copy());
+            }
+        });
+    };
+
+    window.ide.world().fillPage();
+}
+
