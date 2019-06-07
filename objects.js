@@ -8344,6 +8344,7 @@ Costume.prototype.flipped = function () {
 // Costume actions
 
 Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
+    Trace.log("Costume.edit", this.name);
     var myself = this,
         editor = new PaintEditorMorph();
     editor.oncancel = oncancel || nop;
