@@ -1947,6 +1947,7 @@ IDE_Morph.prototype.reactToWorldResize = function (rect) {
 };
 
 IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
+    Trace.log("IDE.droppedImage", name);
     var costume = new Costume(
         aCanvas,
         this.currentSprite.newCostumeName(
@@ -1973,6 +1974,7 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
 };
 
 IDE_Morph.prototype.droppedSVG = function (anImage, name) {
+    Trace.log("IDE.droppedSVG", name);
     var costume = new SVG_Costume(anImage, name.split('.')[0]);
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
@@ -1981,6 +1983,7 @@ IDE_Morph.prototype.droppedSVG = function (anImage, name) {
 };
 
 IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
+    Trace.log("IDE.droppedAudio", name);
 	var myself = this;
     if (anAudio.src.indexOf('data:audio') !== 0) {
     	// fetch and base 64 encode samples using FileReader
@@ -2418,6 +2421,7 @@ IDE_Morph.prototype.paintNewSprite = function () {
 };
 
 IDE_Morph.prototype.newCamSprite = function () {
+    Trace.log("IDE.newCamSprite");
     var sprite = new SpriteMorph(this.globalVariables),
         camDialog,
         myself = this;
@@ -2620,6 +2624,7 @@ IDE_Morph.prototype.snapMenu = function () {
 };
 
 IDE_Morph.prototype.cloudMenu = function () {
+    Trace.log("IDE.cloudMenu");
     var menu,
         myself = this,
         world = this.world(),
@@ -2762,6 +2767,7 @@ IDE_Morph.prototype.cloudMenu = function () {
 };
 
 IDE_Morph.prototype.settingsMenu = function () {
+    Trace.log("IDE.settingsMenu");
     var menu,
         stage = this.stage,
         world = this.world(),
@@ -3188,6 +3194,7 @@ IDE_Morph.prototype.settingsMenu = function () {
 };
 
 IDE_Morph.prototype.projectMenu = function () {
+    Trace.log("IDE.projectMenu");
     var menu,
         myself = this,
         world = this.world(),
@@ -3233,6 +3240,7 @@ IDE_Morph.prototype.projectMenu = function () {
         shiftClicked ?
                 'Export project as plain text...' : 'Export project...',
         function () {
+            Trace.log("ProjectMenu.exportProject");
             if (myself.projectName) {
                 myself.exportProject(myself.projectName, shiftClicked);
             } else {
@@ -3248,13 +3256,19 @@ IDE_Morph.prototype.projectMenu = function () {
     if (this.stage.globalBlocks.length) {
         menu.addItem(
             'Export blocks...',
-            function () {myself.exportGlobalBlocks(); },
+            function () {
+                Trace.log("ProjectMenu.exportBlocks");
+                myself.exportGlobalBlocks();
+            },
             'show global custom block definitions as XML' +
                 '\nin a new browser window'
         );
         menu.addItem(
             'Unused blocks...',
-            function () {myself.removeUnusedBlocks(); },
+            function () {
+                Trace.log("ProjectMenu.unusedBlocks");
+                myself.removeUnusedBlocks();
+            },
             'find unused global custom blocks' +
                 '\nand remove their definitions'
         );
@@ -3262,7 +3276,10 @@ IDE_Morph.prototype.projectMenu = function () {
 
     menu.addItem(
         'Export summary...',
-        function () {myself.exportProjectSummary(); },
+        function () {
+            Trace.log("ProjectMenu.exportSummary");
+            myself.exportProjectSummary();
+        },
         'open a new browser browser window\n with a summary of this project'
     );
 
@@ -3288,6 +3305,7 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem(
         'Import tools',
         function () {
+            Trace.log("ProjectMenu.importTools");
             if (location.protocol === 'file:') {
                 myself.importLocalFile();
                 return;
@@ -3304,6 +3322,7 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem(
         'Libraries...',
         function() {
+            Trace.log("ProjectMenu.libraries");
             if (location.protocol === 'file:') {
                 myself.importLocalFile();
                 return;
@@ -3322,6 +3341,7 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem(
         localize(graphicsName) + '...',
         function () {
+            Trace.log("ProjectMenu." + graphicsName);
             if (location.protocol === 'file:') {
                 myself.importLocalFile();
                 return;
@@ -3333,6 +3353,7 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem(
         localize('Sounds') + '...',
         function () {
+            Trace.log("ProjectMenu.sounds");
             if (location.protocol === 'file:') {
                 myself.importLocalFile();
                 return;
@@ -3861,6 +3882,7 @@ IDE_Morph.prototype.newProject = function () {
 };
 
 IDE_Morph.prototype.save = function () {
+    Trace.log("IDE.save");
     var myself = this;
 
     // temporary hack - only allow exporting projects to disk
@@ -5138,6 +5160,7 @@ IDE_Morph.prototype.setPaletteWidth = function (newWidth) {
 };
 
 IDE_Morph.prototype.createNewProject = function () {
+    Trace.log("IDE.createNewProject");
     var myself = this;
     this.confirm(
         'Replace the current project with a new one?',
@@ -5147,6 +5170,7 @@ IDE_Morph.prototype.createNewProject = function () {
 };
 
 IDE_Morph.prototype.openProjectsBrowser = function () {
+    Trace.log("IDE.openProjectsBrowser");
     if (location.protocol === 'file:') {
         // bypass the project import dialog and directly pop up
         // the local file picker.
@@ -5160,6 +5184,7 @@ IDE_Morph.prototype.openProjectsBrowser = function () {
 };
 
 IDE_Morph.prototype.saveProjectsBrowser = function () {
+    Trace.log("IDE.saveProjectBrowser");
     var myself = this;
 
     // temporary hack - only allow exporting projects to disk
@@ -5253,6 +5278,7 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
 // IDE_Morph blocks scaling
 
 IDE_Morph.prototype.userSetBlocksScale = function () {
+    Trace.log("IDE.zoomBlocks");
     var myself = this,
         scrpt,
         blck,
@@ -5360,6 +5386,7 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
 // IDE_Morph stage size manipulation
 
 IDE_Morph.prototype.userSetStageSize = function () {
+    Trace.log("IDE.stageSize");
     new DialogBoxMorph(
         this,
         this.setStageExtent,
@@ -5441,6 +5468,7 @@ IDE_Morph.prototype.userSetDragThreshold = function () {
 // IDE_Morph cloud interface
 
 IDE_Morph.prototype.initializeCloud = function () {
+    Trace.log("IDE.Login");
     var myself = this,
         world = this.world();
     new DialogBoxMorph(
@@ -5494,6 +5522,7 @@ IDE_Morph.prototype.initializeCloud = function () {
 };
 
 IDE_Morph.prototype.createCloudAccount = function () {
+    Trace.log("IDE.signUp");
     var myself = this,
         world = this.world();
 
@@ -5532,6 +5561,7 @@ IDE_Morph.prototype.createCloudAccount = function () {
 };
 
 IDE_Morph.prototype.resetCloudPassword = function () {
+    Trace.log("IDE.resetPassword");
     var myself = this,
         world = this.world();
 
@@ -5569,6 +5599,7 @@ IDE_Morph.prototype.resetCloudPassword = function () {
 };
 
 IDE_Morph.prototype.resendVerification = function () {
+    Trace.log("IDE.resendVerificationEmail");
     var myself = this,
         world = this.world();
 
@@ -8186,6 +8217,7 @@ CostumeIconMorph.prototype.init = function (aCostume, aTemplate) {
             wardrobe = myself.parentThatIsA(WardrobeMorph);
 
         if (ide) {
+            Trace.log("CostumeIconMorph.costumeClicked", myself.object.name);
             ide.currentSprite.wearCostume(myself.object);
         }
         if (wardrobe) {
@@ -8287,6 +8319,7 @@ CostumeIconMorph.prototype.userMenu = function () {
 };
 
 CostumeIconMorph.prototype.editCostume = function () {
+    Trace.log("CostumeIconMorph.editCostume", this.object.name);
     this.disinherit();
 
     if (this.object instanceof SVG_Costume && this.object.shapes.length === 0) {
@@ -8306,12 +8339,14 @@ CostumeIconMorph.prototype.editCostume = function () {
 };
 
 CostumeIconMorph.prototype.editRotationPointOnly = function () {
+    Trace.log("CostumeIconMorph.editRotationPointOnly", this.object.name);
     var ide = this.parentThatIsA(IDE_Morph);
     this.object.editRotationPointOnly(this.world());
     ide.hasChangedMedia = true;
 };
 
 CostumeIconMorph.prototype.renameCostume = function () {
+    Trace.log("CostumeIconMorph.renameCostume", this.object.name);
     this.disinherit();
     var costume = this.object,
         wardrobe = this.parentThatIsA(WardrobeMorph),
@@ -8326,6 +8361,7 @@ CostumeIconMorph.prototype.renameCostume = function () {
                 );
                 costume.version = Date.now();
                 ide.hasChangedMedia = true;
+                Trace.log("CostumeIconMorph.renameCostumeTo", answer);
             }
         }
     ).prompt(
@@ -8337,6 +8373,7 @@ CostumeIconMorph.prototype.renameCostume = function () {
 };
 
 CostumeIconMorph.prototype.duplicateCostume = function () {
+    Trace.log("CostumeIconMorph.duplicateCostume", this.object.name);
     var wardrobe = this.parentThatIsA(WardrobeMorph),
         ide = this.parentThatIsA(IDE_Morph),
         newcos = this.object.copy();
@@ -8349,6 +8386,7 @@ CostumeIconMorph.prototype.duplicateCostume = function () {
 };
 
 CostumeIconMorph.prototype.removeCostume = function () {
+    Trace.log("CostumeIconMorph.removeCostume", this.object.name);
     var wardrobe = this.parentThatIsA(WardrobeMorph),
         idx = this.parent.children.indexOf(this),
         off = CamSnapshotDialogMorph.prototype.enableCamera ? 3 : 2,
@@ -8360,6 +8398,7 @@ CostumeIconMorph.prototype.removeCostume = function () {
 };
 
 CostumeIconMorph.prototype.exportCostume = function () {
+    Trace.log("CostumeIconMorph.exportCostume", this.object.name);
     var ide = this.parentThatIsA(IDE_Morph);
     if (this.object instanceof SVG_Costume) {
         // don't show SVG costumes in a new tab (shows text)
