@@ -5503,6 +5503,7 @@ IDE_Morph.prototype.initializeCloud = function () {
                     } else {
                         myself.showMessage(response.message, 2);
                     }
+                    Trace.log("SnapCloud.signedInAs", username);
                 },
                 myself.cloudError()
             );
@@ -5665,6 +5666,7 @@ IDE_Morph.prototype.changeCloudPassword = function () {
 
 IDE_Morph.prototype.logout = function () {
     var myself = this;
+    Trace.log("IDE.logout", sessionStorage.username);
     this.cloud.logout(
         function () {
             delete(sessionStorage.username);
@@ -5737,7 +5739,6 @@ IDE_Morph.prototype.verifyProject = function (body) {
 }
 
 IDE_Morph.prototype.saveProjectToCloud = function (name) {
-    Trace.log('IDE.saveProjectToCloud', name);
     var myself = this, projectBody, projectSize;
 
     if (name) {
@@ -5757,6 +5758,8 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
         function () {myself.showMessage('saved.', 2); },
         this.cloudError()
     );
+
+    Trace.log('IDE.saveProjectToCloud', this.projectName);
 };
 
 IDE_Morph.prototype.exportProjectMedia = function (name) {
