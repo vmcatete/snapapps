@@ -4,13 +4,6 @@ html, body {
     width: 100%;
 }
 
-#world {
-    position: absolute;
-    top: 40px;
-    height: calc(100% - 40px);
-    width:100%;
-}
-
 #container {
     height: 100%;
 }
@@ -31,10 +24,6 @@ html, body {
     margin-right: 10px;
     color: white;
 }
-
-/* .ui-dialog-titlebar-close {
-    visibility: hidden;
-} */
 
 #quiz-buttons {
     float:left;
