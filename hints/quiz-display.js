@@ -161,19 +161,22 @@ QuizDisplay.prototype.showSurvey = function(button) {
 
     var myself = this;
 
-    var response = confirm("Are you sure you want to open " + button.value + "? \n You ONLY have 1 attempt.");
-    if (!response) {
-        Trace.log("QuizDisplay.quizCanceled", button.value);
-        return;
-    }
+    new DialogBoxMorph(this, function() {
+        // If they say yes, show inserts and reshow this
+        button.clicked = true;
+        this.disableButtons();
 
-    button.clicked = true;
-    this.disableButtons();
-
-    this.quizDialog.show(button.quizURL, function() {
-        console.log("survey complete" + button.value);
-        myself.enableButtons();
-    }, button.value, newGuid());
+        this.quizDialog.show(button.quizURL, function() {
+            myself.enableButtons();
+        }, button.value, newGuid());
+        Trace.log('QuizDisplay.showQuizPromptOk', button.value);
+    }).askYesNo(
+        localize('Confirm Open'),
+        localize (
+            "Are you sure you want to open " + button.value + "? \n You ONLY have 1 attempt."
+        ),
+        window.world
+    );
 }
 
 QuizDisplay.prototype.enableButtons = function() {
