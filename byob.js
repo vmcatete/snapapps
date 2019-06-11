@@ -1638,6 +1638,8 @@ BlockDialogMorph.prototype.prompt = function() {
 
 BlockDialogMorph.prototype.ok = function() {
     Trace.log('BlockTypeDialog.ok');
+    console.log(this);
+    console.log(arguments);
     BlockDialogMorph.uber.ok.apply(this, arguments);
 };
 
@@ -2072,7 +2074,13 @@ function BlockEditorMorph(definition, target) {
 }
 
 BlockEditorMorph.prototype.ok = function() {
-    Trace.log('BlockEditor.ok');
+    var myself = this;
+    Trace.log('BlockEditor.ok', myself.definition ? {
+        'spec': myself.definition.spec,
+        'category': myself.definition.category,
+        'type': myself.definition.type,
+        'guid': myself.definition.guid,
+    } : null);
     BlockEditorMorph.uber.ok.apply(this, arguments);
 };
 
@@ -2242,7 +2250,13 @@ BlockEditorMorph.prototype.accept = function (origin) {
 
 BlockEditorMorph.prototype.cancel = function (origin) {
     if (origin instanceof CursorMorph) {return; }
-    Trace.log('BlockEditor.cancel');
+    var myself = this;
+    Trace.log('BlockEditor.cancel', myself.definition ? {
+        'spec': myself.definition.spec,
+        'category': myself.definition.category,
+        'type': myself.definition.type,
+        'guid': myself.definition.guid,
+    } : null);
     //this.refreshAllBlockInstances();
     this.close();
 };
@@ -2361,13 +2375,20 @@ BlockEditorMorph.prototype.deduplicateBlockIDs = function() {
 };
 
 BlockEditorMorph.prototype.updateDefinition = function () {
-    Trace.log('BlockEditor.apply');
     var oldSpec = this.definition.blockSpec();
     this.applyToDefinition(this.definition);
     this.refreshAllBlockInstances(oldSpec);
     ide = this.target.parentThatIsA(IDE_Morph);
     ide.flushPaletteCache();
     ide.refreshPalette();
+
+    var myself = this;
+    Trace.log('BlockEditor.apply', myself.definition ? {
+        'spec': myself.definition.spec,
+        'category': myself.definition.category,
+        'type': myself.definition.type,
+        'guid': myself.definition.guid,
+    } : null);
 };
 
 // We want to be able to apply the edits represented in this editor to an

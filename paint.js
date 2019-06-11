@@ -225,16 +225,23 @@ PaintEditorMorph.prototype.buildEdits = function () {
 
     this.edits.add(this.pushButton(
         "undo",
-        function () {paper.undo(); }
+        function () {
+            Trace.log("PaintEditorMorph.undo");
+            paper.undo();
+        }
     ));
 
     this.edits.add(this.pushButton(
         "clear",
-        function () {paper.clearCanvas(); }
+        function () {
+            Trace.log("PaintEditorMorph.clear");
+            paper.clearCanvas();
+        }
     ));
     this.edits.add(this.pushButton(
         'Vector',
         function () {
+            Trace.log("PaintEditorMorph.Vector");
             if (myself.paper.undoBuffer.length > 0) {
                 myself.ide.confirm(
                     'This will erase your current drawing.\n' +
@@ -258,19 +265,31 @@ PaintEditorMorph.prototype.buildScaleBox = function () {
     var paper = this.paper;
     this.scaleBox.add(this.pushButton(
         "grow",
-        function () {paper.scale(0.05, 0.05); }
+        function () {
+            Trace.log("PaintEditorMorph.grow");
+            paper.scale(0.05, 0.05);
+        }
     ));
     this.scaleBox.add(this.pushButton(
         "shrink",
-        function () {paper.scale(-0.05, -0.05); }
+        function () {
+            Trace.log("PaintEditorMorph.shrink");
+            paper.scale(-0.05, -0.05);
+        }
     ));
     this.scaleBox.add(this.pushButton(
         "flip ↔",
-        function () {paper.scale(-2, 0); }
+        function () {
+            Trace.log("PaintEditorMorph.flipLeftRight");
+            paper.scale(-2, 0);
+        }
     ));
     this.scaleBox.add(this.pushButton(
         "flip ↕",
-        function () {paper.scale(0, -2); }
+        function () {
+            Trace.log("PaintEditorMorph.flipTopBottom");
+            paper.scale(0, -2);
+        }
     ));
     this.scaleBox.fixLayout();
 };
@@ -341,6 +360,7 @@ PaintEditorMorph.prototype.refreshToolButtons = function () {
 };
 
 PaintEditorMorph.prototype.ok = function () {
+    Trace.log("PaintEditorMorph.ok");
     this.paper.updateAutomaticCenter();
     this.callback(
         this.paper.paper,
@@ -350,6 +370,7 @@ PaintEditorMorph.prototype.ok = function () {
 };
 
 PaintEditorMorph.prototype.cancel = function () {
+    Trace.log("PaintEditorMorph.cancel");
     if (this.oncancel) {this.oncancel(); }
     this.destroy();
 };
@@ -464,6 +485,7 @@ PaintEditorMorph.prototype.toolButton = function (icon, hint) {
         null,
         this,
         function () { // action
+            Trace.log("PaintEditorMorph.toolButtonClicked", hint);
             myself.paper.currentTool = icon;
             myself.paper.toolChanged(icon);
             myself.refreshToolButtons();

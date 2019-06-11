@@ -4,22 +4,20 @@
 // 'test' and 'view' will not show up on the selection menu
 // Assignment name needs to be the same as example name in EXAMPLES file
 window.assignments = {
-    'none': {
-        name: 'None',
-        hint: 'just using Snap',
+    'LoginAndAccount': {
+        name: 'Create Snap Account',
     },
-    'Day1Starter': {
-        name: 'Day 1',
-        hint: 'coding session',
-        quizURLs: {
-            'Explay/Modify Quiz': 'https://ncsu.qualtrics.com/jfe/form/SV_9vPJ82JDCWM13cp',
-            'Buggy Code Quiz': 'https://ncsu.qualtrics.com/jfe/form/SV_06aIH6ORtHqGfAx',
-            'Parsons Problem Quiz': 'https://ncsu.qualtrics.com/jfe/form/SV_cUt9X0zTUJNnY6F'
-        }
+    'Activity1': {
+        name: 'Activity 1: Click Alonzo Game',
     },
-    'prePD': {
-        name: 'Pre-PD work',
-        hint: 'coding session',
+    'Activity2Part1': {
+        name: 'Activity 2 Part 1: Gossip and Greet',
+    },
+    'Activity2Part2': {
+        name: 'Activity 2 Part 2: Gossip and Greet',
+    },
+    'viewing': {
+        name: 'Viewing',
     },
     'test': {
         name: 'Testing',
@@ -43,15 +41,15 @@ window.requireLogin = true;
 window.allowNewUser = false;
 
 // If true, if in pair
-window.isPairProgramming = true;
+window.isPairProgramming = false;
 
 // Specify to override the default Snap cloud URL
 // window.snapCloudURL = 'https://snap.apps.miosoft.com/SnapCloud';
 
 // Specify login instructions such as which login ID to use.
 window.unityID = {
-    instruction: 'Sign in with your pre-assigned ID',
-    hint: '( This was sent to you via email )'
+    instruction: 'Sign in with your PD ID',
+    hint: '( Your first initial + entire last name )'
 }
 
 // Specify the login header's logo and title text

@@ -65,7 +65,7 @@
 			var select = document.getElementById("assignment");
 			for (var key in assignments) {
 				if (assignments.hasOwnProperty(key)) {
-					if (key == "test" || key == "view") continue;
+					if (key == "test" || key == "view" || key == "viewing") continue;
 					var assignment = assignments[key];
 					var option = document.createElement("option");
 					option.text = assignment.name || assignment;
@@ -87,7 +87,7 @@
 			// Adding new user notification based on if new user is allowed
 			if (window.allowNewUser) {
 				$('#confirm-new').append('<p class="alert">\
-													We have not seen this user ID "<span id="display-id"></span>" before. Please try again.\
+													We have not seen this PD ID "<span id="display-id"></span>" before. Please try again.\
 												</p>\
 												<ul>\
 													<li>If you\'re a new user, please check the box below and hit next.</li>\
@@ -97,7 +97,7 @@
 			}
 			else {
 				$('#confirm-new').append('<p class="alert">\
-													We have not seen this user ID "<span id="display-id"></span>" before. Please try again.\
+													We have not seen this PD ID "<span id="display-id"></span>" before. Please try again.\
 												</p>');
 			}
 			// Set the logo and description from the config file
@@ -240,6 +240,11 @@
 					}
 					$('#display-id-loggedIN').html(id);
 					setUserID(response.userID);
+
+					if (window.location.hash.indexOf("#present:") !== -1) {
+						window.location.href = "../snap.html?assignment=viewing" +  window.location.hash;
+						return true;
+					}
 				}).fail(function() {
 					skipLogIn(true);
 				});
