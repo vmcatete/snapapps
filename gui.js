@@ -442,6 +442,8 @@ IDE_Morph.prototype.openIn = function (world) {
             dict = myself.cloud.parseDict(location.hash.substr(9));
             dict.Username = dict.Username.toLowerCase();
 
+            Trace.log("IDE.loadPublicProject", dict);
+
             myself.cloud.getPublicProject(
                 dict.ProjectName,
                 dict.Username,
@@ -6752,13 +6754,16 @@ ProjectDialogMorph.prototype.openProject = function () {
     if (!proj) {return; }
     this.ide.source = this.source;
     if (this.source === 'cloud') {
+        Trace.log("ProjectDialogMorph.openCloudProject", proj.projectname);
         this.openCloudProject(proj);
     } else if (this.source === 'examples') {
+        Trace.log("ProjectDialogMorph.openLocalProject", proj.name);
         // Note "file" is a property of the parseResourceFile function.
         src = this.ide.getURL(this.ide.resourceURL('Examples', proj.fileName));
         this.ide.openProjectString(src);
         this.destroy();
     } else { // 'local'
+        Trace.log("ProjectDialogMorph.openBrowserProject", proj.name);
         this.ide.openProject(proj.name);
         this.destroy();
     }

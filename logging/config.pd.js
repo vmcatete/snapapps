@@ -16,6 +16,9 @@ window.assignments = {
     'Activity2Part2': {
         name: 'Activity 2 Part 2: Gossip and Greet',
     },
+    'viewing': {
+        name: 'Viewing',
+    },
     'test': {
         name: 'Testing',
     },

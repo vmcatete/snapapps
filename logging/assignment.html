@@ -65,7 +65,7 @@
 			var select = document.getElementById("assignment");
 			for (var key in assignments) {
 				if (assignments.hasOwnProperty(key)) {
-					if (key == "test" || key == "view") continue;
+					if (key == "test" || key == "view" || key == "viewing") continue;
 					var assignment = assignments[key];
 					var option = document.createElement("option");
 					option.text = assignment.name || assignment;
@@ -240,6 +240,11 @@
 					}
 					$('#display-id-loggedIN').html(id);
 					setUserID(response.userID);
+
+					if (window.location.hash.indexOf("#present:") !== -1) {
+						window.location.href = "../snap.html?assignment=viewing" +  window.location.hash;
+						return true;
+					}
 				}).fail(function() {
 					skipLogIn(true);
 				});
