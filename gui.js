@@ -442,8 +442,7 @@ IDE_Morph.prototype.openIn = function (world) {
             dict = myself.cloud.parseDict(location.hash.substr(9));
             dict.Username = dict.Username.toLowerCase();
 
-
-            Trace.log("IDE.loadPublicProject", dict.ProjectName);
+            Trace.log("IDE.loadPublicProject", dict);
 
             myself.cloud.getPublicProject(
                 dict.ProjectName,
