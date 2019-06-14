@@ -23,7 +23,7 @@ var Trace;
     if (window.createLogger) {
         Trace = window.createLogger(Assignment.getID());
     } else {
-        Trace = new Logger(50);
+        Trace = new Logger(1000);
     }
 
     if (window.easyReload && window.easyReload(Assignment.getID())) {

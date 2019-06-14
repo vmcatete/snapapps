@@ -712,41 +712,41 @@ IDE_Morph.prototype.cloudMenu = function() {
         );
         menu.addLine();
     }
-    // if (!SnapCloud.username) {
-    //     menu.addItem(
-    //         'Login...',
-    //         'initializeCloud'
-    //     );
-    //     menu.addItem(
-    //         'Signup...',
-    //         'createCloudAccount'
-    //     );
-    //     menu.addItem(
-    //         'Reset Password...',
-    //         'resetCloudPassword'
-    //     );
-    // } else {
-    //     menu.addItem(
-    //         localize('Logout') + ' ' + SnapCloud.username,
-    //         'logout'
-    //     );
-    //     menu.addItem(
-    //         'Change Password...',
-    //         'changeCloudPassword'
-    //     );
-    // }
-    if (window.hasOwnProperty('userID') && window.userID) {
-        menu.addItem(
-            localize('Logout') + ' ' + window.userID,
-            'logout'
-        );
-    }
-    else {
-        menu.addItem(
-            'Login...',
-            'login'
-        );
-    }
+     if (!SnapCloud.username) {
+         menu.addItem(
+             'Login...',
+             'initializeCloud'
+         );
+         menu.addItem(
+             'Signup...',
+             'createCloudAccount'
+         );
+         menu.addItem(
+             'Reset Password...',
+             'resetCloudPassword'
+         );
+     } else {
+         menu.addItem(
+             localize('Logout') + ' ' + SnapCloud.username,
+             'logout'
+         );
+         menu.addItem(
+             'Change Password...',
+             'changeCloudPassword'
+         );
+     }
+    //if (window.hasOwnProperty('userID') && window.userID) {
+    //    menu.addItem(
+    //        localize('Logout') + ' ' + window.userID,
+    //        'logout'
+    //    );
+    //}
+    //else {
+    //    menu.addItem(
+    //       'Login...',
+    //        'login'
+    //    );
+    //}
     if (shiftClicked) {
         menu.addLine();
         menu.addItem(

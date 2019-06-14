@@ -1,9 +1,9 @@
 <?php
 
 $enable_viewer = true;
-$db = "cellular";
+$db = "epidemics";
 $user = "root";
-$password = "root";
+$password = "Game1+1Learn!";
 $host = "localhost";
 $table = "trace";
 $userTable= "users";
