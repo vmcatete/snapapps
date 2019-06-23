@@ -16,7 +16,14 @@ function SurveyDialog(id, title) {
         myself.createDialogDiv();
         $('#' + myself.idDialog).dialog({
             title: myself.title,
-            dialogClass: 'no-close',
+            close: function() {
+                if (this.getAttribute("id") == window.quizDisplay.quizDialog.idDialog) {
+                    window.quizDisplay.quizDialog.close();
+                }
+                // if (this.getAttribute("id") == window.quizDisplay.helpDialog.idDialog) {
+                //     window.quizDisplay.helpDialog.close();
+                // }
+            },
             closeOnEscape: false,
             width: 700,
             height: 625,
@@ -101,15 +108,18 @@ SurveyDialog.prototype.receiveMessage = function(event) {
     var eventID = event.data.eventID;
     if (eventID != this.eventID) return;
     Trace.log("SurveyDialog.surveySubmitted", this.surveyInfo);
-    console.log(eventID);
-    this.close();
+    if (this.title == "Help") {
+        this.close();
+    }
+    else {
+        this.allowClose(true);
+    }
 };
 
 SurveyDialog.prototype.close = function() {
-    Trace.log('SurveyDialog.close', SurveyDialog.eventID);
+    Trace.log("SurveyDialog.dialogClosed", this.surveyInfo);
     $('#' + this.idDialog).dialog( 'close' );
     if (this.callback) this.callback();
-    Trace.log("SurveyDialog.dialogClosed", this.surveyInfo);
 
     this.surveyInfo = "";
     this.callback = null;

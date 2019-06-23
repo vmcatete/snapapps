@@ -4,17 +4,60 @@
 // 'test' and 'view' will not show up on the selection menu
 // Assignment name needs to be the same as example name in EXAMPLES file
 window.assignments = {
-    'LoginAndAccount': {
-        name: 'Create Snap Account',
+    // 'LoginAndAccount': {
+    //     name: 'Create Snap Account',
+    // },
+    // 'Activity1': {
+    //     name: 'Activity 1: Click Alonzo Game',
+    // },
+    // 'Activity2Part1': {
+    //     name: 'Activity 2 Part 1: Gossip and Greet',
+    // },
+    // 'Activity2Part2': {
+    //     name: 'Activity 2 Part 2: Gossip and Greet',
+    // },
+    'Day1Activity1': {
+        name: 'Draw Square Starter',
+        hint: 'Day 1 Activity 1',
+        quizURLs: {
+            'Reflection Questions': 'https://ncsu.qualtrics.com/jfe/form/SV_7P3HuJ4SrGhvd09',
+        }
     },
-    'Activity1': {
-        name: 'Activity 1: Click Alonzo Game',
+    'Day1Activity2': {
+        name: 'Introduce Yourself Starter',
+        hint: 'Day 1 Activity 2',
+        quizURLs: {
+            'Reflection Questions': 'https://ncsu.qualtrics.com/jfe/form/SV_8dCmxOCqxqYECnH',
+        }
     },
-    'Activity2Part1': {
-        name: 'Activity 2 Part 1: Gossip and Greet',
+    'Day2Activity1': {
+        name: 'Balancing Scales Starter',
+        hint: 'Day 2 Activity 1',
+        quizURLs: {
+            'Reflection Questions': 'https://ncsu.qualtrics.com/jfe/form/SV_bBdnDSlEuIIy6gJ',
+        }
     },
-    'Activity2Part2': {
-        name: 'Activity 2 Part 2: Gossip and Greet',
+    'Day2Activity2': {
+        name: 'Graphing Coordinates Starter',
+        hint: 'Day 2 Activity 2',
+        quizURLs: {
+            'Reflection Questions': 'https://ncsu.qualtrics.com/jfe/form/SV_3KwUkMNg2OyfY8d',
+        }
+    },
+    'Day3Activity1': {
+        name: 'Epidemics Starter',
+        hint: 'Day 3 Activity 1',
+    },
+    'Day3Activity2': {
+        name: 'Foodwebs Starter',
+        hint: 'Day 3 Activity 1',
+        quizURLs: {
+            'Reflection Questions': 'https://ncsu.qualtrics.com/jfe/form/SV_cuJDf4IGqIf0d2R',
+        }
+    },
+    'Create': {
+        name: 'Create my own',
+        hint: 'Create Session',
     },
     'viewing': {
         name: 'Viewing',
@@ -41,7 +84,7 @@ window.requireLogin = true;
 window.allowNewUser = false;
 
 // If true, if in pair
-window.isPairProgramming = false;
+window.isPairProgramming = true;
 
 // Specify to override the default Snap cloud URL
 // window.snapCloudURL = 'https://snap.apps.miosoft.com/SnapCloud';
