@@ -7,7 +7,7 @@ function QuizDisplay() {
 
     this.quizDialog = new SurveyDialog('quiz', 'Questions');
     this.helpDialog = new SurveyDialog('help', 'Help');
-    this.helpDialog.surveyURL = "https://ncsu.qualtrics.com/jfe/form/SV_4Tq1ISyYu2wgsHH";
+    this.helpDialog.surveyURL = "https://ncsu.qualtrics.com/jfe/form/SV_0IgB67CpclWhU8d";
 
     window.quizDisplay = this;
 
