@@ -50,7 +50,7 @@ window.assignments = {
     },
     'Day3Activity2': {
         name: 'Foodwebs Starter',
-        hint: 'Day 3 Activity 1',
+        hint: 'Day 3 Activity 2',
         quizURLs: {
             'Reflection Questions': 'https://ncsu.qualtrics.com/jfe/form/SV_cuJDf4IGqIf0d2R',
         }
