@@ -4,20 +4,37 @@
         <title>Login Page</title>
         <script src="isnap/lib/jquery-3.1.1.min.js?v=2.5.1-e1.1"></script>
         <script src="isnap/lib/jquery-ui-1.12.1/jquery-ui.min.js?v=2.5.1-e1.1"></script>
+
+		<script type="text/javascript" src="morphic.js?v=2.4.9"></script>
+        <script type="text/javascript" src="cloud.js?v=2.4.9"></script>
+		<script type="text/javascript" src="sha512.js?v=2.4.9"></script>
     </head>
     <body>
-        <form action = "snap.html" id="form" method="GET">
-            <input type="text" id="username" placeholder="User Name" />
-            <input type="password" id="password" />
-            <button type="submit">Sign In</button>
-        </form>
+        <h1>Welcome to our system!</h1>
+        User name: <input type="text" id="username" placeholder="User Name" /> <br />
+        Password: <input type="password" id="password" /> <br />
+        <button type="submit" onclick=submit()>Sign In</button>
 
         <script type="text/javascript">
-            $("#form").submit( function(event) {
-                window.alert($("#username").val());
-                sessionStorage.setItem("snap_username", $("#username").val());
-                sessionStorage.setItem("snap_password", $("#password").val());
-            });
+            var cloud = new Cloud();
+            cloud.logout();
+            function submit() {
+                console.log("Trying to login...");
+                var user = {};
+                user.username = $("#username").val();
+                user.password = $('#password').val();
+                user.persist = false;
+                cloud.login(
+                    user.username,
+                    user.password,
+                    user.persist,
+                    function() {
+                        sessionStorage.username=user.username;
+                        window.location.href = "snap.html";
+                    },
+                    function() {window.alert("failed")}
+                )
+            }
         </script>
     </body>
 </html>
