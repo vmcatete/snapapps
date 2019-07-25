@@ -84,7 +84,9 @@
                         loadSchools();
                         $('.belt-container').addClass('is-transitioned');
                     },
-                    function() {window.alert("failed")}
+                    function() {
+                        $('#needsCookiesEnabled').removeClass('hidden');
+                    }
                 )
 
                 return false;
