@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login Page</title>
+        <script src="isnap/lib/jquery-3.1.1.min.js?v=2.5.1-e1.1"></script>
+        <script src="isnap/lib/jquery-ui-1.12.1/jquery-ui.min.js?v=2.5.1-e1.1"></script>
+    </head>
+    <body>
+        <form action = "snap.html" id="form" method="GET">
+            <input type="text" id="username" placeholder="User Name" />
+            <input type="password" id="password" />
+            <button type="submit">Sign In</button>
+        </form>
+
+        <script type="text/javascript">
+            $("#form").submit( function(event) {
+                window.alert($("#username").val());
+                sessionStorage.setItem("snap_username", $("#username").val());
+                sessionStorage.setItem("snap_password", $("#password").val());
+            });
+        </script>
+    </body>
+</html>
