@@ -177,7 +177,7 @@
 				color: #656565;
 				margin-bottom: 20px;
 			}
-			#input-id{
+			#input-id, #input-pwd{
 			    padding-top: 5px;
 				padding-bottom: 5px;
 				padding-left: 20px;
@@ -190,7 +190,7 @@
 				font-size: 22px;
 				outline: none;
 				border: 2px solid rgb(143,86,227);
-				background: url(userIcon.png) no-repeat right 10px center;
+				/* background: url(userIcon.png) no-repeat right 10px center; */
 				background-color: rgb(255,255,255);
 				background-size: 45px 45px;
 			}
@@ -341,7 +341,7 @@
 			    margin-top: 16px;
 				margin-bottom: 16px;
 			}
-			#assignment{
+			#assignment, #school, #teacher{
 			    padding-top: 7px;
 				padding-bottom: 7px;
 				padding-left: 25px;

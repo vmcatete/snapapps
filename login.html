@@ -4,25 +4,74 @@
         <title>Login Page</title>
         <script src="isnap/lib/jquery-3.1.1.min.js?v=2.5.1-e1.1"></script>
         <script src="isnap/lib/jquery-ui-1.12.1/jquery-ui.min.js?v=2.5.1-e1.1"></script>
-
+        <link rel="stylesheet" type="text/css" href="logging/login/assignment.css">
+		<link rel="stylesheet" type="text/css" href="logging/login/css/font-awesome.min.css">
 		<script type="text/javascript" src="morphic.js?v=2.4.9"></script>
         <script type="text/javascript" src="cloud.js?v=2.4.9"></script>
 		<script type="text/javascript" src="sha512.js?v=2.4.9"></script>
     </head>
     <body>
-        <h1>Welcome to our system!</h1>
+
+        <div id="flex-Parent">
+                <div id="blackBar"><div><img id="headerLogo"></div> <div><span id="courseName"> </span></div></div>
+                <div id="theBox">
+                    <div id="needsCookiesEnabled" class="hidden"><i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i><span>Wrong user name or password. Please try again.</span></div>
+                    <div id="theBorder">
+                        <div id="logout" class="getFlex"> <div id="back-arrow"><a href="#" onclick="logout()"><i class="fa fa-long-arrow-left fa-3x" aria-hidden="true"></i></a></div></div>
+                        <!-- <div id="snapLogo"><img src="login/SnapLogo.png"></img></div> -->
+                        <div class="container">
+                            <div class="belt-container">
+                                <div class="belt">
+                                    <div class="state state-1">
+                                        <div>
+                                            <img id="infusing-logo" src="infusing-pic.png">
+                                            <h1 id="unityID-instruction">Sign in with your Unity ID</h1>
+                                            <div id="unityID-hint"> ( This is the ID in your email address )</div>
+                                        </div>
+                                        <div id="form-id">
+                                            <form id="form-flex-Parent">
+                                                <input id="input-id" name="id" placeholder="Enter User Name" required pattern="[A-Za-z0-9_]+" autofocus>
+                                                <input id="input-pwd" name="pwd" placeholder="Enter Password" required type="password">
+                                                <div id="confirm-new">
+                                                    <!-- adding content based on if new user is allowed -->
+                                                </div>
+                                                <div><input type="submit" id="sign-in-Button" value="Next"></input></div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="state state-2">
+                                        <div id="form-assignment">
+                                            <div id="signed-in-as">Signed in as <span id="display-id-loggedIN"></span></div>
+                                            <form action="snap.html" method="get">
+                                                <h1>Select School</h1>
+                                                <div><select id="school" name="school" disabled></select></div>
+                                                <h1>Select Teacher</h1>
+                                                <div><select id="teacher" name="teacher" disabled></select></div>
+                                                <h1>Select Assignment</h1>
+                                                <div><select id="assignment" name="assignment" disabled></select></div>
+                                                <div><button id="assignmentGObutton" type="submit" disabled>GO</button></div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        <!-- <h1>Welcome to our system!</h1>
         User name: <input type="text" id="username" placeholder="User Name" /> <br />
         Password: <input type="password" id="password" /> <br />
-        <button type="submit" onclick=submit()>Sign In</button>
+        <button type="submit" onclick=submit()>Sign In</button> -->
 
         <script type="text/javascript">
-            var cloud = new Cloud();
-            cloud.logout();
-            function submit() {
+            function doLogin() {
                 console.log("Trying to login...");
                 var user = {};
-                user.username = $("#username").val();
-                user.password = $('#password').val();
+                user.username = $("#input-id").val();
+                user.password = $('#input-pwd').val();
                 user.persist = false;
                 cloud.login(
                     user.username,
@@ -30,11 +79,99 @@
                     user.persist,
                     function() {
                         sessionStorage.username=user.username;
-                        window.location.href = "snap.html";
+                        $('#display-id-loggedIN').html(user.username);
+                        $('#needsCookiesEnabled').addClass('hidden');
+                        loadSchools();
+                        $('.belt-container').addClass('is-transitioned');
                     },
                     function() {window.alert("failed")}
                 )
+
+                return false;
             }
+
+            function loadSchools() {
+                var select = document.getElementById("school");
+
+                var option = document.createElement("option");
+                option.text = "Select one";
+                option.value = "default";
+                select.add(option);
+
+                if (sessionStorage.username == "ydong2") {
+                    option = document.createElement("option");
+                    option.text = "North Carolina State";
+                    option.value = "NCSU";
+                    select.add(option);
+
+                    option = document.createElement("option");
+                    option.text = "University of North Carolina";
+                    option.value = "UNC";
+                    select.add(option);
+                }
+
+                $('#school').prop("disabled", false);
+            }
+
+            function loadTeachers() {
+                var select = document.getElementById("teacher");
+                var school = $("#school :selected").val();
+
+                var option = document.createElement("option");
+                option.text = "Select one";
+                option.value = "default";
+                select.add(option);
+
+                if (sessionStorage.username == "ydong2" && school == "NCSU") {
+                    option = document.createElement("option");
+                    option.text = "Ms. Barnes";
+                    option.value = "barnes";
+                    select.add(option);
+
+                    option = document.createElement("option");
+                    option.text = "Ms. Catete";
+                    option.value = "catete";
+                    select.add(option);
+                }
+
+                $('#teacher').prop("disabled", false);
+            }
+
+            function loadAssignments() {
+                var select = document.getElementById("assignment");
+                var school = $("#school :selected").val();
+                var teacher = $("#teacher :selected").val();
+
+                if (sessionStorage.username == "ydong2" && school == "NCSU" && teacher == "catete") {
+                    option = document.createElement("option");
+                    option.text = "Draw Square Starter";
+                    option.value = "Day1Activity1";
+                    select.add(option);
+
+                    option = document.createElement("option");
+                    option.text = "Introduce Yourself Starter";
+                    option.value = "Day1Activity2";
+                    select.add(option);
+                }
+                $('#assignment').prop("disabled", false);
+            }
+
+            var cloud = new Cloud();
+            cloud.logout();
+            delete sessionStorage.username;
+
+            $("#form-flex-Parent").submit(doLogin);
+            $("#school").change(function() {
+                loadTeachers();
+            });
+            $("#teacher").change(function() {
+                loadAssignments();
+            });
+            $("#school").change(function() {
+                $('#assignmentGObutton').prop("disabled", false);
+            });
+            $('#form-assignment')[0].action += document.location.hash;
+
         </script>
     </body>
 </html>
