@@ -43,8 +43,6 @@
                                         <div id="form-assignment">
                                             <div id="signed-in-as">Signed in as <span id="display-id-loggedIN"></span></div>
                                             <form action="snap.html" method="get">
-                                                <h1>Select School</h1>
-                                                <div><select id="school" name="school" disabled></select></div>
                                                 <h1>Select Teacher</h1>
                                                 <div><select id="teacher" name="teacher" disabled></select></div>
                                                 <h1>Select Assignment</h1>
@@ -68,7 +66,6 @@
 
         <script type="text/javascript">
             function doLogin() {
-                console.log("Trying to login...");
                 var user = {};
                 user.username = $("#input-id").val();
                 user.password = $('#input-pwd').val();
@@ -81,7 +78,7 @@
                         sessionStorage.username=user.username;
                         $('#display-id-loggedIN').html(user.username);
                         $('#needsCookiesEnabled').addClass('hidden');
-                        loadSchools();
+                        loadTeachers();
                         $('.belt-container').addClass('is-transitioned');
                     },
                     function() {
@@ -92,8 +89,8 @@
                 return false;
             }
 
-            function loadSchools() {
-                var select = document.getElementById("school");
+            function loadTeachers() {
+                var select = document.getElementById("teacher");
 
                 var option = document.createElement("option");
                 option.text = "Select one";
@@ -101,30 +98,6 @@
                 select.add(option);
 
                 if (sessionStorage.username == "ydong2") {
-                    option = document.createElement("option");
-                    option.text = "North Carolina State";
-                    option.value = "NCSU";
-                    select.add(option);
-
-                    option = document.createElement("option");
-                    option.text = "University of North Carolina";
-                    option.value = "UNC";
-                    select.add(option);
-                }
-
-                $('#school').prop("disabled", false);
-            }
-
-            function loadTeachers() {
-                var select = document.getElementById("teacher");
-                var school = $("#school :selected").val();
-
-                var option = document.createElement("option");
-                option.text = "Select one";
-                option.value = "default";
-                select.add(option);
-
-                if (sessionStorage.username == "ydong2" && school == "NCSU") {
                     option = document.createElement("option");
                     option.text = "Ms. Barnes";
                     option.value = "barnes";
@@ -141,10 +114,9 @@
 
             function loadAssignments() {
                 var select = document.getElementById("assignment");
-                var school = $("#school :selected").val();
                 var teacher = $("#teacher :selected").val();
 
-                if (sessionStorage.username == "ydong2" && school == "NCSU" && teacher == "catete") {
+                if (sessionStorage.username == "ydong2" && teacher == "catete") {
                     option = document.createElement("option");
                     option.text = "Draw Square Starter";
                     option.value = "Day1Activity1";
