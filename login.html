@@ -91,23 +91,40 @@
 
             function loadTeachers() {
                 var select = document.getElementById("teacher");
+                var user_name = sessionStorage.username;
 
                 var option = document.createElement("option");
                 option.text = "Select one";
                 option.value = "default";
                 select.add(option);
 
-                if (sessionStorage.username == "ydong2") {
-                    option = document.createElement("option");
-                    option.text = "Ms. Barnes";
-                    option.value = "barnes";
-                    select.add(option);
-
-                    option = document.createElement("option");
-                    option.text = "Ms. Catete";
-                    option.value = "catete";
-                    select.add(option);
-                }
+                $.post('login/getTeacher.php', {
+					'user_name': user_name
+				}, function(data, status) {
+					var response;
+					try {
+						response = JSON.parse(data);
+					} catch(e) {
+					    skipLogIn(true);
+						return;
+					}
+					if (response.newUser || response.newUserPartner) {
+						if (response.newUser) {
+							$('#display-id').html(id);
+						}
+						else if (response.newUserPartner) {
+							$('#display-id').html(partner_id);
+						}
+						$('#confirm-new').removeClass('getFrames2');
+						$('#confirm-new').addClass('getFrames');
+						$("#confirm-new").css("margin-bottom", "30px");
+						return;
+					}
+					$('#display-id-loggedIN').html(id + '/' + partner_id);
+					setUserID(id + '/' + partner_id);
+				}).fail(function() {
+					skipLogIn(true);
+				});
 
                 $('#teacher').prop("disabled", false);
             }
