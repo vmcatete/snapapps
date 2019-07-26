@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `user_name` varchar(255) NOT NULL COMMENT 'A front facing user name to log into the system and Snap cloud',
   `email` varchar(255) NOT NULL COMMENT 'email address to reset password',
   `school_id` varchar(255) NOT NULL COMMENT 'NCES school id or a unique school identifier',
-  `user_type` varchar(255) NOT NULL COMMENT 'student or teacher',
+  `user_type` varchar(255) NOT NULL COMMENT 'student or teacher or helper or researcher',
   `display_name` varchar(255) COMMENT 'display in the drop down menu',
   PRIMARY KEY (user_id),
   INDEX (user_name),
@@ -70,3 +70,48 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 
 
+DROP TABLE IF EXISTS `school`;
+
+CREATE TABLE IF NOT EXISTS `school` (
+  `school_id` varchar(255) NOT NULL COMMENT 'A unique identifier for the school, nces id for public k-12 schools',
+  `school_name` varchar(255) NOT NULL COMMENT 'A front facing name for the school',
+  `street_address` varchar(255) NOT NULL COMMENT 'The street address of the school',
+  `city` varchar(255) NOT NULL COMMENT 'The city where the school is in',
+  `county` varchar(255) NOT NULL COMMENT 'The county the school is in',
+  `state` varchar(255) COMMENT 'The state the school is in, acronym ',
+  `zip` varchar(10) COMMENT 'The zip code of the school',
+  PRIMARY KEY (school_id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+DROP TABLE IF EXISTS `session`;
+
+CREATE TABLE IF NOT EXISTS `session` (
+  `session_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'A unique row ID for this session.',
+  `student_id` varchar(255) NOT NULL COMMENT 'A unique identifier for the student',
+  `teacher_id` varchar(255) NOT NULL COMMENT 'A unique identifier for the teacher',
+  `period` varchar(255) NOT NULL COMMENT 'The front facing period number',
+  `assignment_id` varchar(255) NOT NULL COMMENT 'An unique identifier for the assignment',
+  `consent` tinyint(1) NOT NULL COMMENT 'If we have student consent to look at the data',
+  PRIMARY KEY (session_id),
+  INDEX (teacher_id,period,assignment_id,consent)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+DROP TABLE IF EXISTS `assignment`;
+
+CREATE TABLE IF NOT EXISTS `assignment` (
+  `assignment_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'A unique identifier for the assignment.',
+  `assignment_key` varchar(255) NOT NULL COMMENT 'The key of the key-value pair in the config file',
+  `assignment_name` varchar(255) NOT NULL COMMENT 'The front facing name of the assignment',
+  `description` varchar(255) COMMENT 'The description of the assignment',
+  `environment` varchar(20) NOT NULL COMMENT 'The programming environment of the assignment',
+  `config_path` varchar(255) NOT NULL COMMENT 'The relative path to the config file',
+  `start_date` datetime NOT NULL COMMENT 'The date when the assignment begins',
+  `end_date` datetime NOT NULL COMMENT 'The date when the assignment ends',
+  PRIMARY KEY (assignment_id),
+  INDEX (start_date),
+  INDEX (end_date)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
