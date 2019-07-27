@@ -98,35 +98,26 @@
                 option.value = "default";
                 select.add(option);
 
-                $.post('login/getTeacher.php', {
+                $.post('logging/login/getTeacher.php', {
 					'user_name': user_name
 				}, function(data, status) {
 					var response;
 					try {
-						response = JSON.parse(data);
+                        response = JSON.parse(data);
 					} catch(e) {
-					    skipLogIn(true);
+                        window.alert("json parse error");
 						return;
-					}
-					if (response.newUser || response.newUserPartner) {
-						if (response.newUser) {
-							$('#display-id').html(id);
-						}
-						else if (response.newUserPartner) {
-							$('#display-id').html(partner_id);
-						}
-						$('#confirm-new').removeClass('getFrames2');
-						$('#confirm-new').addClass('getFrames');
-						$("#confirm-new").css("margin-bottom", "30px");
-						return;
-					}
-					$('#display-id-loggedIN').html(id + '/' + partner_id);
-					setUserID(id + '/' + partner_id);
+                    }
+                    response.forEach(teacher => {
+                        option = document.createElement("option");
+                        option.text = teacher.display_name;
+                        option.value = teacher.user_id;
+                        select.add(option);
+                    });
+                    $('#teacher').prop("disabled", false);
 				}).fail(function() {
-					skipLogIn(true);
+					window.alert("getTeacher post error");
 				});
-
-                $('#teacher').prop("disabled", false);
             }
 
             function loadAssignments() {
