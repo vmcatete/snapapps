@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `user_type` varchar(255) NOT NULL COMMENT 'student or teacher or helper or researcher',
   `display_name` varchar(255) COMMENT 'display in the drop down menu',
   PRIMARY KEY (user_id),
-  INDEX (user_name),
+  UNIQUE (user_name),
   INDEX (school_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

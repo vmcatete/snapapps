@@ -115,4 +115,10 @@ INSERT INTO `session` SET
     `consent` = 1
 ;
 
-
+INSERT INTO `session` SET
+    `student_id`  = 'nick002',
+    `teacher_id`  = 'catete002',
+    `period` = '1',
+    `assignment_id` = 1,
+    `consent` = 1
+;
