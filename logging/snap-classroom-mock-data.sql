@@ -80,6 +80,16 @@ INSERT INTO `assignment` SET
 ;
 
 INSERT INTO `assignment` SET
+    `assignment_file_name`  = 'Day3Activity1',
+    `assignment_name`  = 'Cellular starter',
+    `description` = 'Introducing simulation in cellular',
+    `environment` = 'Cellular',
+    `config_path` = '../config.js',
+    `start_date` = '2019-07-27 00:00:01',
+    `end_date` = '2019-07-28 23:59:59'
+;
+
+INSERT INTO `assignment` SET
     `assignment_file_name`  = 'Day2Activity1',
     `assignment_name`  = 'Draw Coordinate',
     `description` = 'Draw Coordinate starter code for the 2019 summer IC PD',
@@ -104,6 +114,14 @@ INSERT INTO `session` SET
     `teacher_id`  = 'catete002',
     `period` = '3',
     `assignment_id` = 2,
+    `consent` = 1
+;
+
+INSERT INTO `session` SET
+    `student_id`  = 'yihuan001',
+    `teacher_id`  = 'catete002',
+    `period` = '3',
+    `assignment_id` = 4,
     `consent` = 1
 ;
 

@@ -42,7 +42,7 @@
                                     <div class="state state-2">
                                         <div id="form-assignment">
                                             <div id="signed-in-as">Signed in as <span id="display-id-loggedIN"></span></div>
-                                            <form action="snap.html" method="get">
+                                            <form id="form-select-assignment">
                                                 <h1>Select Teacher</h1>
                                                 <div><select id="teacher" name="teacher" disabled></select></div>
                                                 <h1>Select Assignment</h1>
@@ -89,6 +89,61 @@
                 return false;
             }
 
+            function loadAssignments() {
+                var select = document.getElementById("assignment");
+                var teacher_id = $('#teacher :selected').prop("value");
+                var user_name = sessionStorage.username;
+
+                var option = document.createElement("option");
+                option.text = "Select one";
+                option.value = "default";
+                select.add(option);
+
+                $.post('logging/login/getAssignment.php', {
+                    'user_name': user_name,
+                    'teacher_id': teacher_id
+				}, function(data, status) {
+					var response;
+					try {
+                        response = JSON.parse(data);
+                        response.forEach(assignment => {
+                            option = document.createElement("option");
+                            option.text = assignment.assignment_name;
+                            option.value = assignment.assignment_id;
+                            option.assignment = assignment;
+                            select.add(option);
+                        });
+                        $('#assignment').prop("disabled", false);
+                        $('#assignment').change(function() {
+                            if ($('#assignment :selected').prop("value") == "default") {
+                                $('#assignmentGObutton').prop("disabled", true);
+                            }
+                            else {
+                                $('#assignmentGObutton').prop("disabled", false);
+                            }
+                        });
+					} catch(e) {
+                        window.alert("Json parse error: getAssignment.php");
+						return;
+                    }
+				}).fail(function() {
+					window.alert("Post error: getAssignment.php");
+				});
+
+            }
+
+            function refreshAssignments() {
+                $('#assignment option').remove();
+                $('#assignmentGObutton').prop("disabled", true);
+
+                if ($("#teacher :selected").prop("value") == "default") {
+                    $('#assignment').prop("disabled", true);
+                    return;
+                }
+
+                loadAssignments();
+            }
+
             function loadTeachers() {
                 var select = document.getElementById("teacher");
                 var user_name = sessionStorage.username;
@@ -104,15 +159,18 @@
 					var response;
 					try {
                         response = JSON.parse(data);
+                        console.log(response);
                         response.forEach(teacher => {
                             option = document.createElement("option");
                             option.text = teacher.display_name;
-                            option.value = teacher.user_id;
+                            option.value = teacher.teacher_id;
                             select.add(option);
                         });
+
+                        $('#teacher').change(refreshAssignments);
                         $('#teacher').prop("disabled", false);
 					} catch(e) {
-                        window.alert("json parse error");
+                        window.alert("json parse error: getTeacher.php");
 						return;
                     }
 				}).fail(function() {
@@ -120,22 +178,12 @@
 				});
             }
 
-            function loadAssignments() {
-                var select = document.getElementById("assignment");
-                var teacher = $("#teacher :selected").val();
+            function redirect() {
+                var assignment = $('#assignment :selected').prop("assignment");
+                sessionStorage.assignment = JSON.stringify(assignment);
+                window.alert("Redirecting to: " + JSON.parse(sessionStorage.assignment).environment);
 
-                if (sessionStorage.username == "ydong2" && teacher == "catete") {
-                    option = document.createElement("option");
-                    option.text = "Draw Square Starter";
-                    option.value = "Day1Activity1";
-                    select.add(option);
-
-                    option = document.createElement("option");
-                    option.text = "Introduce Yourself Starter";
-                    option.value = "Day1Activity2";
-                    select.add(option);
-                }
-                $('#assignment').prop("disabled", false);
+                return false;
             }
 
             var cloud = new Cloud();
@@ -143,16 +191,7 @@
             delete sessionStorage.username;
 
             $("#form-flex-Parent").submit(doLogin);
-            $("#school").change(function() {
-                loadTeachers();
-            });
-            $("#teacher").change(function() {
-                loadAssignments();
-            });
-            $("#school").change(function() {
-                $('#assignmentGObutton').prop("disabled", false);
-            });
-            $('#form-assignment')[0].action += document.location.hash;
+            $("#form-select-assignment").submit(redirect);
 
         </script>
     </body>

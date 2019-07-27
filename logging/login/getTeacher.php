@@ -21,8 +21,8 @@ include('../config.php');
     }
     $list = array();
     while($row = mysqli_fetch_array($result)) {
-        $teacher->user_id = $row['user_id'];
-        $teacher->display_name = $row['display_name'];
+        $teacher['teacher_id'] = $row['user_id'];
+        $teacher['display_name'] = $row['display_name'];
         array_push($list, $teacher);
     }
     echo json_encode($list);
