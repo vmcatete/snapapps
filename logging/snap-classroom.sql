@@ -104,7 +104,7 @@ DROP TABLE IF EXISTS `assignment`;
 
 CREATE TABLE IF NOT EXISTS `assignment` (
   `assignment_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'A unique identifier for the assignment.',
-  `assignment_key` varchar(255) NOT NULL COMMENT 'The key of the key-value pair in the config file',
+  `assignment_file_name` varchar(255) COMMENT 'The name of the assignment file',
   `assignment_name` varchar(255) NOT NULL COMMENT 'The front facing name of the assignment',
   `description` varchar(255) COMMENT 'The description of the assignment',
   `environment` varchar(20) NOT NULL COMMENT 'The programming environment of the assignment',
