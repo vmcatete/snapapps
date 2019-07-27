@@ -158,11 +158,12 @@
 				}, function(data, status) {
 					var response;
 					try {
+                        console.log(data);
                         response = JSON.parse(data);
                         console.log(response);
                         response.forEach(teacher => {
                             option = document.createElement("option");
-                            option.text = teacher.display_name;
+                            option.text = teacher.display_name + " (" + teacher.period + " period)";
                             option.value = teacher.teacher_id;
                             select.add(option);
                         });
