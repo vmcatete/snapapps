@@ -59,32 +59,51 @@
             </div>
 
 
-        <!-- <h1>Welcome to our system!</h1>
-        User name: <input type="text" id="username" placeholder="User Name" /> <br />
-        Password: <input type="password" id="password" /> <br />
-        <button type="submit" onclick=submit()>Sign In</button> -->
-
         <script type="text/javascript">
             function doLogin() {
                 var user = {};
-                user.username = $("#input-id").val();
+                user.username = $("#input-id").val().trim();
                 user.password = $('#input-pwd').val();
                 user.persist = false;
-                cloud.login(
-                    user.username,
-                    user.password,
-                    user.persist,
-                    function() {
-                        sessionStorage.username=user.username;
-                        $('#display-id-loggedIN').html(user.username);
-                        $('#needsCookiesEnabled').addClass('hidden');
-                        loadTeachers();
-                        $('.belt-container').addClass('is-transitioned');
-                    },
-                    function() {
-                        $('#needsCookiesEnabled').removeClass('hidden');
+
+                // check if the user name exists in our database.
+                $.post('logging/login/getUser.php', {
+					'user_name': user.username
+				}, function(data, status) {
+                    // if new user, display new user message.
+                    if (data == "new user") {
+                        window.alert("New user");
                     }
-                )
+                    // if existing user, log into snap account.
+                    else {
+                        var response;
+                        try {
+                            response = JSON.parse(data);
+                            cloud.login(
+                                user.username,
+                                user.password,
+                                user.persist,
+                                function() {
+                                    sessionStorage.username = user.username;
+                                    sessionStorage.user = JSON.stringify(response);
+
+                                    $('#display-id-loggedIN').html(user.username);
+                                    $('#needsCookiesEnabled').addClass('hidden');
+                                    loadTeachers();
+                                    $('.belt-container').addClass('is-transitioned');
+                                },
+                                function() {
+                                    $('#needsCookiesEnabled').removeClass('hidden');
+                                }
+                            )
+                        } catch(e) {
+                            console.log(e);
+                            return;
+                        }
+                    }
+				}).fail(function(xhr, status, error) {
+					window.alert(xhr.responseText);
+				});
 
                 return false;
             }
@@ -158,9 +177,7 @@
 				}, function(data, status) {
 					var response;
 					try {
-                        console.log(data);
                         response = JSON.parse(data);
-                        console.log(response);
                         response.forEach(teacher => {
                             option = document.createElement("option");
                             option.text = teacher.display_name + " (" + teacher.period + " period)";
