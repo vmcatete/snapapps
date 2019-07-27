@@ -104,19 +104,19 @@
 					var response;
 					try {
                         response = JSON.parse(data);
+                        response.forEach(teacher => {
+                            option = document.createElement("option");
+                            option.text = teacher.display_name;
+                            option.value = teacher.user_id;
+                            select.add(option);
+                        });
+                        $('#teacher').prop("disabled", false);
 					} catch(e) {
                         window.alert("json parse error");
 						return;
                     }
-                    response.forEach(teacher => {
-                        option = document.createElement("option");
-                        option.text = teacher.display_name;
-                        option.value = teacher.user_id;
-                        select.add(option);
-                    });
-                    $('#teacher').prop("disabled", false);
 				}).fail(function() {
-					window.alert("getTeacher post error");
+					window.alert("Post error: getTeacher.php");
 				});
             }
 
