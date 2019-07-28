@@ -206,7 +206,16 @@
             function redirect() {
                 var assignment = $('#assignment :selected').prop("assignment");
                 sessionStorage.assignment = JSON.stringify(assignment);
-                window.alert("Redirecting to: " + JSON.parse(sessionStorage.assignment).environment);
+
+                if (assignment.environment == "Snap") {
+                    window.location.href = "snap.html";
+                }
+                else if (assignment.environment == "Cellular") {
+                    window.location.href = "../cellular/cellular.html";
+                }
+                else {
+                    window.alert("Unknown environment: " + assignment.environment);
+                }
 
                 return false;
             }
