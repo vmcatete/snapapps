@@ -31,16 +31,21 @@ IDE_Morph.prototype.loadAssignment = function() {
     else {
         window.assignment = JSON.parse(sessionStorage.assignment);
         window.assignmentID = window.assignment.assignment_id;
-        Trace.log("IDE.loadAssignment", window.assignmentID);
 
         var resourceURL = ide.resourceURL(window.assignmentFolder, window.assignment.assignment_file_name);
-
         var xmlString = ide.getURL(resourceURL);
-        ide.openProjectString(ide.getURL(resourceURL));
+
+        if (!xmlString.startsWith("<!DOC")) {
+            ide.openProjectString(ide.getURL(resourceURL));
+            Trace.log("IDE.loadAssignment", window.assignmentID);
+        }
+        else {
+            Trace.log("IDE.loadAssignmentFailed", window.assignmentID);
+        }
     }
 
     window.hintProvider = window.getHintProvider();
-    
+
     // ide.loadExampleProject(window.assignments[assignmentID].name);
 
     ide.controlBar.updateLabel();
