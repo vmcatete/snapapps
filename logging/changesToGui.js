@@ -36,10 +36,6 @@ IDE_Morph.prototype.loadAssignment = function() {
         }
     }
 
-    window.hintProvider = window.getHintProvider();
-
-    // ide.loadExampleProject(window.assignments[assignmentID].name);
-
     ide.controlBar.updateLabel();
     ide.controlBar.fixLayout();
 }
