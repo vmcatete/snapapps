@@ -18,11 +18,23 @@ IDE_Morph.prototype.loadExampleProject = function(name) {
     }
 }
 
-IDE_Morph.prototype.loadAssignment = function(assignmentID) {
-    Trace.log("IDE.loadAssignment", assignmentID);
-    Assignment.setID(assignmentID);
+IDE_Morph.prototype.loadAssignment = function() {
+    if (!Assignment.exist) {
+        Trace.log("No associated assignment to load for the session.");
+        console.log("No associated assignment to load for the session.");
+    }
+    else {
+        var resourceURL = ide.resourceURL(window.assignmentFolder, Assignment.getFileName());
+        var xmlString = ide.getURL(resourceURL);
 
-    ide.loadExampleProject(window.assignments[assignmentID].name);
+        if (!xmlString.startsWith("<!DOC")) {
+            ide.openProjectString(ide.getURL(resourceURL));
+            Trace.log("IDE.loadAssignment", Assignment.getID());
+        }
+        else {
+            Trace.log("IDE.loadAssignmentFailed", Assignment.getID());
+        }
+    }
 
     ide.controlBar.updateLabel();
     ide.controlBar.fixLayout();
