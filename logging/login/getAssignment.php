@@ -46,5 +46,7 @@ include('../config.php');
         array_push($list, $assignment);
     }
     echo json_encode($list);
+    mysqli_close($mysqli);
+    return;
 ?>
 

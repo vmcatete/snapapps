@@ -43,5 +43,5 @@ include('../config.php');
     }
 
     echo json_encode($list);
-
+    mysqli_close($mysqli);
 ?>

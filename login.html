@@ -91,6 +91,7 @@
                                     $('#needsCookiesEnabled').addClass('hidden');
                                     loadTeachers();
                                     $('.belt-container').addClass('is-transitioned');
+                                    $('#logout').css('visibility', 'visible');
                                 },
                                 function() {
                                     $('#needsCookiesEnabled').removeClass('hidden');
@@ -210,9 +211,19 @@
                 return false;
             }
 
+            function logout() {
+                cloud.logout();
+                delete sessionStorage.username;
+                $('.belt-container').removeClass('is-transitioned');
+                $('#teacher,#assignment,#assignmentGObutton').prop('disabled', true);
+                $('#teacher,#assignment').unbind('change');
+                $('#assignment option').remove();
+                $('#teacher option').remove();
+                $('#input-id').focus();
+                $('#logout').css('visibility', 'hidden');
+            }
             var cloud = new Cloud();
-            cloud.logout();
-            delete sessionStorage.username;
+            logout(); // clear all previous user session
 
             $("#form-flex-Parent").submit(doLogin);
             $("#form-select-assignment").submit(redirect);
