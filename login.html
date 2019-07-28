@@ -223,6 +223,8 @@
             function logout() {
                 cloud.logout();
                 delete sessionStorage.username;
+                delete sessionStorage.user;
+                delete sessionStorage.assignment;
                 $('.belt-container').removeClass('is-transitioned');
                 $('#teacher,#assignment,#assignmentGObutton').prop('disabled', true);
                 $('#teacher,#assignment').unbind('change');
