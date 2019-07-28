@@ -165,7 +165,9 @@
 
             function loadTeachers() {
                 var select = document.getElementById("teacher");
-                var user_name = sessionStorage.username;
+                var user = JSON.parse(sessionStorage.user);
+                var user_id = user.user_id;
+                var user_type = user.user_type;
 
                 var option = document.createElement("option");
                 option.text = "Select one";
@@ -173,7 +175,8 @@
                 select.add(option);
 
                 $.post('logging/login/getTeacher.php', {
-					'user_name': user_name
+                    'user_id': user_id,
+                    'user_type': user_type
 				}, function(data, status) {
 					var response;
 					try {

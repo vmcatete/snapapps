@@ -47,8 +47,8 @@ INSERT INTO `user` SET
 
 INSERT INTO `user` SET
     `user_id`  = 'catete002',
-    `user_name`  = 'ncsut002',
-    `email`  = 'game2learnlab@ncsu.edu',
+    `user_name`  = 'teacher001',
+    `email`  = 'yihuandong@gmail.com',
     `school_id` = 'ncsuschoolid',
     `user_type` = 'teacher',
     `display_name` = 'Ms. Catete'
