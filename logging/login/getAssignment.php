@@ -1,22 +1,36 @@
 <?php
 include('../config.php');
-    if (!array_key_exists('user_name', $_POST)) {
+    if (!array_key_exists('user_id', $_POST)) {
         return;
     }
     if (!array_key_exists('teacher_id', $_POST)) {
         return;
     }
-    $user_name = $_POST['user_name'];
+    $user_id = $_POST['user_id'];
     $teacher_id = $_POST['teacher_id'];
+    $user_type = 'student';
+
+    if (array_key_exists('user_type', $_POST)) {
+        $user_type = $_POST['user_type'];
+    }
 
     $mysqli = new mysqli($host, $user, $password, $db);
     if ($mysqli->connect_errno) {
         http_response_code(503);
         die ("Failed to connect to MySQL: ($mysqli->errno) $mysqli->error");
     }
-    $query = "SELECT assignment_id, assignment_file_name, assignment_name, environment FROM `assignment` WHERE assignment_id IN (";
-    $query.= "SELECT assignment_id FROM session LEFT JOIN user ON session.student_id = user.user_id WHERE user.user_name = '$user_name' and session.teacher_id = '$teacher_id') ";
-    $query.= "AND (NOW() BETWEEN start_date AND end_date)";
+    $query = "";
+
+    if ($user_type === 'student') {
+        $query = "SELECT assignment_id, assignment_file_name, assignment_name, environment FROM `assignment` WHERE assignment_id IN (SELECT assignment_id FROM session WHERE student_id = '$user_id' and teacher_id = '$teacher_id') AND (NOW() BETWEEN start_date AND end_date)";
+    }
+    else if ($user_type === 'teacher') {
+        $query = "SELECT assignment_id, assignment_file_name, assignment_name, environment FROM `assignment` WHERE assignment_id IN (SELECT assignment_id FROM session WHERE teacher_id = '$user_id') AND (NOW() BETWEEN start_date AND end_date)";
+    }
+    else {
+        echo json_encode(array());
+        return;
+    }
 
     $result = $mysqli->query($query);
     if (!$result) {

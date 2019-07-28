@@ -110,8 +110,10 @@
 
             function loadAssignments() {
                 var select = document.getElementById("assignment");
+                var user = JSON.parse(sessionStorage.user);
+                var user_id = user.user_id;
+                var user_type = user.user_type;
                 var teacher_id = $('#teacher :selected').prop("value");
-                var user_name = sessionStorage.username;
 
                 var option = document.createElement("option");
                 option.text = "Select one";
@@ -119,8 +121,9 @@
                 select.add(option);
 
                 $.post('logging/login/getAssignment.php', {
-                    'user_name': user_name,
-                    'teacher_id': teacher_id
+                    'user_id': user_id,
+                    'teacher_id': teacher_id,
+                    'user_type': user_type
 				}, function(data, status) {
 					var response;
 					try {
