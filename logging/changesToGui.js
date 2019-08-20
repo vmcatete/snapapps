@@ -19,7 +19,7 @@ IDE_Morph.prototype.loadExampleProject = function(name) {
 }
 
 IDE_Morph.prototype.loadAssignment = function() {
-    if (!Assignment.exist) {
+    if (!Assignment.exist || Assignment.getFileName() == "") {
         Trace.log("No associated assignment to load for the session.");
         console.log("No associated assignment to load for the session.");
     }
