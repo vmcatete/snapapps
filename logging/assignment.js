@@ -7,7 +7,7 @@ var Assignment = {
 
 Assignment.exist = false; // initialize to false;
 
-Assignment.redirectURL = "login.html";
+Assignment.redirectURL = "../login.html";
 
 Assignment.initOrRedirect = function() {
     // check if user is logged into OUR system (sessionStorage.user) but not only Snap Cloud (sessionStorage.username)
