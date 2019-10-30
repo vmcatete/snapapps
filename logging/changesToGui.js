@@ -85,7 +85,8 @@ IDE_Morph.prototype.cloudMenu = function () {
             localize('Logout') + ' ' + this.cloud.username,
             'logout'
         );
-        if (window.user && (window.user.user_type == "teacher" || window.user.user_type == "admin")) {
+
+        if (allowStudentChangePassword || (window.user && (window.user.user_type == "teacher" || window.user.user_type == "admin"))) {
             menu.addItem(
                 'Change Password...',
                 'changeCloudPassword'
