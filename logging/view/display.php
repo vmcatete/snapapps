@@ -145,7 +145,8 @@ if ($enable_viewer) {
 		die ("Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error);
 	}
 
-	$id = $mysqli->real_escape_string($_GET['id']);
+	// $id = $mysqli->real_escape_string($_GET['id']);
+	$id = tryGetParam('id', $mysqli);
 	$assignment = tryGetParam('assignment', $mysqli);
 	$start = tryGetParam('start', $mysqli);
 	$end = tryGetParam('end', $mysqli);
@@ -155,7 +156,10 @@ if ($enable_viewer) {
 	echo "<h3>Project: $id</h3>";
 	echo "<p>This lists all logs for this project. Click on a date to see the code at that time, or click here and then use the A and D keys to scroll through snapshots. Loads quickest on Chrome.</p>";
 
-	$where = "WHERE projectID='$id'";
+	$where = "";
+	if ($id) {
+		$where = "WHERE projectID='$id'";
+	}
 	if ($assignment) {
 		$where .= " AND assignmentID = '$assignment'";
 	}
