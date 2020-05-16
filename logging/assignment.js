@@ -5,7 +5,7 @@ var Assignment = {
 
 };
 
-Assignment.exist = false; // initialize to false;
+Assignment.exist = false; // Used in changesToGui.js to see if there is an assignment file to load. initialize to false;
 
 Assignment.redirectURL = "../login.html";
 
@@ -14,14 +14,7 @@ Assignment.initOrRedirect = function() {
     window.assignmentID = getSearchParameters()['assignment'];
 
     if (window.assignmentID != "view") {
-        if (sessionStorage.user) {
-            window.user = JSON.parse(sessionStorage.user)
-            window.userID = window.user.user_id;
-        }
-        else {
-            window.location.replace(Assignment.redirectURL);
-        }
-    
+        // set assignment first, because userID format is determined by if the assignment is pair programming
         if (sessionStorage.assignment) {
             window.assignment = JSON.parse(sessionStorage.assignment);
             Assignment.exist = true;
@@ -32,6 +25,22 @@ Assignment.initOrRedirect = function() {
             window.assignment.assignment_name = "Explore";
             Assignment.exist = false;
         }
+        // set userID
+        if (sessionStorage.user) {
+            window.user = JSON.parse(sessionStorage.user)
+            // set user id based on if is paired programming
+            if (Assignment.isPairProgramming()) {
+                window.partner = JSON.parse(sessionStorage.partner);
+                window.userID = window.user.user_id + '/' + window.partner.user_id;
+            }
+            else {
+                window.userID = window.user.user_id;
+            }
+        }
+        else {
+            window.location.replace(Assignment.redirectURL);
+        }
+    
     }
     else { // does not require login to view the log
         window.assignment = {};
@@ -138,6 +147,15 @@ Assignment.setID = function(assignmentID) {
     });
 
     if (window.ide) ide.fixLayout();
+};
+
+Assignment.isPairProgramming = function() {
+    return Assignment.get().is_pair_programming;
+};
+
+Assignment.getUsers = function() {
+    if (!window.userID) return [];
+    return window.userID.split('/');
 };
 
 // Assignment.updateStageAssignment = function(overwrite) {

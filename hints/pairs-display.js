@@ -20,7 +20,6 @@ PairsDisplay.prototype.show = function() {
         return;
     }
     Trace.log('PairsDisplay.show');
-
     this.hintButton =
         this.addHintButton(localize('Swap Roles'), PairsDisplay.showSwapDialog, false); // the third parameter is for setting the isHitnButton false.
 };
@@ -83,6 +82,7 @@ PairsDisplay.showSwapDialog = function() {
         Trace.log('PairsDisplay.roleSwapTo', logData);
         this.destroy();
 
+        // Make sure in the php.ini file, increase the "max_allowed_packet" so that mysql allow the transmission
         xhr.onreadystatechange = function() {
             if (!(xhr.status === 200 && xhr.readyState === 4)) return;
             Trace.log('PairsDisplay.savedProject');
