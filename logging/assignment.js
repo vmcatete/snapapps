@@ -150,7 +150,8 @@ Assignment.setID = function(assignmentID) {
 };
 
 Assignment.isPairProgramming = function() {
-    return Assignment.get().is_pair_programming;
+    //the "==1" part is a must since is_pair_programming attribute's type is string due to parsed from JSON.parse.
+    return Assignment.get().is_pair_programming == "1";
 };
 
 Assignment.getUsers = function() {
