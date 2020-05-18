@@ -5,28 +5,48 @@ var Assignment = {
 
 };
 
-Assignment.exist = false; // initialize to false;
+Assignment.exist = false; // Used in changesToGui.js to see if there is an assignment file to load. initialize to false;
 
 Assignment.redirectURL = "../login.html";
 
 Assignment.initOrRedirect = function() {
     // check if user is logged into OUR system (sessionStorage.user) but not only Snap Cloud (sessionStorage.username)
-    if (sessionStorage.user) {
-        window.user = JSON.parse(sessionStorage.user)
-        window.userID = window.user.user_id;
-    }
-    else {
-        window.location.replace(Assignment.redirectURL);
-    }
+    window.assignmentID = getSearchParameters()['assignment'];
 
-    if (sessionStorage.assignment) {
-        window.assignment = JSON.parse(sessionStorage.assignment);
-        Assignment.exist = true;
+    if (window.assignmentID != "view") {
+        // set assignment first, because userID format is determined by if the assignment is pair programming
+        if (sessionStorage.assignment) {
+            window.assignment = JSON.parse(sessionStorage.assignment);
+            Assignment.exist = true;
+        }
+        else {
+            window.assignment = {};
+            window.assignment.assignment_id = "N/A";
+            window.assignment.assignment_name = "Explore";
+            Assignment.exist = false;
+        }
+        // set userID
+        if (sessionStorage.user) {
+            window.user = JSON.parse(sessionStorage.user)
+            // set user id based on if is paired programming
+            if (Assignment.isPairProgramming()) {
+                window.partner = JSON.parse(sessionStorage.partner);
+                window.userID = window.user.user_id + '/' + window.partner.user_id;
+            }
+            else {
+                window.userID = window.user.user_id;
+            }
+        }
+        else {
+            window.location.replace(Assignment.redirectURL);
+        }
+    
     }
-    else {
+    else { // does not require login to view the log
         window.assignment = {};
-        window.assignment.assignment_id = "N/A";
-        window.assignment.assignment_name = "Explore";
+        window.userID = "viewer";
+        window.assignment.assignment_id = "view";
+        window.assignment.assignment_name = "view";
         Assignment.exist = false;
     }
 }
@@ -127,6 +147,15 @@ Assignment.setID = function(assignmentID) {
     });
 
     if (window.ide) ide.fixLayout();
+};
+
+Assignment.isPairProgramming = function() {
+    return Assignment.get().is_pair_programming;
+};
+
+Assignment.getUsers = function() {
+    if (!window.userID) return [];
+    return window.userID.split('/');
 };
 
 // Assignment.updateStageAssignment = function(overwrite) {

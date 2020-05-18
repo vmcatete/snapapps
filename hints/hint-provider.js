@@ -68,32 +68,23 @@ HintProvider.prototype.isActive = function() {
     return assignment && (this.alwaysHint || assignment.hints);
 };
 
-HintProvider.prototype.showDisplays = function() {
+HintProvider.prototype.updateDisplays = function() {
+    var myself = this;
     this.displays.forEach(function(display) {
-        if (!display.showing) {
+        var shouldShow = myself.isActive() || display.alwaysActive();
+        if (shouldShow && !display.showing) {
             display.show();
-            display.showing = true;
+        } else if (!shouldShow && display.showing) {
+            display.clear();
+            display.hide();
         }
+        display.showing = shouldShow;
     });
     this.getHintsFromServer();
 };
 
-HintProvider.prototype.hideDisplays = function() {
-    this.displays.forEach(function(display) {
-        if (display.showing) {
-            display.clear();
-            display.hide();
-            display.showing = false;
-        }
-    });
-};
-
 HintProvider.prototype.loadAssignment = function() {
-    if (this.isActive()) {
-        this.showDisplays();
-    } else {
-        this.hideDisplays();
-    }
+    this.updateDisplays();
 };
 
 HintProvider.prototype.clearDisplays = function() {
