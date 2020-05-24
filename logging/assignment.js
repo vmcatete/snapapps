@@ -7,8 +7,7 @@ var Assignment = {
 
 Assignment.exist = false; // Used in changesToGui.js to see if there is an assignment file to load. initialize to false;
 
-// Assignment.redirectURL = "../login.html";
-Assignment.redirectURL = "./logging/assignment.html";
+Assignment.redirectURL = "../login.html";
 
 Assignment.initOrRedirect = function() {
     // check if user is logged into OUR system (sessionStorage.user) but not only Snap Cloud (sessionStorage.username)
