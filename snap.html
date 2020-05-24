@@ -7,10 +7,12 @@
 		<link rel="stylesheet" href="isnap/lib/jquery-ui-1.12.1/themes/smoothness/jquery-ui.min.css?v=2.5.1-e1.1">
 		<link rel="shortcut icon" href="favicon.ico?v=2.5.1-e1.1">
 		<link rel="stylesheet" href="hints/hints.css?v=2.5.1-e1.1">
+		<link rel="stylesheet" href="snap.css">
 		<!-- <link rel="stylesheet" href="goals/goals.css?v=2.5.1-e1.1"> -->
 		<link rel="stylesheet" href="hints/quiz.css">
 		<script src="isnap/lib/jquery-3.1.1.min.js?v=2.5.1-e1.1"></script>
-        <script src="isnap/lib/jquery-ui-1.12.1/jquery-ui.min.js?v=2.5.1-e1.1"></script>
+		<script src="isnap/lib/jquery-ui-1.12.1/jquery-ui.min.js?v=2.5.1-e1.1"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf.min.js"></script>
 		<!-- <script type="text/javascript" >
 			// Helps to debug object types. Must come before other scripts.
 			Object.prototype.getDebugType = function() {
@@ -67,7 +69,7 @@
 		<script type="text/javascript" src="hints/pairs-display.js?v=2.5.5"></script>
 		<script type="text/javascript" src="hints/main.js?v=2.4.9"></script>
 		<script type="text/javascript" src="logging/changesToGui.js"></script>
-
+		
 		<!-- End auto-generated script tags -->
 
 		<script type="text/javascript">
@@ -98,25 +100,25 @@
 		</script>
 	</head>
 	<body style="margin: 0; width: 100%; height: 100%">
+		<div id="my_pdf_viewer" class="instruction_viewer">
+			<button onclick="toggleInstruction()" class="title"><div>Instruction</div></button>
+            <div id="canvas_container">
+				<canvas id="pdf_renderer"></canvas>
+				<div id="navigation_controls">
+					<button id="go_previous">Previous</button>
+					<input id="current_page" value="1" type="number"/>
+					<button id="go_next">Next</button>
+				</div>
+				<!-- <div id="zoom_controls">
+					<button id="zoom_in">+</button>
+					<button id="zoom_out">-</button>
+				</div> -->
+            </div>
+        </div>
 		<div id = "container">
 			<canvas id="world" tabindex="1" ></canvas>
 		</div>
-		<div id="my_pdf_viewer">
-			<div id="button">
-				<button onclick="toggleInstruction()">Open</button>
-			</div>
-            <div id="canvas_container">
-                <canvas id="pdf_renderer"></canvas>
-            </div>
-            <div id="navigation_controls">
-                <button id="go_previous">Previous</button>
-                <input id="current_page" value="1" type="number"/>
-                <button id="go_next">Next</button>
-            </div>
-            <div id="zoom_controls">
-                <button id="zoom_in">+</button>
-                <button id="zoom_out">-</button>
-            </div>
-        </div>
+
+		<script type="text/javascript" src="logging/instruction.js"></script>
 	</body>
 </html>
