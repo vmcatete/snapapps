@@ -219,7 +219,9 @@ extend(IDE_Morph, 'createLogo', function(base) {
 // update fixLayout function so the default buttons align on top of the control bar
 extend(IDE_Morph, 'createControlBar', function(base) {
     base.call(this);
-    var myself = this;
+
+    var myself = this,
+        x = 0;
         padding = 4,
         stopButton = this.controlBar.stopButton,
         pauseButton = this.controlBar.pauseButton,
@@ -232,6 +234,7 @@ extend(IDE_Morph, 'createControlBar', function(base) {
         cloudButton = this.controlBar.cloudButton,
         projectButton = this.controlBar.projectButton;
 
+    this.controlBar.customButtons = [];
     this.controlBar.fixLayout = function () {
         x = this.right() - padding;
         [stopButton, pauseButton, startButton].forEach(
@@ -274,6 +277,17 @@ extend(IDE_Morph, 'createControlBar', function(base) {
 
         this.refreshSlider();
         this.updateLabel();
+
+        // setting custom buttons layout
+        x = this.label.left() + padding;
+        this.customButtons.forEach(
+            function(button) {
+                button.setTop(myself.controlBar.height() / 2);
+                button.setLeft(x);
+                x += button.width();
+                x += button.padding ? button.padding : padding;
+            }
+        );
     };
 
     this.controlBar.updateLabel = function () {
@@ -303,4 +317,40 @@ extend(IDE_Morph, 'createControlBar', function(base) {
         this.label.setTop(this.top() + 8);
         this.label.setLeft(this.settingsButton.right() + padding);
     };
+
+    // credit to hint-display.js
+    // padding is optional
+    this.controlBar.addCustomButton = function(buttonName, text, onClick, padding) {
+        var button = new PushButtonMorph(ide, onClick, text);
+        button.fontSize = DialogBoxMorph.prototype.buttonFontSize;
+        button.edge = DialogBoxMorph.prototype.buttonEdge;
+        button.padding = DialogBoxMorph.prototype.buttonPadding;
+        button.outlineColor = ide.spriteBar.color;
+        button.outlineGradient = false;
+        button.contrast = DialogBoxMorph.prototype.buttonContrast;
+        button.corner = DialogBoxMorph.prototype.buttonCorner;
+        button.outline = DialogBoxMorph.prototype.buttonOutline;
+        if (padding) {
+            button.padding = padding;
+        }
+
+        button.drawNew();
+        button.fixLayout();
+
+        extendObject(window.ide, 'toggleAppMode', function(base, appMode) {
+            base.call(this, appMode);
+            if (button.parent == null) return;
+            if (this.isAppMode) button.hide();
+            else button.show();
+        });
+
+        window.ide.controlBar.add(button);
+        window.ide.controlBar.customButtons.push(button);
+        window.ide.controlBar[buttonName] = button;
+        window.ide.fixLayout();
+
+        return button;
+    }
+
 });
+
