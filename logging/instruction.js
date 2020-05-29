@@ -79,16 +79,16 @@ document.getElementById('current_page')
             }
         }
     });
-document.getElementById('zoom_in')
-    .addEventListener('click', (e) => {
-    if(myState.pdf == null) return;
-    myState.zoom += 0.5;
-    render();
-    });
+// document.getElementById('zoom_in')
+//     .addEventListener('click', (e) => {
+//     if(myState.pdf == null) return;
+//     myState.zoom += 0.5;
+//     render();
+//     });
 
-document.getElementById('zoom_out')
-    .addEventListener('click', (e) => {
-    if(myState.pdf == null) return;
-    myState.zoom -= 0.5;
-    render();
-    });
+// document.getElementById('zoom_out')
+//     .addEventListener('click', (e) => {
+//     if(myState.pdf == null) return;
+//     myState.zoom -= 0.5;
+//     render();
+//     });
