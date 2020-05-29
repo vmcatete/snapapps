@@ -93,6 +93,25 @@ IDE_Morph.prototype.cloudMenu = function () {
             );
         }
     }
+
+    // add two buttons, share my code and view other's code
+    menu.addLine();
+    menu.addItem(
+        'Share my code',
+        function() {
+            alert("Share my code");
+            new DialogBoxMorph(
+                
+            )
+        }
+    );
+    menu.addItem(
+        "View other's code",
+        function() {
+            alert("view other's code");
+        }
+    );
+
     if (shiftClicked) {
         menu.addLine();
         menu.addItem(
@@ -189,3 +208,99 @@ IDE_Morph.prototype.cloudMenu = function () {
 IDE_Morph.prototype.logout = function () {
     window.location.href = "../login.html";
 }
+
+
+// make logo (and control bar) twice as wide
+extend(IDE_Morph, 'createLogo', function(base) {
+    base.call(this);
+    ide.logo.setHeight(ide.logo.height() * 2);
+});
+
+// update fixLayout function so the default buttons align on top of the control bar
+extend(IDE_Morph, 'createControlBar', function(base) {
+    base.call(this);
+    var myself = this;
+        padding = 4,
+        stopButton = this.controlBar.stopButton,
+        pauseButton = this.controlBar.pauseButton,
+        startButton = this.controlBar.startButton,
+        slider = this.controlBar.steppingSlider,
+        stageSizeButton = this.controlBar.stageSizeButton,
+        appModeButton = this.controlBar.appModeButton,
+        steppingButton = this.controlBar.steppingButton,
+        settingsButton = this.controlBar.settingsButton,
+        cloudButton = this.controlBar.cloudButton,
+        projectButton = this.controlBar.projectButton;
+
+    this.controlBar.fixLayout = function () {
+        x = this.right() - padding;
+        [stopButton, pauseButton, startButton].forEach(
+            function (button) {
+                button.setTop(myself.controlBar.top() + padding);
+                button.setRight(x);
+                x -= button.width();
+                x -= padding;
+            }
+        );
+
+        x = Math.min(
+            startButton.left() - (3 * padding + 2 * stageSizeButton.width()),
+            myself.right() - StageMorph.prototype.dimensions.x *
+                (myself.isSmallStage ? myself.stageRatio : 1)
+        );
+        [stageSizeButton, appModeButton].forEach(
+            function (button) {
+                x += padding;
+                button.setTop(myself.controlBar.top() + padding);
+                button.setLeft(x);
+                x += button.width();
+            }
+        );
+
+        slider.setTop(myself.controlBar.top() + padding);
+        slider.setRight(stageSizeButton.left() - padding);
+
+        steppingButton.setTop(myself.controlBar.top() + padding);
+        steppingButton.setRight(slider.left() - padding);
+
+        settingsButton.setTop(myself.controlBar.top() + padding);
+        settingsButton.setLeft(this.left());
+
+        cloudButton.setTop(myself.controlBar.top() + padding);
+        cloudButton.setRight(settingsButton.left() - padding);
+
+        projectButton.setTop(myself.controlBar.top() + padding);
+        projectButton.setRight(cloudButton.left() - padding);
+
+        this.refreshSlider();
+        this.updateLabel();
+    };
+
+    this.controlBar.updateLabel = function () {
+        var suffix = myself.world().isDevMode ?
+                ' - ' + localize('development mode') : '';
+
+        if (this.label) {
+            this.label.destroy();
+        }
+        if (myself.isAppMode) {
+            return;
+        }
+
+        this.label = new StringMorph(
+            (myself.projectName || localize('untitled')) + suffix,
+            14,
+            'sans-serif',
+            true,
+            false,
+            false,
+            MorphicPreferences.isFlat ? null : new Point(2, 1),
+            myself.frameColor.darker(myself.buttonContrast)
+        );
+        this.label.color = myself.buttonLabelColor;
+        this.label.drawNew();
+        this.add(this.label);
+        this.label.setTop(this.top() + 8);
+        this.label.setLeft(this.settingsButton.right() + padding);
+    };
+});
