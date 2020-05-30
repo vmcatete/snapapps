@@ -285,7 +285,7 @@ extend(IDE_Morph, 'createControlBar', function(base) {
                 button.setTop(myself.controlBar.height() / 2);
                 button.setLeft(x);
                 x += button.width();
-                x += button.padding ? button.padding : padding;
+                x += 100;
             }
         );
     };
@@ -330,9 +330,6 @@ extend(IDE_Morph, 'createControlBar', function(base) {
         button.contrast = DialogBoxMorph.prototype.buttonContrast;
         button.corner = DialogBoxMorph.prototype.buttonCorner;
         button.outline = DialogBoxMorph.prototype.buttonOutline;
-        if (padding) {
-            button.padding = padding;
-        }
 
         button.drawNew();
         button.fixLayout();
