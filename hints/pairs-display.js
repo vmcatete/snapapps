@@ -23,13 +23,14 @@ PairsDisplay.prototype.show = function() {
     window.currentRole = sessionStorage.initRole;
     Trace.log('PairsDisplay.show', window.currentRole);
 
-    this.hintButton = this.addHintButton(localize('Swap Roles'), PairsDisplay.showSwapDialog, false); // the third parameter is for setting the isHitnButton false.
+    // this.hintButton = this.addHintButton(localize('Swap Roles'), PairsDisplay.showSwapDialog, false); // the third parameter is for setting the isHitnButton false.
+    this.swapButton = window.ide.controlBar.addCustomButton('swapButton', localize('Swap Roles'), PairsDisplay.showSwapDialog)
 
     this.changeRoleTo(window.currentRole);
 };
 
 PairsDisplay.prototype.hide = function() {
-    if (this.hintButton) this.hintButton.destroy();
+    if (this.swapButton) this.swapButton.destroy();
 };
 
 PairsDisplay.prototype.alwaysActive = function() {
@@ -158,16 +159,16 @@ PairsDisplay.prototype.changeRoleTo = function(newRole) {
     window.currentRole = newRole;
 
     if (newRole == 'driver') {
-        this.hintButton.labelColor = new Color(255, 0, 0, 1);
-        this.hintButton.labelString = "Driver (swap role)";
+        this.swapButton.labelColor = new Color(255, 0, 0, 1);
+        this.swapButton.labelString = "Driver (swap role)";
     }
     else {
-        this.hintButton.labelColor = new Color(0, 0, 255, 1);
-        this.hintButton.labelString = "Navigator (swap role)";
+        this.swapButton.labelColor = new Color(0, 0, 255, 1);
+        this.swapButton.labelString = "Navigator (swap role)";
     }
 
-    this.hintButton.drawNew();
-    this.hintButton.fixLayout();
+    this.swapButton.drawNew();
+    this.swapButton.fixLayout();
 }
 
 DialogBoxMorph.prototype.addText = function (

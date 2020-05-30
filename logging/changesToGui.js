@@ -266,13 +266,13 @@ extend(IDE_Morph, 'createControlBar', function(base) {
         steppingButton.setTop(myself.controlBar.top() + padding);
         steppingButton.setRight(slider.left() - padding);
 
-        settingsButton.setTop(myself.controlBar.top() + padding);
+        settingsButton.setCenter(myself.controlBar.center());
         settingsButton.setLeft(this.left());
 
-        cloudButton.setTop(myself.controlBar.top() + padding);
+        cloudButton.setCenter(myself.controlBar.center());
         cloudButton.setRight(settingsButton.left() - padding);
 
-        projectButton.setTop(myself.controlBar.top() + padding);
+        projectButton.setCenter(myself.controlBar.center());
         projectButton.setRight(cloudButton.left() - padding);
 
         this.refreshSlider();
