@@ -12,6 +12,7 @@ BuddyDisplay.prototype = Object.create(HintDisplay.prototype);
 BuddyDisplay.prototype.initDisplay = function() {
     this.button = window.ide.controlBar.addCustomButton('shareButton', localize("Share My Work"), BuddyDisplay.showShareDialog);
     this.button = window.ide.controlBar.addCustomButton('viewButton', localize("View Other's Work"), BuddyDisplay.showViewDialog);
+    this.snapViewerDialog.allowClose(true);
 };
 
 BuddyDisplay.prototype.show = function() {
@@ -44,7 +45,6 @@ BuddyDisplay.showViewDialog = function() {
     var viewDialog = new DialogBoxMorph();
     var inp = new AlignmentMorph('column', 2);
     var txtbox = new InputFieldMorph();
-    var myself = this;
     var txt = new TextMorph(
         "Who's project you want to view?",
         12,
@@ -76,16 +76,26 @@ BuddyDisplay.showViewDialog = function() {
     viewDialog.labelString = "View Project";
     viewDialog.createLabel();
     viewDialog.action = function() {
+        var user = txtbox.getValue().trim();
         $.post('../php/getUser.php', {
-            'user_name': txtbox.getValue()
+            'user_name': user
         }, function(data, status) {
             // if new user, display user doesn't exist message.
             if (data == "new user") {
-                ide.inform("Invalid User", "We have never seen '" + txtbox.getValue() + "' before. \n Please verify the user name."); // might be able to 
+                ide.inform("Invalid User", "We have never seen '" + user + "' before. \n Please verify the user name."); // might be able to 
             }
             // if existing user, log into snap account.
             else {
-                window.alert("openning new window")
+                var url = "http://localhost/stemc_snap/snap.html?view=" + user;
+                var padding = 20;
+                window.buddyDisplay.snapViewerDialog.fitToWindow(40);
+
+                // remove the "leave site, unsaved" message, when opening iframe
+                var tmp = window.onbeforeunload;
+                window.onbeforeunload = null;
+                window.buddyDisplay.snapViewerDialog.show(url, nop);
+                // adding the "leave site, unsaved" message back
+                window.onbeforeunload = tmp
             }
         }).fail(function(xhr, status, error) {
             window.alert(xhr.responseText);
@@ -105,7 +115,8 @@ BuddyDisplay.showShareDialog = function() {
     var myself = this;
     var dialog = new DialogBoxMorph();
     var xhr = new XMLHttpRequest();
-    var url = "" // Left off here
+    var url = "logging/sharecode.php?userID=" + encodeURI(user)
+        + "&assignmentID=" + encodeURI(Assignment.getID()); // Left off here
 
     dialog.askYesNo("Share My Work", "Are you sure you want to share this project? \n" +
         "(This will replace the project that you shared before)", window.world);
@@ -113,12 +124,10 @@ BuddyDisplay.showShareDialog = function() {
     dialog.action = function() {
         xhr.onreadystatechange = function() {
             if (!(xhr.status === 200 && xhr.readyState === 4)) return;
-            Trace.log('PairsDisplay.savedProject');
+            Trace.log('BuddyDisplay.savedProject');
             new DialogBoxMorph().inform('Project Saved',
-                'Project saved! Now your partner should Load the project.',
+                'Project saved! Now others can load your project.',
                 window.world);
-
-            window.pairsDisplay.changeRoleTo('navigator');
         };
 
         xhr.open('POST', url, true);
