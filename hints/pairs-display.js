@@ -84,7 +84,7 @@ PairsDisplay.showSwapDialog = function() {
 
     if (window.currentRole == 'driver') {
         var button = dialog.addButton(function() {
-            logData.newRole = 'Navigator';
+            logData.newRole = 'navigator';
             Trace.log('PairsDisplay.roleSwapTo', logData);
             this.destroy();
     
@@ -110,7 +110,7 @@ PairsDisplay.showSwapDialog = function() {
     }
     else {
         var button = dialog.addButton(function() {
-            logData.newRole = 'Driver';
+            logData.newRole = 'driver';
             Trace.log('PairsDisplay.roleSwapTo', logData);
             this.destroy();
     
