@@ -87,9 +87,9 @@ BuddyDisplay.showViewDialog = function() {
             // if existing user, log into snap account.
             else {
                 console.log(JSON.parse(data)); // TODO: pass the assignment id over.
-                var url = "http://localhost/stemc_snap/snap.html?user=" + window.userID + "&view=" + view;
-                var padding = 20;
-                window.buddyDisplay.snapViewerDialog.fitToWindow(40);
+                var url = window.buddyDisplayBaseUrl + "?user=" + window.userID + "&view=" + view;
+
+                window.buddyDisplay.snapViewerDialog.fitToWindow(50);
 
                 // remove the "leave site, unsaved" message, when opening iframe
                 var tmp = window.onbeforeunload;
