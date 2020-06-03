@@ -127,7 +127,7 @@ BuddyDisplay.showShareDialog = function() {
             if (!(xhr.status === 200 && xhr.readyState === 4)) return;
             Trace.log('BuddyDisplay.savedProject');
             new DialogBoxMorph().inform('Project Saved',
-                'Project saved! Now others can load your project.',
+                'Project saved!\n' + 'Now others can view your project using\n"' + user + '"',
                 window.world);
         };
 
