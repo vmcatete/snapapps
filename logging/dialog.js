@@ -22,8 +22,8 @@ function Dialog(
             title: myself.title,
             close: callback,
             closeOnEscape: false,
-            width: 700,
-            height: 625,
+            // width: 1000,
+            // height: 1000,
             resizable: true,
             autoOpen: false,
         });
@@ -47,36 +47,30 @@ Dialog.prototype.createDialogDiv = function() {
     body.append(divDialog);
 }
 
-Dialog.prototype.show = function(baseURL, callback, surveyInfo, eventID) {
+Dialog.prototype.show = function(baseURL, callback) {
     var myself = this;
 
     // In case there's a latent callback, go ahead and call it
     if (this.callback) this.callback();
     this.callback = callback;
-    this.surveyInfo = surveyInfo;
-    this.eventID = eventID;
-
-    $('#' + this.dialogID).dialog('option', 'width', 700);
-    $('#' + this.dialogID).dialog('option', 'height', 625);
 
     // log information
     var url = baseURL;
-    url += '?userID=' + window.userID;
-    url += '&eventID=' + this.eventID;
+    
     Object.keys(myself.params).forEach(function(key) {
         var value = myself.params[key];
         url += '&' + key + '=' + value;
     });
-    Trace.log('Dialog.show', {
-        eventID: myself.eventID,
-        url: url,
-        surveyInfo: surveyInfo,
-    });
-    $('#' + this.idIframe).attr('src', url);
-    $('#' + this.idDialog).dialog( 'open' );
 
-    this.allowClose(false);
+    Trace.log('Dialog.show', url);
+    $('#' + this.idIframe).attr('src', url);
+    $('#' + this.idDialog).dialog('open');
 };
+
+Dialog.prototype.fitToWindow = function(padding) {
+    this.setOption("width", ide.width() - padding);
+    this.setOption("height", ide.height() - padding);
+}
 
 Dialog.prototype.allowClose = function(allowClose) {
     if (allowClose != true && allowClose != false) return;
@@ -90,7 +84,7 @@ Dialog.prototype.allowClose = function(allowClose) {
 Dialog.prototype.setOption = function(key, value) {
     // No Objects allowed
     if (Object(key)  === key || Object(value) === value) return;
-    $('#' + this.dialogID).dialog('option', key, value);
+    $('#' + this.idDialog).dialog('option', key, value);
 }
 
 Dialog.prototype.setParam = function(key, value) {
