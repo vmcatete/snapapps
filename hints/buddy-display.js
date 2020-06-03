@@ -76,17 +76,18 @@ BuddyDisplay.showViewDialog = function() {
     viewDialog.labelString = "View Project";
     viewDialog.createLabel();
     viewDialog.action = function() {
-        var user = txtbox.getValue().trim();
-        $.post('../php/getUser.php', {
-            'user_name': user
+        var view = txtbox.getValue().trim();
+        $.post('logging/getShareCodeUser.php', {
+            'user_name': view
         }, function(data, status) {
             // if new user, display user doesn't exist message.
             if (data == "new user") {
-                ide.inform("Invalid User", "We have never seen '" + user + "' before. \n Please verify the user name."); // might be able to 
+                ide.inform("Invalid User", "We have never seen '" + view + "' before. \n Please verify the user name."); // might be able to 
             }
             // if existing user, log into snap account.
             else {
-                var url = "http://localhost/stemc_snap/snap.html?view=" + user;
+                console.log(JSON.parse(data)); // TODO: pass the assignment id over.
+                var url = "http://localhost/stemc_snap/snap.html?user=" + window.userID + "&view=" + view;
                 var padding = 20;
                 window.buddyDisplay.snapViewerDialog.fitToWindow(40);
 
