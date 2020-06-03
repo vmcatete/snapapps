@@ -40,6 +40,45 @@ IDE_Morph.prototype.loadAssignment = function() {
     ide.controlBar.fixLayout();
 }
 
+
+IDE_Morph.prototype.loadSharedProject = function() {
+    window.userID = getSearchParameters()['user'];
+
+    var xhr = new XMLHttpRequest();
+    var view = getSearchParameters()['view'];
+    var url = "logging/sharecode.php?userID=" + view;
+
+    window.assignment = {};
+    window.assignment.assignment_id = view;
+    window.assignment.assignment_name = view + "'s project";
+    window.allowStudentChangePassword = true; //this should be in the config file
+    Assignment.exist = false; //this should be in the config file
+
+    xhr.onreadystatechange = function() {
+        if (!(xhr.status === 200 && xhr.readyState === 4)) return;
+        Trace.log('BuddyDisplay.loadProject');
+        var response = xhr.responseText;
+        if (!response || !response.startsWith('<project')) {
+            new DialogBoxMorph().inform('No User Project Saved',
+                'We could not find a recent project to load from this user.\n' +
+                'Make sure they shared their project using the "share my project" button.',
+                window.world);
+            Trace.log('BuddyDisplay.noProjectToLoad');
+            return;
+        }
+
+        window.ide.openProjectString(response);
+
+        new DialogBoxMorph().inform("Project Loaded",
+            view + '\'s project is loaded. \n' +
+            "You can save the code to your Snap cloud if you wish to keep your edits.", window.world);
+    };
+
+    xhr.open('GET', url, true);
+    xhr.send();
+}
+
+
 IDE_Morph.prototype.cloudMenu = function () {
     Trace.log("IDE.cloudMenu");
     var menu,

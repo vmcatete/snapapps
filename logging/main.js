@@ -8,7 +8,8 @@ var Trace;
 
 // Setup
 (function () {
-    Assignment.initOrRedirect();
+    // surpress init or redirect because does not require login.
+    // Assignment.initOrRedirect();
 
     if (window.createLogger) {
         Trace = window.createLogger(Assignment.getID());
