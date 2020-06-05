@@ -1,7 +1,6 @@
 require('hint-display');
 require('../logging/assignment');
 
-
 function BuddyDisplay() {
     window.buddyDisplay = this;
     this.snapViewerDialog = new Dialog("snap-viewer", "Snap Viewer", nop);// set callback function later
@@ -41,7 +40,6 @@ BuddyDisplay.prototype.clear = function() {
 BuddyDisplay.serializer = new SnapSerializer();
 
 BuddyDisplay.showViewDialog = function() {
-    var url = 'localhost/buddy-viewer/snap.html?username=ydong2&view=rcmms-demo';
     var viewDialog = new DialogBoxMorph();
     var inp = new AlignmentMorph('column', 2);
     var txtbox = new InputFieldMorph();
@@ -89,14 +87,20 @@ BuddyDisplay.showViewDialog = function() {
                 console.log(JSON.parse(data)); // TODO: pass the assignment id over.
                 var url = window.buddyDisplayBaseUrl + "?user=" + window.userID + "&view=" + view;
 
-                window.buddyDisplay.snapViewerDialog.fitToWindow(50);
+                if (window.openViewerInNewWindow) {
+                    window.open(url, "_blank", "menubar=yes,location=no,resizable=yes,scrollbars=yes,status=no");
+                }
+                else {
+                    window.buddyDisplay.snapViewerDialog.fitToWindow(50);
+                    // remove the "leave site, unsaved" message, when opening iframe
+                    var tmp = window.onbeforeunload;
+                    window.onbeforeunload = null;
+                    window.buddyDisplay.snapViewerDialog.show(url, nop);
+                    // adding the "leave site, unsaved" message back
+                    window.onbeforeunload = tmp;
+                }
 
-                // remove the "leave site, unsaved" message, when opening iframe
-                var tmp = window.onbeforeunload;
-                window.onbeforeunload = null;
-                window.buddyDisplay.snapViewerDialog.show(url, nop);
-                // adding the "leave site, unsaved" message back
-                window.onbeforeunload = tmp
+                
             }
         }).fail(function(xhr, status, error) {
             window.alert(xhr.responseText);
