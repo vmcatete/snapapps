@@ -44,10 +44,10 @@ BuddyDisplay.showViewDialog = function() {
     var inp = new AlignmentMorph('column', 2);
     var txtbox = new InputFieldMorph();
     var txt = new TextMorph(
-        "Who's project you want to view?",
+        "Who's project do you want to view?",
         12,
         null, // style
-        false, // bold
+        true, // bold
         null, // italic
         null, // alignment
         null, // width
@@ -60,6 +60,24 @@ BuddyDisplay.showViewDialog = function() {
     txtbox.setWidth(200);
     inp.setColor(new Color(255, 255, 255, 1));
     inp.add(txt);
+
+    if (Assignment.isPairProgramming()) {
+        var annotation = new TextMorph(
+            "(Autofilled with your partner's id)",
+            12,
+            null, // style
+            false, // bold
+            true, // italic
+            null, // alignment
+            null, // width
+            null, // font name
+            MorphicPreferences.isFlat ? null : new Point(1, 1),
+            new Color(255, 255, 255) // shadowColor
+        );
+        inp.add(annotation);
+        txtbox.contents().text.text = window.partner.user_id + "/" + window.user.user_id;
+    }
+
     inp.add(txtbox);
     viewDialog.addBody(inp);
 
