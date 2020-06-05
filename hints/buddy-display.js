@@ -106,7 +106,16 @@ BuddyDisplay.showViewDialog = function() {
                 var url = window.buddyDisplayBaseUrl + "?user=" + window.userID + "&view=" + view;
 
                 if (window.openViewerInNewWindow) {
-                    window.open(url, "_blank", "menubar=yes,location=no,resizable=yes,scrollbars=yes,status=no");
+                    var winWidth = ide.width() * 0.9;
+                    var winHeight = ide.height() * 0.9;
+                    var left = (screen.width - winWidth) / 2;
+                    var top = (screen.height - winHeight) / 2;
+                    var options = "menubar=yes,location=no,resizable=yes,scrollbars=yes,status=no"
+                        + ",width=" + winWidth
+                        + ",height=" + winHeight
+                        + ",top=" + top
+                        + ",left=" + left; // doesn't work in chrome, no idea why...
+                    window.open(url, "_blank", options);
                 }
                 else {
                     window.buddyDisplay.snapViewerDialog.fitToWindow(50);
