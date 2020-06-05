@@ -94,24 +94,6 @@ IDE_Morph.prototype.cloudMenu = function () {
         }
     }
 
-    // add two buttons, share my code and view other's code
-    menu.addLine();
-    menu.addItem(
-        'Share my code',
-        function() {
-            alert("Share my code");
-            new DialogBoxMorph(
-                
-            )
-        }
-    );
-    menu.addItem(
-        "View other's code",
-        function() {
-            alert("view other's code");
-        }
-    );
-
     if (shiftClicked) {
         menu.addLine();
         menu.addItem(
