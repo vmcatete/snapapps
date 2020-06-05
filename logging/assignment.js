@@ -67,47 +67,6 @@ Assignment.getFileName = function() {
     return window.assignment.assignment_file_name;
 }
 
-
-// Assignment.initOrRedirect = function() {
-//     // Get the assignment passed via GET parameter
-//     window.assignmentID = getSearchParameters()['assignment'];
-
-//     var redirectURL = Assignment.redirectURL;
-
-//     if (window.requireAssignment && (!window.assignments ||
-//             !window.assignments[assignmentID])) {
-//         // redirect if no assignment is listed
-//         redirectURL += window.location.hash;
-//         window.location.replace(redirectURL);
-//         return false;
-//     }
-
-//     // Also check for a userID
-//     window.userID = getSearchParameters()['user'];
-//     if (!window.userID || window.userID.length == 0) {
-//         window.userID = window.userID || getCookie('snapIDHash');
-//     }
-//     if (window.requireLogin && !userID && window.assignmentID !== 'view') {
-//         if (window.assignmentID) {
-//             redirectURL += '?assignment=' + window.assignmentID;
-//         }
-//         redirectURL += window.location.hash;
-//         // redirect if the user isn't logged in
-//         window.location.replace(redirectURL);
-//         return false;
-//     }
-//     return true;
-// };
-
-// Assignment.get = function() {
-//     if (!window.assignmentID || !window.assignments) return null;
-//     return window.assignments[window.assignmentID];
-// };
-
-// Assignment.getID = function() {
-//     return window.assignmentID;
-// };
-
 Assignment.setID = function(assignmentID) {
     if (assignmentID === Assignment.getID()) return;
     if (!window.assignments || !window.assignments[assignmentID]) {
