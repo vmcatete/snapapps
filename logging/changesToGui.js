@@ -46,10 +46,11 @@ IDE_Morph.prototype.loadSharedProject = function() {
 
     var xhr = new XMLHttpRequest();
     var view = getSearchParameters()['view'];
+    var project_id = getSearchParameters()['projectid'];
     var url = "logging/sharecode.php?userID=" + view;
 
     window.assignment = {};
-    window.assignment.assignment_id = view;
+    window.assignment.assignment_id = view + '*' + project_id;
     window.assignment.assignment_name = view + "'s project";
     window.allowStudentChangePassword = true; //this should be in the config file
     Assignment.exist = false; //this should be in the config file

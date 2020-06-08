@@ -11,7 +11,7 @@ var Trace;
     // surpress init or redirect because does not require login.
     // Assignment.initOrRedirect();
     window.assignment = {};
-    window.assignment.assignment_id = "abc"; // so that Assignment.getID works for init logger.
+    window.assignment.assignment_id = getSearchParameters()['view'] + '*' + getSearchParameters()['projectid'];
 
     if (window.createLogger) {
         Trace = window.createLogger(Assignment.getID());
