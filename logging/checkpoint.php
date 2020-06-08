@@ -36,7 +36,7 @@ try {
         // TODO: confirm
         $query = "SELECT code FROM checkpoints
         WHERE userIDA = '$userIDA' AND userIDB = '$userIDB'
-        AND NOW() - serverTime < 90
+        AND NOW() - serverTime < 900
         ORDER BY serverTime DESC;
         ";
 
