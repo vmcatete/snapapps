@@ -98,7 +98,10 @@ BuddyDisplay.showViewDialog = function() {
         }, function(data, status) {
             // if new user, display user doesn't exist message.
             if (data == "new user") {
-                ide.inform("Invalid User", "We have never seen '" + view + "' before. \n Please verify the user name."); // might be able to 
+                ide.inform("Invalid User", 
+                    'We could not find a recent project to load from this user\n' +
+                    '"' + view + '"\n' + 
+                    'Make sure they shared their project using the "share my project" button.'); // might be able to 
             }
             // if existing user, log into snap account.
             else {
