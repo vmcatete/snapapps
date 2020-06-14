@@ -90,6 +90,9 @@
 				if (ide.loadAssignment) {
 					ide.loadAssignment();
 				}
+				if (ide.loadInstruction) {
+					ide.loadInstruction();
+				}
 
         		loop();
 				if (window.onWorldLoaded) {
@@ -112,10 +115,6 @@
 					<input id="current_page" value="1" type="number"/>
 					<button id="go_next">Next</button>
 				</div>
-				<!-- <div id="zoom_controls">
-					<button id="zoom_in">+</button>
-					<button id="zoom_out">-</button>
-				</div> -->
             </div>
         </div>
 		<div id = "container">

@@ -40,6 +40,22 @@ IDE_Morph.prototype.loadAssignment = function() {
     ide.controlBar.fixLayout();
 }
 
+
+IDE_Morph.prototype.loadInstruction = function() {
+    if (window.assignment.instruction_file_name && window.assignment.instruction_file_name != "" && !window.assignment.instruction_file_name.endsWith(".pdf")) {
+        Trace.log("No instruction file to load");
+        return;
+    }
+
+    var path = "./" + window.instructionFolder + "/" + window.assignment.instruction_file_name;
+    console.log(path);
+    pdfjsLib.getDocument(path).then((pdf) => {
+        myState.pdf = pdf;
+        render();
+    });
+}
+
+
 IDE_Morph.prototype.cloudMenu = function () {
     Trace.log("IDE.cloudMenu");
     var menu,

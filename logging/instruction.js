@@ -16,11 +16,6 @@ function toggleInstruction() {
    }
 }
 
-pdfjsLib.getDocument("./Instructions/Day1.pdf").then((pdf) => {
-    myState.pdf = pdf;
-    render();
-});
-
 function render() {
     myState.pdf.getPage(myState.currentPage).then((page) => {
         var canvas = document.getElementById("pdf_renderer");
