@@ -4,6 +4,7 @@ var myState = {
     zoom: 1
 }
 
+$('#my_pdf_viewer').hide();
 window.instruction = 1;
 function toggleInstruction() {
    if (window.instruction) {

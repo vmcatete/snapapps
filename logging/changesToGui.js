@@ -42,9 +42,8 @@ IDE_Morph.prototype.loadAssignment = function() {
 
 
 IDE_Morph.prototype.loadInstruction = function() {
-    if (window.assignment.instruction_file_name && window.assignment.instruction_file_name != "" && !window.assignment.instruction_file_name.endsWith(".pdf")) {
+    if (!(window.assignment.instruction_file_name && window.assignment.instruction_file_name != "" && window.assignment.instruction_file_name.endsWith(".pdf"))) {
         Trace.log("IDE.loadInstruction", "None");
-        $('#my_pdf_viewer').hide();
         return;
     }
 
@@ -54,6 +53,8 @@ IDE_Morph.prototype.loadInstruction = function() {
         myState.pdf = pdf;
         render();
     });
+    
+    $('#my_pdf_viewer').show();
 }
 
 
