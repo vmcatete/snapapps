@@ -38,6 +38,7 @@ document.getElementById('go_previous')
         document.getElementById("current_page")
                 .value = myState.currentPage;
         render();
+        Trace.log("InstructionViewer.previousPage", myState.currentPage);
     });
 document.getElementById('go_next')
     .addEventListener('click', (e) => {
@@ -50,6 +51,7 @@ document.getElementById('go_next')
         document.getElementById("current_page")
                 .value = myState.currentPage;
         render();
+        Trace.log("InstructionViewer.nextPage", myState.currentPage);
     });
 document.getElementById('current_page')
     .addEventListener('keypress', (e) => {
@@ -71,6 +73,7 @@ document.getElementById('current_page')
                     document.getElementById("current_page")
                             .value = desiredPage;
                     render();
+                    Trace.log("InstructionViewer.goToPage", myState.currentPage);
             }
         }
     });

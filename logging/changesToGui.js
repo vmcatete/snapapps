@@ -47,8 +47,8 @@ IDE_Morph.prototype.loadInstruction = function() {
         return;
     }
 
+    Trace.log("IDE.loadInstruction", window.assignment.instruction_file_name);
     var path = "./" + window.instructionFolder + "/" + window.assignment.instruction_file_name;
-    console.log(path);
     pdfjsLib.getDocument(path).then((pdf) => {
         myState.pdf = pdf;
         render();
