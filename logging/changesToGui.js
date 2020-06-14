@@ -43,7 +43,8 @@ IDE_Morph.prototype.loadAssignment = function() {
 
 IDE_Morph.prototype.loadInstruction = function() {
     if (window.assignment.instruction_file_name && window.assignment.instruction_file_name != "" && !window.assignment.instruction_file_name.endsWith(".pdf")) {
-        Trace.log("No instruction file to load");
+        Trace.log("IDE.loadInstruction", "None");
+        $('#my_pdf_viewer').hide();
         return;
     }
 
