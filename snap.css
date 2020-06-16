@@ -1,0 +1,53 @@
+.instruction_viewer {
+    font-weight: 100;
+    width: 80%;
+    /* max-height: 500px; */
+	height: 100%;
+	padding-left: 0px;
+	position: fixed;
+	z-index: 100;
+    right: 0px;
+    -webkit-transition:all 500ms ease-out 0.5s;
+    -moz-transition:all 500ms ease-out 0.5s;
+    -o-transition:all 500ms ease-out 0.5s;
+    transition:all 500ms ease-out 0.0s;
+}
+
+.instruction_viewer .title {
+    position: absolute;
+    top:35%;
+    width: 25px;
+    height: 30%;
+    font-weight: 800;
+    font-size: 15px;
+}
+
+.instruction_viewer .title div {
+    position: absolute;
+    top: 50%;
+    left: -35px;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    transform: rotate(270deg);
+}
+
+#canvas_container {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    width: calc(100% - 25px);
+    overflow: auto;
+    left: 25px;
+    vertical-align: middle;
+}
+#canvas_container {
+    background: #333;
+    text-align: center;
+    border: solid 3px;
+}
+
+#pdf_renderer {
+    width: 100%;
+}
