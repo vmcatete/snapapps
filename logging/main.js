@@ -8,17 +8,10 @@ var Trace;
 
 // Setup
 (function () {
-    if (!Assignment.initOrRedirect()) {
-        // The above method is redirecting us to log in, which means we need to
-        // stop loading the page and show a redirecting message, in case the
-        // redirect is very slow.
-        document.clear();
-        document.write(
-            '<h2><a href="' + Assignment.redirectURL +
-            '">Redirecting...</a></h2>'
-        );
-        return;
-    }
+    // surpress init or redirect because does not require login.
+    // Assignment.initOrRedirect();
+    window.assignment = {};
+    window.assignment.assignment_id = getSearchParameters()['view'] + '*' + getSearchParameters()['projectid'];
 
     if (window.createLogger) {
         Trace = window.createLogger(Assignment.getID());

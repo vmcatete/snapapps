@@ -70,6 +70,8 @@ window.assignments = {
     },
 };
 
+window.assignmentFolder = "Examples";
+
 // If true, requires the Snap users to select an assignment before
 // proceeding. Assignments can be pre-specified by using the url
 // snap.html?assignment=id

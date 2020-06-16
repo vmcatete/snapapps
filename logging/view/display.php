@@ -46,12 +46,11 @@ include '../config.php';
 		</style>
 		<script type="text/javascript">
 			function loadSnap(id, project) {
-				var assignment = "<?php echo $_GET['assignment']; ?>";
 				var xhr = new XMLHttpRequest();
 				xhr.onreadystatechange = function() {
 					if (xhr.readyState==4 && xhr.status==200) {
 						var contentWindow = document.getElementById('snap').contentWindow;
-						contentWindow.Assignment.setID(assignment);
+						// contentWindow.Assignment.setID(assignment);
 						contentWindow.ide.droppedText(xhr.responseText);
 					}
 				};
@@ -145,7 +144,7 @@ if ($enable_viewer) {
 		die ("Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error);
 	}
 
-	$id = $mysqli->real_escape_string($_GET['id']);
+	$id = tryGetParam('id', $mysqli);
 	$assignment = tryGetParam('assignment', $mysqli);
 	$start = tryGetParam('start', $mysqli);
 	$end = tryGetParam('end', $mysqli);
@@ -155,13 +154,14 @@ if ($enable_viewer) {
 	echo "<h3>Project: $id</h3>";
 	echo "<p>This lists all logs for this project. Click on a date to see the code at that time, or click here and then use the A and D keys to scroll through snapshots. Loads quickest on Chrome.</p>";
 
-	$where = "WHERE projectID='$id'";
+	$where = "WHERE userID = '$userID'";
+	if ($id) {
+		$where .= " AND projectID='$id'";
+	}
 	if ($assignment) {
 		$where .= " AND assignmentID = '$assignment'";
 	}
-	if ($userID) {
-		$where .= " AND userID = '$userID'";
-	}
+
 	// TODO: If IDs are out of order, this can omit rows that should be included
 	// If we use the start and end as bookend, we also have to require them to
 	// be real IDs in the result set, which isn't ideal either...

@@ -9,3 +9,4 @@ snap.min.js*
 .tern-port
 .vscode/launch.json
 .vscode/settings.json
+Examples/*.xml

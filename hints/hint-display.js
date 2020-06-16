@@ -1,5 +1,4 @@
-
-// HintDisplay: outputs hitns to the console
+// HintDisplay: outputs hints to the console
 
 require('code-hint-dialog-box-morph');
 
@@ -207,7 +206,20 @@ HintDisplay.prototype.parentSelector = function(enclosingBlock) {
     }
     return enclosingBlock.selector;
 };
+HintDisplay.displayedHints = {};
 
+HintDisplay.logHint = function(data) {
+    // The next 4 lines processes how many times a specific hint is displayed.
+        // displayedHints is a dictionary with key as a hint identifier and value as the number of times this hint was displayed (count)
+    var key = JSON.stringify(data); // a way to get an identifier for the hint
+    var count = HintDisplay.displayedHints[key] || 0;
+    HintDisplay.displayedHints[key] = ++count;
+    // JSON.parse(key) will return the data object. I did this to make a copy of the data variable
+    // without affecting the data object itself.
+    var dataTemp = JSON.parse(key);
+    dataTemp.nDisplayed = count;
+    return dataTemp;
+}
 /**
  * Creates a function for logging and showing a script hint.
  *
@@ -222,11 +234,17 @@ HintDisplay.prototype.parentSelector = function(enclosingBlock) {
  * the script to be edited, and an additional array is optional.
  * @param {string[]} to An array of selectors which are displayed as a script
  * on the to side of the script hint.
+ * @param {int[]} highlightIndices An optional array, with each element holding
+ * the index of a block to highlight to indicate that it is the
+ * modified/inserted block, for the from and to lists, respectively. A single
+ * number will be interpreted as a to-index.
+ * @param {string} A text hint to show with this code hint (or null for none)
+ * @param {boolean} selfExplain a boolean that shows if selfExplain prompt will be shown or not
  * @param {function} onThumbsDown Optional callback to be called if the hint is
  * rated with a thumbs down.
  */
 HintDisplay.prototype.createScriptHintCallback = function(simple, root,
-        extraRoot, fromList, to, onThumbsDown) {
+        extraRoot, fromList, to, highlightIndices, textHints, onThumbsDown, selfExplain) {
 
     // For logging, we find the parent block this script is inside of, or null
     var enclosingBlock = this.getEnclosingParentBlock(root);
@@ -239,9 +257,20 @@ HintDisplay.prototype.createScriptHintCallback = function(simple, root,
     var parentSelector = this.parentSelector(enclosingBlock);
     var parentID = enclosingBlock ? enclosingBlock.id : null;
 
+    if (highlightIndices == null) {
+        highlightIndices = [null, null];
+    } else if (!highlightIndices.length) {
+        highlightIndices = [null, highlightIndices];
+    }
     if (root instanceof PrototypeHatBlockMorph) {
+        // copy arrays so no lasting changes
+        to = to.slice();
+        fromList = fromList.slice();
+        fromList[0] = fromList[0].slice();
         fromList[0].unshift('prototypeHatBlock');
         to.unshift('prototypeHatBlock');
+        if (highlightIndices[0] != null) highlightIndices[0]++;
+        if (highlightIndices[1] != null) highlightIndices[1]++;
 
         // We can't use the PrototypeHatBlockMorph's id, since it is not logged
         // so we use the GUID of the custom block and set index to 0 to indicate
@@ -271,15 +300,32 @@ HintDisplay.prototype.createScriptHintCallback = function(simple, root,
         'fromList': fromList,
         // An array containing the selectors on the to side of the hint
         'to': to,
+        // index of highlighted block in the to list (or null if none)
+        'highlightIndices': highlightIndices,
+        // A text hint, if any, shown with this code hint
+        'textHint': textHints,
+        // a boolean that shows if selfExplain prompt will be shown or not
+        'selfExplain': selfExplain,
+        // stores how many times this hint was displayed.
+        'nDisplayed': 0,
     };
+
+    if (highlightIndices[0] != null) {
+        fromList[0] = this.addIndexHighlight(fromList[0], highlightIndices[0]);
+    }
+    if (highlightIndices[1] != null) {
+        to = this.addIndexHighlight(to, highlightIndices[1]);
+    }
 
     var myself = this;
     return function() {
-        Trace.log('SnapDisplay.showScriptHint', data);
-        new CodeHintDialogBoxMorph(window.ide, simple)
-            .showScriptHint(parentSelector, index, fromList, to)
+        Trace.log('SnapDisplay.showScriptHint', HintDisplay.logHint(data));
+        dialog = new CodeHintDialogBoxMorph(window.ide, simple, textHints, selfExplain);
+        dialog.showScriptHint(parentSelector, index, fromList, to)
             .onThumbsDown(onThumbsDown);
+        myself.showHintParentHighlight(enclosingBlock, dialog);
         myself.hintDialogShown();
+        return dialog;
     };
 };
 
@@ -296,13 +342,25 @@ HintDisplay.prototype.createScriptHintCallback = function(simple, root,
  * on the from side of the block hint.
  * @param {string[]} to An array of selectors which are displayed as arguments
  * on the to side of the script hint.
+ * @param {int[]} highlightIndices An optional array, with each element holding
+ * the index of a block to highlight to indicate that it is the
+ * modified/inserted block, for the from and to lists, respectively. A single
+ * number will be interpreted as a to-index.
  * @param {string[]} otherBlocks An array of selectors which are also displayed
  * as a script on the from side of the script.
+ * @param {string} A text hint to show with this code hint (or null for none)
  * @param {function} onThumbsDown Optional callback to be called if the hint is
  * rated with a thumbs down.
  */
 HintDisplay.prototype.createBlockHintCallback = function(simple, root,
-        extraRoot, from, to, otherBlocks, onThumbsDown) {
+        extraRoot, from, to, highlightIndices, otherBlocks, textHints,
+        onThumbsDown, selfExplain) {
+
+    if (!highlightIndices == null) {
+        highlightIndices = [null, null];
+    } else if (!highlightIndices.length) {
+        highlightIndices = [null, highlightIndices];
+    }
 
     var enclosingBlock = root.enclosingBlock();
     var selector = this.parentSelector(enclosingBlock);
@@ -321,23 +379,62 @@ HintDisplay.prototype.createBlockHintCallback = function(simple, root,
         'from': from,
         // An array of selectors being shown as arguments on the to side
         'to': to,
+        // index of highlighted block in the to list (or null if none)
+        'highlightIndices': highlightIndices,
         // An array of selectors from the extraRoot, if any, shown on the from
         // side as a script
         'otherBlocks': otherBlocks,
+        // A text hint, if any, shown with this code hint
+        'textHint': textHints,
+        // a boolean that shows if a selfExplain prompt will be shown or not.
+        'selfExplain': selfExplain,
     };
+
+    if (highlightIndices[0] != null) {
+        from = this.addIndexHighlight(from, highlightIndices[0]);
+    }
+    if (highlightIndices[1] != null) {
+        to = this.addIndexHighlight(to, highlightIndices[1]);
+    }
 
     var myself = this;
     return function() {
-        Trace.log('SnapDisplay.showBlockHint', data);
-        new CodeHintDialogBoxMorph(window.ide, simple)
-            .showBlockHint(selector, from, to, otherBlocks)
+        Trace.log('SnapDisplay.showBlockHint', HintDisplay.logHint(data));
+        var dialog = new CodeHintDialogBoxMorph(window.ide, simple, textHints, selfExplain);
+        dialog.showBlockHint(selector, from, to, otherBlocks)
             .onThumbsDown(onThumbsDown);
+        myself.showHintParentHighlight(enclosingBlock, dialog);
         myself.hintDialogShown();
+        return dialog;
     };
 };
 
+HintDisplay.highlightPrefix = '**';
+
+HintDisplay.prototype.addIndexHighlight = function(array, highlightIndex) {
+    array = array.slice();
+    if (highlightIndex != null && highlightIndex >= 0 &&
+            highlightIndex < array.length) {
+        array[highlightIndex] =
+            HintDisplay.highlightPrefix + array[highlightIndex];
+    }
+    return array;
+};
+
+HintDisplay.prototype.showHintParentHighlight = function(
+    parent, dialog, color
+) {
+    if (!color) color = new Color(255, 255, 255);
+    if (!parent || !parent.addSingleHintHighlight) return;
+    parent.addSingleHintHighlight(color);
+    extendObject(dialog, 'destroy', function(base) {
+        parent.removeHintHighlight();
+        base.call(this);
+    });
+};
+
 HintDisplay.prototype.createStructureHintCallback = function(simple, root,
-        message, from, to, onThumbsDown) {
+        message, from, to, onThumbsDown, selfExplain) {
 
     var rootType = null;
     var rootID = null;
@@ -367,12 +464,15 @@ HintDisplay.prototype.createStructureHintCallback = function(simple, root,
         'to': to
     };
 
+    var myself = this;
     return function() {
         Trace.log('SnapDisplay.showStructureHint', data);
         var dialog = new MessageHintDialogBoxMorph(window.ide, simple, message,
             'Suggestion');
+        // myself.showHintParentHighlight(root, dialog, new Color(255, 0, 0));
         dialog.onThumbsDown(onThumbsDown);
         dialog.popUp();
+        return dialog;
     };
 };
 
@@ -405,11 +505,11 @@ HintDisplay.showLoggedHint = function(data) {
                 parent = parent.selector;
             }
         }
-        new CodeHintDialogBoxMorph(window.ide)
+        new CodeHintDialogBoxMorph(window.ide, false, data.textHint)
             .showScriptHint(parent, data.index, fromList, data.to);
     } else if (type === 'BlockHint') {
         fromList = data.fromList || [data.from, []];
-        new CodeHintDialogBoxMorph(window.ide)
+        new CodeHintDialogBoxMorph(window.ide, false, data.textHint)
             .showBlockHint(data.parentSelector, fromList[0], data.to,
                 fromList[1]);
     } else {
@@ -417,16 +517,18 @@ HintDisplay.showLoggedHint = function(data) {
     }
 };
 
-HintDisplay.prototype.addHintButton = function(text, onClick) {
+HintDisplay.prototype.addHintButton = function(text, onClick, isHintButton) {
     var hintButton = new PushButtonMorph(ide, onClick, text);
+    hintButton.isHintButton = isHintButton;
     hintButton.fontSize = DialogBoxMorph.prototype.buttonFontSize;
-    hintButton.corner = DialogBoxMorph.prototype.buttonCorner;
     hintButton.edge = DialogBoxMorph.prototype.buttonEdge;
-    hintButton.outline = DialogBoxMorph.prototype.buttonOutline;
+    hintButton.padding = DialogBoxMorph.prototype.buttonPadding;
     hintButton.outlineColor = ide.spriteBar.color;
     hintButton.outlineGradient = false;
-    hintButton.padding = DialogBoxMorph.prototype.buttonPadding;
     hintButton.contrast = DialogBoxMorph.prototype.buttonContrast;
+    hintButton.corner = DialogBoxMorph.prototype.buttonCorner;
+    hintButton.outline = DialogBoxMorph.prototype.buttonOutline;
+
     hintButton.drawNew();
     hintButton.fixLayout();
 
@@ -450,9 +552,15 @@ extendObject(window, 'onWorldLoaded', function(base) {
         base.call(this, situation);
         var hintButton = this.controlBar.hintButton;
         if (hintButton) {
-            hintButton.setPosition(new Point(
-                this.stage.left() - hintButton.width() / 2 - 60,
-                hintButton.top()));
+            if(hintButton.isHintButton){  // for checkMyWork button
+                hintButton.setPosition(new Point(
+                    this.stage.left() - hintButton.width() / 2 - 150,
+                    hintButton.top()));
+            }else{
+                hintButton.setPosition(new Point(   // for "swap roles" button or any other thing
+                    this.stage.left() - hintButton.width() / 2 - 225,
+                    hintButton.top()));
+            }
         }
     });
 });
