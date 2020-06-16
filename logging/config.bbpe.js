@@ -4,6 +4,10 @@
 // in the assignment table.
 window.assignmentFolder = "Examples";
 
+// This folder stores all instruction files.
+// all instruction files should be pdf.
+window.instructionFolder = "Instructions";
+
 // For buddy display
 // is the viewer in a new window or a inner window?
 window.openViewerInNewWindow = true;
