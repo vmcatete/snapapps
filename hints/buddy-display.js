@@ -106,7 +106,7 @@ BuddyDisplay.showViewDialog = function() {
             // if existing user, log into snap account.
             else {
                 var project_id = JSON.parse(data).id;
-                var url = window.buddyDisplayBaseUrl + "?user=" + window.userID + "&view=" + view + "&projectid=" + project_id;
+                var url = window.buddyDisplayBaseUrlSnap + "?user=" + window.userID + "&view=" + view + "&projectid=" + project_id;
 
                 if (window.openViewerInNewWindow) {
                     var winWidth = ide.width() * 0.9;
