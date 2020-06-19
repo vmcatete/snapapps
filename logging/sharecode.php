@@ -5,7 +5,7 @@ include "config.php";
 try {
     date_default_timezone_set('America/New_York');
 
-    $mysqli = new mysqli($host, $user, $password, $viewer_db);
+    $mysqli = new mysqli($host, $user, $password, $db);
     if ($mysqli->connect_errno) {
         http_response_code(503);
         die ("Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error);

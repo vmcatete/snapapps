@@ -5,7 +5,7 @@ include('config.php');
     }
     $user_name = $_POST['user_name'];
 
-    $mysqli = new mysqli($host, $user, $password, $viewer_db);
+    $mysqli = new mysqli($host, $user, $password, $db);
     if ($mysqli->connect_errno) {
         http_response_code(503);
         die ("Failed to connect to MySQL: ($mysqli->errno) $mysqli->error");
