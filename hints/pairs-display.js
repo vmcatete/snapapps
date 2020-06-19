@@ -156,6 +156,7 @@ PairsDisplay.showSwapDialog = function() {
 
 // change the role button to new row and update window.currentRole
 PairsDisplay.prototype.changeRoleTo = function(newRole) {
+    Trace.log("PairsDisplay.changeRoleTo", newRole);
     window.currentRole = newRole;
 
     if (newRole == 'driver') {
