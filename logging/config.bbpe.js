@@ -11,6 +11,7 @@ window.instructionFolder = "Instructions";
 // For buddy display
 // is the viewer in a new window or a inner window?
 window.openViewerInNewWindow = true;
+window.buddyDisplayBaseUrl = "";
 
 // Specify the login header's logo and title text
 window.loginHeader = {
