@@ -13,6 +13,7 @@ window.instructionFolder = "Instructions";
 window.openViewerInNewWindow = true;
 window.buddyDisplayBaseUrl = "";
 
+
 // Specify the login header's logo and title text
 window.loginHeader = {
     logo: 'login/NCStateLogoWhite.png',
