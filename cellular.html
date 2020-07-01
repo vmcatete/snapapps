@@ -6,6 +6,7 @@
 		<link rel="stylesheet" href="isnap/lib/jquery-ui-1.12.1/themes/smoothness/jquery-ui.min.css?v=2.5.1-e1.1">
 		<link rel="shortcut icon" href="favicon.ico">
 		<link rel="stylesheet" href="hints/quiz.css">
+		<link rel="stylesheet" href="snap.css">
 
 		<script src="isnap/lib/jquery-3.1.1.min.js?v=2.5.1-e1.1"></script>
         <script src="isnap/lib/jquery-ui-1.12.1/jquery-ui.min.js?v=2.5.1-e1.1"></script>
@@ -133,8 +134,20 @@
 		</script>
 	</head>
 	<body style="margin: 0; width: 100%; height: 100%">
+		<div id="my_pdf_viewer" class="instruction_viewer">
+			<button onclick="toggleInstruction()" class="title"><div>Instruction</div></button>
+            <div id="canvas_container">
+				<canvas id="pdf_renderer"></canvas>
+				<div id="navigation_controls">
+					<button id="go_previous">Previous</button>
+					<input id="current_page" value="1" type="number"/>
+					<button id="go_next">Next</button>
+				</div>
+            </div>
+        </div>
 		<div id = "container">
 			<canvas id="world" tabindex="1" ></canvas>
 		</div>
+		<script type="text/javascript" src="logging/instruction.js"></script>
 	</body>
 </html>

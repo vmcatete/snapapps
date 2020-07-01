@@ -11,7 +11,7 @@ BuddyDisplay.prototype = Object.create(HintDisplay.prototype);
 BuddyDisplay.prototype.initDisplay = function() {
     this.button = window.ide.controlBar.addCustomButton('shareButton', localize("Share My Work"), BuddyDisplay.showShareDialog);
     this.button = window.ide.controlBar.addCustomButton('viewButton', localize("View Other's Work"), BuddyDisplay.showViewDialog);
-    this.snapViewerDialog.allowClose(true);
+    // this.snapViewerDialog.allowClose(true);
 };
 
 BuddyDisplay.prototype.show = function() {
