@@ -9,7 +9,8 @@
 		<link rel="stylesheet" href="snap.css">
 
 		<script src="isnap/lib/jquery-3.1.1.min.js?v=2.5.1-e1.1"></script>
-        <script src="isnap/lib/jquery-ui-1.12.1/jquery-ui.min.js?v=2.5.1-e1.1"></script>
+		<script src="isnap/lib/jquery-ui-1.12.1/jquery-ui.min.js?v=2.5.1-e1.1"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf.min.js"></script>
 
 		<!-- Base-64 library -->
 		<script type="text/javascript" src="cellular/mdnb64.js"></script>
@@ -120,6 +121,9 @@
 				// var assignmentID = Assignment.getID();
 				if (ide.loadAssignment) {
 					ide.loadAssignment();
+				}
+				if (ide.loadInstruction) {
+					ide.loadInstruction();
 				}
 
 				loop();
