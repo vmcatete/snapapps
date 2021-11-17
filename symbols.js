@@ -142,7 +142,8 @@ SymbolMorph.prototype.names = [
     'location',
     'footprints',
     'keyboard',
-    'keyboardFilled'
+    'keyboardFilled',
+    'emoji'
 ];
 
 // SymbolMorph instance creation:
@@ -342,6 +343,8 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolKeyboard(canvas, aColor);
     case 'keyboardFilled':
         return this.drawSymbolKeyboardFilled(canvas, aColor);
+    case "emoji":
+        return this.renderSymbolEmoji(canvas, aColor);
     default:
         return canvas;
     }
@@ -1847,3 +1850,62 @@ SymbolMorph.prototype.drawSymbolKeyboardFilled = function (canvas, color) {
     ctx.fillRect(u * 4, u * 7, k * 4, k);
     return canvas;
 };
+
+SymbolMorph.prototype.renderSymbolEmoji = function (canvas, color) {
+
+    var ctx = canvas.getContext('2d');
+    // draw a solid circle
+    var w = this.symbolWidth();
+  
+    l = Math.max(w / 20, 0.5);
+  
+    ctx.fillStyle = color.toString();
+  
+    ctx.beginPath();
+  
+    // Draw mouth
+    ctx.moveTo((w * 3) / 4 + l / 2, (w * 4) / 7);
+    ctx.arc(w / 2, (4 * w) / 7, w / 4 - l / 2, radians(0), radians(180), false);
+    ctx.fill();
+  
+    this.drawSymbolCircle(canvas, color);
+    this.renderSymbolEyes(canvas, color);
+    return canvas;
+  };
+
+  SymbolMorph.prototype.renderSymbolEyes = function (canvas, color) {
+
+    var ctx = canvas.getContext('2d');
+
+    var w = this.symbolWidth();
+  
+    l = Math.max(w / 20, 0.5);
+    ctx.fillStyle = color.toString();
+  
+    ctx.beginPath();
+  
+    // Draw left eye
+    ctx.moveTo((l * 3) / 2 + w / 4, (w * 3) / 8);
+    ctx.arc(
+      l / 2 + w / 4,
+      (w * 3) / 8,
+      (3 * l) / 2,
+      radians(0),
+      radians(360),
+      false
+    );
+  
+    // Draw right eye
+    ctx.moveTo((w * 3) / 4 + l / 2, (w * 3) / 8);
+    ctx.arc(
+      (w * 3) / 4 - l / 2,
+      (w * 3) / 8,
+      (3 * l) / 2,
+      radians(0),
+      radians(360),
+      false
+    );
+  
+    ctx.fill();
+    return canvas;
+  };

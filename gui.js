@@ -1639,12 +1639,7 @@ IDE_Morph.prototype.createCorralBar = function () {
         cambutton.fixLayout();
         cambutton.setCenter(this.corralBar.center());
         cambutton.setLeft(
-            this.corralBar.left() +
-            padding +
-            newbutton.width() +
-            padding +
-            paintbutton.width() +
-            padding
+            this.corralBar.left() + padding + newbutton.width() + padding + paintbutton.width() + padding
         );
         this.corralBar.add(cambutton);
         document.addEventListener(
@@ -8732,7 +8727,8 @@ WardrobeMorph.prototype.updateList = function () {
         template,
         txt,
         paintbutton,
-        cambutton;
+        cambutton,
+        emojibutton;
 
     this.changed();
     oldFlag = Morph.prototype.trackChanges;
@@ -8775,6 +8771,29 @@ WardrobeMorph.prototype.updateList = function () {
 
     this.addContents(paintbutton);
 
+    emojibutton = new PushButtonMorph(
+        this,
+        "emojiNew",
+        new SymbolMorph("emoji", 15)
+      );
+      emojibutton.padding = 0;
+      emojibutton.corner = 12;
+      emojibutton.color = IDE_Morph.prototype.groupColor;
+      emojibutton.highlightColor = IDE_Morph.prototype.frameColor.darker(50);
+      emojibutton.pressColor = emojibutton.highlightColor;
+      emojibutton.labelMinExtent = new Point(36, 18);
+      emojibutton.labelShadowOffset = new Point(-1, -1);
+      emojibutton.labelShadowColor = emojibutton.highlightColor;
+      emojibutton.labelColor = TurtleIconMorph.prototype.labelColor;
+      emojibutton.contrast = this.buttonContrast;
+      emojibutton.hint = "Add an emoji";
+      emojibutton.setPosition(new Point(x, y));
+      emojibutton.fixLayout();
+      emojibutton.setCenter(icon.center());
+      emojibutton.setLeft(paintbutton.right() + padding * 2);
+    
+      this.addContents(emojibutton);
+
     if (CamSnapshotDialogMorph.prototype.enableCamera) {
         cambutton = new PushButtonMorph(
             this,
@@ -8796,7 +8815,7 @@ WardrobeMorph.prototype.updateList = function () {
         cambutton.setPosition(new Point(x, y));
         cambutton.fixLayout();
         cambutton.setCenter(paintbutton.center());
-        cambutton.setLeft(paintbutton.right() + toolsPadding);
+        cambutton.setLeft(emojibutton.right() + toolsPadding);
 
         this.addContents(cambutton);
 
@@ -8884,6 +8903,23 @@ WardrobeMorph.prototype.paintNew = function () {
         }
     });
 };
+
+WardrobeMorph.prototype.emojiNew = function () {
+    var cos = new Costume(
+        newCanvas(null, true),
+        this.sprite.newCostumeName(localize("Untitled"))
+      ),
+      ide = this.parentThatIsA(IDE_Morph),
+      myself = this;
+    cos.edit(this.world(), ide, true, null, function () {
+      myself.sprite.shadowAttribute("costumes");
+      myself.sprite.addCostume(cos);
+      myself.updateList();
+      if (ide) {
+        ide.currentSprite.wearCostume(cos);
+      }
+    });
+  };
 
 WardrobeMorph.prototype.newFromCam = function () {
     var camDialog,
