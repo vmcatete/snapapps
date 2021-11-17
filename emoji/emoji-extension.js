@@ -3,6 +3,15 @@ WardrobeMorph.prototype.emojiNew = function () {
 };
 
 IDE_Morph.prototype.importEmojis = function () {
+
+    fetch("Emojis/EMOJIS").then(f => {
+        f.text().then(txt => {
+            var emojis = this.parseEmojiFile(txt);
+            new EmojiImportDialogMorph(this, emojis).popUp();
+        })
+    })
+
+    /*
     this.getURL(
         this.resourceURL('Emojis', 'EMOJIS'),
         txt => {
@@ -10,6 +19,7 @@ IDE_Morph.prototype.importEmojis = function () {
             new EmojiImportDialogMorph(this, emojis).popUp();
         }
     );
+    */
 };
 
 IDE_Morph.prototype.parseEmojiFile = function (text) {
@@ -50,10 +60,11 @@ IDE_Morph.prototype.parseEmojiFile = function (text) {
         } else {
             parts = line.split('\t').map(str => str.trim());
             if (index != 0) {
-                var alt;
+                var alt = [];
                 if (parts[3]) {
                     alt = parts[3].toLowerCase().split(' ').map(str => str + ".png");
                 }
+                alt.unshift(parts[0].toLowerCase() + ".png");
                 emojiList.push({
                     fileName: parts[0].toLowerCase() + ".png",
                     ascii: parts[1],
@@ -346,7 +357,7 @@ EmojiImportDialogMorph.prototype.displayAlternatives = function (items, descript
         var url = ide.resourceURL('Emojis', item),
             img = new Image(),
             icon = new CostumeIconMorph(
-                new Costume(turtle.getImage(), description)
+                new Costume(turtle.image, description)
             );
         console.log(url);
         icon.isDraggable = false;
@@ -409,7 +420,7 @@ EmojiImportDialogMorph.prototype.displayEmojis = function (items) {
         var url = ide.resourceURL('Emojis', item.fileName),
             img = new Image(),
             icon = new CostumeIconMorph(
-                new Costume(turtle.getImage(), item.description)
+                new Costume(turtle.image, item.description)
             );
         icon.isDraggable = false;
         icon.userMenu = nop;
