@@ -387,7 +387,11 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     if (model.stage.attributes.name) {
         project.stage.name = model.stage.attributes.name;
     }
-    if (model.stage.attributes.guid) {
+    // We store the project guid and assignment in stage because there is no
+    // serialized 'project' object.
+    if (model.project.attributes.guid) {
+        project.stage.guid = model.project.attributes.guid;
+    } else if (model.stage.attributes.guid) {
         project.stage.guid = model.stage.attributes.guid;
     }
     if (model.stage.attributes.scheduled === 'true') {
@@ -879,7 +883,7 @@ SnapSerializer.prototype.loadCustomBlocks = function (
     }, this);
 };
 
-SnapSerializer.prototype.loadCustomBlock = function(object, child, isGlobal) {
+SnapSerializer.prototype.loadCustomBlock = function(object, child, isGlobal, isDispatch) {
     var definition, names, inputs, vars, header, code, comment, i;
     if (child.tag !== 'block-definition') {
         return null;
@@ -899,14 +903,11 @@ SnapSerializer.prototype.loadCustomBlock = function(object, child, isGlobal) {
     definition.isGlobal = (isGlobal === true);
     if (isDispatch) {
         object.inheritedMethodsCache.push(definition);
+    } else {
         if (definition.isGlobal) {
             object.globalBlocks.push(definition);
         } else {
-            if (definition.isGlobal) {
-                object.globalBlocks.push(definition);
-            } else {
-                object.customBlocks.push(definition);
-            }
+            object.customBlocks.push(definition);
         }
     }
 
@@ -917,25 +918,6 @@ SnapSerializer.prototype.loadCustomBlock = function(object, child, isGlobal) {
     ).map(function (str) {
         return str.substr(1);
     });
-
-    definition.names = names;
-    inputs = child.childNamed('inputs');
-    if (inputs) {
-        i = -1;
-        inputs.children.forEach(function (child) {
-            var options = child.childNamed('options');
-            if (child.tag !== 'input') {
-                return;
-            }
-            i += 1;
-            definition.declarations[names[i]] = [
-                child.attributes.type,
-                child.contents,
-                options ? options.contents : undefined,
-                child.attributes.readonly === 'true'
-            ];
-        });
-    }
 
     definition.names = names;
     inputs = child.childNamed('inputs');
@@ -2066,8 +2048,16 @@ ReporterBlockMorph.prototype.toScriptXML = function (
 };
 
 CustomCommandBlockMorph.prototype.toBlockXML = function (serializer) {
-    var scope = (this.definition.isGlobal || !this.definition.receiver) ? undefined
+    var scope;
+
+    if (this.definition) {
+        scope = (this.definition.isGlobal || !this.definition.receiver) ? undefined
         : this.definition.receiver.name;
+    }
+    else {
+        this.isGlobal ? undefined : 'local';
+    }
+
     return serializer.format(
         '<custom-block id="@" s="@"%>%%%%</custom-block>',
         this.id,

@@ -505,7 +505,7 @@ SpriteIconMorph.prototype.fixLayout = function () {
                     if (stageChildren[i] instanceof SpriteMorph
                         && stageChildren[i].parentSprite == this.object)
                         numClones++;
-         
+
                 this.duplicator.setContents(numClones);
             }
         }
@@ -545,3 +545,310 @@ IDE_Morph.prototype.removeSprite = function (object) {
 // and I thought the dimensions of the stage were hardcoded somewhere. FIX ME.
 IDE_Morph.prototype.userSetStageSize = function () { };
 IDE_Morph.prototype._snapapps_showStageSizeOptions = false;
+
+/*************************************************************
+ * For Epidemic Simulatioin
+ *************************************************************/
+// Change saving feature to save to the last_saved table
+
+// IDE_Morph.prototype.save = function() {
+//     this.source = 'cloud';
+
+//     if (window.assignmentID) {
+//         this.saveProject(window.assignmentID, "last_saved");
+//     } else {
+//         this.showMessage("You need to set a project name first.", 2);
+//     }
+// }
+
+// IDE_Morph.prototype.saveProject = function (name, table) {
+//     Trace.log('IDE.saveProject', name);
+//     var myself = this;
+//     this.nextSteps([
+//         function () {
+//             if (table === "last_saved") {
+//                 myself.showMessage('Saving...');
+//             }
+//         },
+//         function () {
+//             myself.rawSaveProject(name, table);
+//         }
+//     ]);
+// };
+
+// IDE_Morph.prototype.rawSaveProject = function (name, table) {
+//     var myself = this;
+
+//     if (name) {
+//         // do not mess with project name since it's already set
+//         // this.setProjectName(name);
+
+//         if (Process.prototype.isCatchingErrors) {
+//             try {
+//                 var xhr = new XMLHttpRequest();
+//                 var projectInfo = {
+//                     'userID': window.userID,
+//                     'time': Date.now(),
+//                     'assignmentID': Assignment.getID(),
+//                     'data': myself.serializer.serialize(myself.stage),
+//                     'table': table
+//                 };
+
+//                 xhr.onreadystatechange = function() {
+//                     if (table === "last_saved") {
+//                         if (xhr.status === 200) {
+//                             myself.showMessage('Saved!', 1);
+//                         }
+//                         else if (xhr.status > 0) {
+//                             myself.showMessage('Failed to save: ' + xhr.responseText);
+//                             Trace.logErrorMessage(xhr.responseText);
+//                         }
+//                     }
+//                 }
+//                 xhr.open('POST', 'logging/login/saveProject.php', true);
+//                 xhr.send(JSON.stringify(projectInfo));
+//             } catch (err) {
+//                 myself.showMessage('Save failed: ' + err);
+//                 Trace.logError(err);
+//             }
+//         } else {
+
+//             // console.log("Not in try block: \n" + this.serializer.serialize(this.stage));
+//             // myself.showMessage('Saved!', 1);
+//         }
+//     }
+// };
+
+IDE_Morph.prototype.loadExampleProject = function(name) {
+    Trace.log("IDE.loadExampleProject", name);
+    if (!name) return;
+    if (name === "Viewing") return;
+    var examples = ide.getMediaList("Examples");
+    var resourceURL = null;
+    examples.forEach(function(example) {
+        if (example.name === name) {
+            resourceURL = ide.resourceURL('Examples', example.fileName);
+        }
+    });
+
+    if (resourceURL) {
+        ide.openProjectString(ide.getURL(resourceURL));
+    }
+    else {
+        Trace.logErrorMessage("Example project doesn't exist.");
+        return false;
+    }
+}
+
+IDE_Morph.prototype.loadLastSavedProject = function(userID) {
+    Trace.log("IDE.loadLastSavedProject", userID);
+    if (!userID) return;
+
+    var myself = this;
+
+    if (Process.prototype.isCatchingErrors) {
+        try {
+            var xhr = new XMLHttpRequest();
+            var projectInfo = {
+                'userID': userID
+            };
+
+            xhr.onreadystatechange = function() {
+                if (this.readyState === 4) {
+                    if (xhr.status === 200) {
+                        if (xhr.responseText.length === 0) {
+                            myself.showMessage("You don't have a saved project.");
+                            Trace.logErrorMessage("No saved project.", userID);
+                        }
+                        else {
+                            myself.openProjectString(xhr.responseText);
+                        }
+                    }
+                    else {
+                        myself.showMessage('Failed to load saved project: ' + xhr.responseText);
+                        Trace.logErrorMessage(xhr.responseText);
+                    }
+                }
+            }
+            xhr.open('POST', 'logging/login/getProject.php', true);
+            xhr.send(JSON.stringify(projectInfo));
+        } catch (err) {
+            myself.showMessage('Load saved project failed: ' + err);
+            Trace.logError(err);
+        }
+    } else {
+
+        // console.log("Not in try block: \n" + this.serializer.serialize(this.stage));
+        // myself.showMessage('Saved!', 1);
+    }
+}
+
+IDE_Morph.prototype.loadAssignment = function(assignmentID) {
+    Trace.log("IDE.loadAssignment", assignmentID);
+    Assignment.setID(assignmentID);
+    if (assignmentID === "lastSaved") {
+        ide.loadLastSavedProject(window.userID);
+    }
+    else {
+        ide.loadExampleProject(window.assignments[assignmentID].name);
+    }
+    ide.controlBar.updateLabel();
+    ide.controlBar.fixLayout();
+}
+
+// IDE_Morph.prototype.cloudMenu = function() {
+//     var menu,
+//         myself = this,
+//         world = this.world(),
+//         pos = this.controlBar.cloudButton.bottomLeft(),
+//         shiftClicked = (world.currentKey === 16);
+
+//     menu = new MenuMorph(this);
+//     if (shiftClicked) {
+//         menu.addItem(
+//             'url...',
+//             'setCloudURL',
+//             null,
+//             new Color(100, 0, 0)
+//         );
+//         menu.addLine();
+//     }
+//     // if (!SnapCloud.username) {
+//     //     menu.addItem(
+//     //         'Login...',
+//     //         'initializeCloud'
+//     //     );
+//     //     menu.addItem(
+//     //         'Signup...',
+//     //         'createCloudAccount'
+//     //     );
+//     //     menu.addItem(
+//     //         'Reset Password...',
+//     //         'resetCloudPassword'
+//     //     );
+//     // } else {
+//     //     menu.addItem(
+//     //         localize('Logout') + ' ' + SnapCloud.username,
+//     //         'logout'
+//     //     );
+//     //     menu.addItem(
+//     //         'Change Password...',
+//     //         'changeCloudPassword'
+//     //     );
+//     // }
+//     if (window.hasOwnProperty('userID') && window.userID) {
+//         menu.addItem(
+//             localize('Logout') + ' ' + window.userID,
+//             'logout'
+//         );
+//     }
+//     else {
+//         menu.addItem(
+//             'Login...',
+//             'login'
+//         );
+//     }
+//     if (shiftClicked) {
+//         menu.addLine();
+//         menu.addItem(
+//             'export project media only...',
+//             function () {
+//                 if (myself.projectName) {
+//                     myself.exportProjectMedia(myself.projectName);
+//                 } else {
+//                     myself.prompt('Export Project As...', function (name) {
+//                         myself.exportProjectMedia(name);
+//                     }, null, 'exportProject');
+//                 }
+//             },
+//             null,
+//             this.hasChangedMedia ? new Color(100, 0, 0) : new Color(0, 100, 0)
+//         );
+//         menu.addItem(
+//             'export project without media...',
+//             function () {
+//                 if (myself.projectName) {
+//                     myself.exportProjectNoMedia(myself.projectName);
+//                 } else {
+//                     myself.prompt('Export Project As...', function (name) {
+//                         myself.exportProjectNoMedia(name);
+//                     }, null, 'exportProject');
+//                 }
+//             },
+//             null,
+//             new Color(100, 0, 0)
+//         );
+//         menu.addItem(
+//             'export project as cloud data...',
+//             function () {
+//                 if (myself.projectName) {
+//                     myself.exportProjectAsCloudData(myself.projectName);
+//                 } else {
+//                     myself.prompt('Export Project As...', function (name) {
+//                         myself.exportProjectAsCloudData(name);
+//                     }, null, 'exportProject');
+//                 }
+//             },
+//             null,
+//             new Color(100, 0, 0)
+//         );
+//         menu.addLine();
+//         menu.addItem(
+//             'open shared project from cloud...',
+//             function () {
+//                 myself.prompt('Author nameï¿??', function (usr) {
+//                     myself.prompt('Project name...', function (prj) {
+//                         var id = 'Username=' +
+//                             encodeURIComponent(usr.toLowerCase()) +
+//                             '&ProjectName=' +
+//                             encodeURIComponent(prj);
+//                         myself.showMessage(
+//                             'Fetching project\nfrom the cloud...'
+//                         );
+//                         SnapCloud.getPublicProject(
+//                             id,
+//                             function (projectData) {
+//                                 var msg;
+//                                 if (!Process.prototype.isCatchingErrors) {
+//                                     window.open(
+//                                         'data:text/xml,' + projectData
+//                                     );
+//                                 }
+//                                 myself.nextSteps([
+//                                     function () {
+//                                         msg = myself.showMessage(
+//                                             'Opening project...'
+//                                         );
+//                                     },
+//                                     function () {nop(); }, // yield (Chrome)
+//                                     function () {
+//                                         myself.rawOpenCloudDataString(
+//                                             projectData
+//                                         );
+//                                     },
+//                                     function () {
+//                                         msg.destroy();
+//                                     }
+//                                 ]);
+//                             },
+//                             myself.cloudError()
+//                         );
+
+//                     }, null, 'project');
+//                 }, null, 'project');
+//             },
+//             null,
+//             new Color(100, 0, 0)
+//         );
+//     }
+//     menu.popup(world, pos);
+// }
+
+// IDE_Morph.prototype.logout = function() {
+//     window.userID = null;
+//     window.location.replace('logging/assignment.html');
+// }
+
+// IDE_Morph.prototype.login = function() {
+//     window.location.replace('logging/assignment.html');
+// }

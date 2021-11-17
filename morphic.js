@@ -8,7 +8,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2019 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -85,6 +85,7 @@
             ColorPaletteMorph
                 GrayPaletteMorph
             ColorPickerMorph
+            DialMorph
             FrameMorph
                 ScrollFrameMorph
                     ListMorph
@@ -126,6 +127,7 @@
     CursorMorph
     BoxMorph
     SpeechBubbleMorph
+    DialMorph
     CircleBoxMorph
     SliderButtonMorph
     SliderMorph
@@ -174,7 +176,7 @@
     - Safari for Windows (deprecated)
     - safari for Mac
     - Safari for iOS (mobile)
-    - IE for Windows
+    - IE for Windows (partial support)
     - Edge for Windows
     - Opera for Windows
     - Opera for Mac
@@ -257,14 +259,16 @@
     <!DOCTYPE html>
     <html>
         <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <title>Morphic!</title>
             <script type="text/javascript" src="morphic.js"></script>
             <script type="text/javascript">
                 var world;
 
                 window.onload = function () {
-                    world = new WorldMorph(
-                        document.getElementById('world'));
+                    world = new WorldMorph(document.getElementById('world'));
+                    world.worldCanvas.focus();
+                    world.isDevMode = true;
                     loop();
                 };
 
@@ -274,15 +278,14 @@
                 }
             </script>
         </head>
-        <body>
-            <canvas id="world" tabindex="1" width="800" height="600">
-                <p>Your browser doesn't support canvas.</p>
-            </canvas>
+        <body style="margin: 0;">
+            <canvas id="world" tabindex="1" width="800" height="600"
+                style="position: absolute;" />
         </body>
     </html>
 
     if you use ScrollFrames or otherwise plan to support mouse wheel
-    scrolling events, you might also add the following inline-CSS
+    scrolling events, make sure to add the following inline-CSS
     attribute to the Canvas element:
 
         style="position: absolute;"
@@ -303,12 +306,14 @@
     <!DOCTYPE html>
     <html>
         <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <title>Morphic!</title>
             <script type="text/javascript" src="morphic.js"></script>
             <script type="text/javascript">
                 var world1, world2;
 
                 window.onload = function () {
+                    disableRetinaSupport();
                     world1 = new WorldMorph(
                         document.getElementById('world1'), false);
                     world2 = new WorldMorph(
@@ -325,13 +330,9 @@
         </head>
         <body>
             <p>first world:</p>
-            <canvas id="world1" tabindex="1" width="600" height="400">
-                <p>Your browser doesn't support canvas.</p>
-            </canvas>
+            <canvas id="world1" tabindex="1" width="600" height="400" />
             <p>second world:</p>
-            <canvas id="world2" tabindex="2" width="400" height="600">
-                <p>Your browser doesn't support canvas.</p>
-            </canvas>
+            <canvas id="world2" tabindex="2" width="400" height="600" />
         </body>
     </html>
 
@@ -351,6 +352,7 @@
     <!DOCTYPE html>
     <html>
         <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <title>touch me!</title>
             <script type="text/javascript" src="morphic.js"></script>
             <script type="text/javascript">
@@ -361,8 +363,9 @@
 
                     worldCanvas = document.getElementById('world');
                     world = new WorldMorph(worldCanvas);
+                    world.worldCanvas.focus();
                     world.isDevMode = false;
-                    world.color = new Color();
+                    world.setColor(new Color());
 
                     w = 100;
                     h = 100;
@@ -391,10 +394,9 @@
                 }
             </script>
         </head>
-        <body bgcolor='black'>
-            <canvas id="world" width="800" height="600">
-                <p>Your browser doesn't support canvas.</p>
-            </canvas>
+        <body bgcolor='black' style="margin: 0;">
+            <canvas id="world" width="800" height="600"
+                style="position: absolute;" />
         </body>
     </html>
 
@@ -652,7 +654,7 @@
     Those are dispatched as
 
         droppedAudio(anAudio, name)
-        droppedText(aString, name)
+        droppedText(aString, name, type)
 
     events to interested Morphs at the mouse pointer.
 
@@ -1040,7 +1042,7 @@
     canvasses for simple shapes in order to save system resources and
     optimize performance. Examples are costumes and backgrounds in Snap.
     In Morphic you can create new canvas elements using
-    
+
         newCanvas(extentPoint [, nonRetinaFlag])
 
     If retina support is enabled such new canvasses will automatically be
@@ -1081,12 +1083,12 @@
     stepping mechanism.
 
     For an example how to use animations look at how the Morph's methods
-    
+
         glideTo()
         fadeTo()
 
     and
-    
+
         slideBackTo()
 
     are implemented.
@@ -1139,8 +1141,7 @@
     editor for Windows, later switched to Apple's Dashcode and later
     still to Apple's Xcode. I've also come to depend on both Douglas
     Crockford's JSLint and later the JSHint project, as well as on
-    Mozilla's Firebug and Google's Chrome to get
-    it right.
+    Mozilla's Firebug and Google's Chrome to get it right.
 
 
     IX. contributors
@@ -1159,9 +1160,9 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
+/*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2017-September-01';
+var morphicVersion = '2019-January-10';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1444,7 +1445,7 @@ function copy(target) {
     canvasses for simple shapes in order to save system resources and
     optimize performance. Examples are costumes and backgrounds in Snap.
     In Morphic you can create new canvas elements using
-    
+
         newCanvas(extentPoint [, nonRetinaFlag])
 
     If retina support is enabled such new canvasses will automatically be
@@ -1478,7 +1479,7 @@ function enableRetinaSupport() {
 
     NOTE: This implementation is not exhaustive; it only implements what is
     needed by the Snap! UI.
-    
+
     [Jens]: like all other retina screen support implementations I've seen
     Bartosz's patch also does not address putImageData() compatibility when
     mixing retina-enabled and non-retina canvasses. If you need to manipulate
@@ -1616,7 +1617,7 @@ function enableRetinaSupport() {
     contextProto.drawImage = function(image) {
         var pixelRatio = getPixelRatio(image),
             sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight;
-        
+
         // Different signatures of drawImage() method have different
         // parameter assignments.
         switch (arguments.length) {
@@ -1808,12 +1809,12 @@ function normalizeCanvas(aCanvas, getCopy) {
     stepping mechanism.
 
     For an example how to use animations look at how the Morph's methods
-    
+
         glideTo()
         fadeTo()
 
     and
-    
+
         slideBackTo()
 
     are implemented.
@@ -1919,6 +1920,19 @@ Color.prototype.toString = function () {
         this.a + ')';
 };
 
+Color.prototype.toRGBstring = function () {
+    return 'rgb(' +
+        Math.round(this.r) + ',' +
+        Math.round(this.g) + ',' +
+        Math.round(this.b) + ')';
+};
+
+Color.fromString = function (aString) {
+    // I parse rgb/rgba strings into a Color object
+    var components = aString.split(/[\(),]/).slice(1,5);
+    return new Color(components[0], components[1], components[2], components[3]);
+};
+
 // Color copying:
 
 Color.prototype.copy = function () {
@@ -1932,13 +1946,13 @@ Color.prototype.copy = function () {
 
 // Color comparison:
 
-Color.prototype.eq = function (aColor) {
+Color.prototype.eq = function (aColor, observeAlpha) {
     // ==
     return aColor &&
         this.r === aColor.r &&
         this.g === aColor.g &&
         this.b === aColor.b &&
-		this.a === aColor.a;
+        (observeAlpha ? this.a === aColor.a : true);
 };
 
 // Color conversion (hsv):
@@ -2020,6 +2034,80 @@ Color.prototype.set_hsv = function (h, s, v) {
     this.g *= 255;
     this.b *= 255;
 
+};
+
+// Color conversion (hsl):
+
+Color.prototype.hsl = function () {
+    // ignore alpha
+    var rr = this.r / 255,
+        gg = this.g / 255,
+        bb = this.b / 255,
+        max = Math.max(rr, gg, bb), min = Math.min(rr, gg, bb),
+        h,
+        s,
+        l = (max + min) / 2,
+        d;
+    if (max === min) { // achromatic
+        h = 0;
+        s = 0;
+    } else {
+        d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+        case rr:
+            h = (gg - bb) / d + (gg < bb ? 6 : 0);
+            break;
+        case gg:
+            h = (bb - rr) / d + 2;
+            break;
+        case bb:
+            h = (rr - gg) / d + 4;
+            break;
+        }
+        h /= 6;
+    }
+    return [h, s, l];
+};
+
+Color.prototype.set_hsl = function (h, s, l) {
+    // ignore alpha, h, s and l are to be within [0, 1]
+    var q, p;
+
+    function hue2rgb(p, q, t) {
+        if (t < 0) {
+            t += 1;
+        }
+        if (t > 1) {
+            t -= 1;
+        }
+        if (t < 1/6) {
+            return p + (q - p) * 6 * t;
+        }
+        if (t < 1/2) {
+            return q;
+        }
+        if (t < 2/3) {
+            return p + (q - p) * (2/3 - t) * 6;
+        }
+        return p;
+    }
+
+    if (s == 0) { // achromatic
+        this.r = l;
+        this.g = l;
+        this.b = l;
+    } else {
+        q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        p = 2 * l - q;
+        this.r = hue2rgb(p, q, h + 1/3);
+        this.g = hue2rgb(p, q, h);
+        this.b = hue2rgb(p, q, h - 1/3);
+    }
+
+    this.r *= 255;
+    this.g *= 255;
+    this.b *= 255;
 };
 
 // Color mixing:
@@ -3136,21 +3224,21 @@ Morph.prototype.setFullCenter = function (aPoint) {
 Morph.prototype.keepWithin = function (aMorph) {
     // make sure I am completely within another Morph's bounds
     var leftOff, rightOff, topOff, bottomOff;
-    leftOff = this.fullBounds().left() - aMorph.left();
-    if (leftOff < 0) {
-        this.moveBy(new Point(-leftOff, 0));
-    }
     rightOff = this.fullBounds().right() - aMorph.right();
     if (rightOff > 0) {
         this.moveBy(new Point(-rightOff, 0));
     }
-    topOff = this.fullBounds().top() - aMorph.top();
-    if (topOff < 0) {
-        this.moveBy(new Point(0, -topOff));
+    leftOff = this.fullBounds().left() - aMorph.left();
+    if (leftOff < 0) {
+        this.moveBy(new Point(-leftOff, 0));
     }
     bottomOff = this.fullBounds().bottom() - aMorph.bottom();
     if (bottomOff > 0) {
         this.moveBy(new Point(0, -bottomOff));
+    }
+    topOff = this.fullBounds().top() - aMorph.top();
+    if (topOff < 0) {
+        this.moveBy(new Point(0, -topOff));
     }
 };
 
@@ -3250,31 +3338,7 @@ Morph.prototype.drawNew = function () {
     this.image = newCanvas(this.extent());
     var context = this.image.getContext('2d');
     context.fillStyle = this.color.toString();
-
-    /*
-        Chrome issue:
-
-            when filling a rectangular area, versions of Chrome beginning with
-            57.0.2987.133 start introducing vertical transparent stripes
-            to the right of the rectangle.
-            The following code replaces the original fillRect() call with
-            an explicit almost-rectangular path that miraculously  makes
-            sure the whole rectangle gets filled correctly.
-
-        Important: This needs to be monitored in the future so we can
-        revert to sane code once this Chrome issue has been resolved again.
-    */
-
-    // context.fillRect(0, 0, this.width(), this.height()); // taken out
-
-    context.beginPath();
-    context.moveTo(0, 0);
-    context.lineTo(this.image.width, 0);
-    context.lineTo(this.image.width, this.image.height);
-    context.lineTo(0, this.image.height + 0.0001); // yeah, I luv Chrome!
-    context.closePath();
-    context.fill();
-
+    context.fillRect(0, 0, this.width(), this.height());
     if (this.cachedTexture) {
         this.drawCachedTexture();
     } else if (this.texture) {
@@ -4804,19 +4868,19 @@ PenMorph.prototype.drawNew = function (facing) {
         left = start.distanceAngle(len, direction + 195);
         right = start.distanceAngle(len, direction - 195);
     } else if (this.penPoint === 'cellular-center') { //CELLULAR MODIFICATION
-    
+
         var zero = new Point(0,0);
-        
+
         dest = zero.distanceAngle(len * 0.75, direction - 180);
         left = zero.distanceAngle(len, direction + 195);
         right = zero.distanceAngle(len, direction - 195);
-        
+
         start = start.distanceAngle(len * 0.5, direction);
-        
+
         dest = start.add(dest);
         left = start.add(left);
         right = start.add(right);
-        
+
     } else { // 'middle'
         dest = start.distanceAngle(len * 0.75, direction);
         left = start.distanceAngle(len * 0.33, direction + 230);
@@ -4856,6 +4920,52 @@ PenMorph.prototype.setHeading = function (degrees) {
     this.heading = ((+degrees % 360) + 360) % 360;
     this.drawNew();
     this.changed();
+};
+
+PenMorph.prototype.numericalSetters = function () {
+    // for context menu demo purposes
+    return [
+        'setLeft',
+        'setTop',
+        'setWidth',
+        'setHeight',
+        'setAlphaScaled',
+        'setHeading'
+    ];
+};
+
+// PenMorph menu:
+
+PenMorph.prototype.developersMenu = function () {
+    var menu = PenMorph.uber.developersMenu.call(this);
+    menu.addLine();
+    menu.addItem(
+        'set rotation',
+        "setRotation",
+        'interactively turn this morph\nusing a dial widget'
+    );
+    return menu;
+};
+
+PenMorph.prototype.setRotation = function () {
+    var menu, dial,
+    	name = this.name || this.constructor.name;
+    if (name.length > 10) {
+    	name = name.slice(0, 9) + '...';
+    }
+    menu = new MenuMorph(this, name);
+    dial = new DialMorph(null, null, this.heading);
+    dial.rootForGrab = function () {return this; };
+    dial.target = this;
+    dial.action = 'setHeading';
+    menu.items.push(dial);
+    menu.addLine();
+    menu.addItem('(90) right', function () {this.setHeading(90); });
+    menu.addItem('(-90) left', function () {this.setHeading(-90); });
+    menu.addItem('(0) up', function () {this.setHeading(0); });
+    menu.addItem('(180) down', function () {this.setHeading(180); });
+    menu.isDraggable = true;
+    menu.popUpAtHand(this.world());
 };
 
 // PenMorph drawing:
@@ -6258,6 +6368,315 @@ SpeechBubbleMorph.prototype.fixLayout = function () {
     this.removeShadow();
     this.drawNew();
     this.addShadow(new Point(2, 2), 80);
+};
+
+// DialMorph //////////////////////////////////////////////////////
+
+// I am a knob than can be turned to select a number
+
+var DialMorph;
+
+// DialMorph inherits from Morph:
+
+DialMorph.prototype = new Morph();
+DialMorph.prototype.constructor = DialMorph;
+DialMorph.uber = Morph.prototype;
+
+function DialMorph(min, max, value, tick, radius) {
+    this.init(min, max, value, tick, radius);
+}
+
+DialMorph.prototype.init = function (min, max, value, tick, radius) {
+    this.target = null;
+    this.action = null;
+    this.min = min || 0;
+    this.max = max || 360;
+    this.value = Math.max(this.min, (value || 0) % this.max);
+    this.tick = tick || 15;
+    this.fillColor = null;
+
+    DialMorph.uber.init.call(this);
+
+    this.color = new Color(230, 230, 230);
+    this.noticesTransparentClick = true;
+    this.setRadius(radius || MorphicPreferences.menuFontSize * 4);
+};
+
+DialMorph.prototype.setRadius = function (radius) {
+	this.radius = radius;
+    this.setExtent(new Point(this.radius * 2, this.radius * 2));
+};
+
+DialMorph.prototype.setValue = function (value, snapToTick, noUpdate) {
+	var range = this.max - this.min;
+ 	value = value || 0;
+    this.value = this.min + (((+value % range) + range) % range);
+    if (snapToTick) {
+    	if (this.value < this.tick) {
+     		this.value = this.min;
+       	} else {
+    		this.value -= this.value % this.tick % this.value;
+        }
+    }
+	this.drawNew();
+ 	this.changed();
+  	if (noUpdate) {return; }
+  	this.updateTarget();
+};
+
+DialMorph.prototype.getValueOf = function (point) {
+    var range = this.max - this.min,
+    	center = this.center(),
+        deltaX = point.x - center.x,
+        deltaY = center.y - point.y,
+        angle = Math.abs(deltaX) < 0.001 ? (deltaY < 0 ? 90 : 270)
+                : Math.round(
+                (deltaX >= 0 ? 0 : 180)
+                    - (Math.atan(deltaY / deltaX) * 57.2957795131)
+        		),
+        value = angle + 90 % 360,
+        ratio = value / 360;
+    return range * ratio + this.min;
+};
+
+DialMorph.prototype.setExtent = function (aPoint) {
+	var size = Math.min(aPoint.x, aPoint.y);
+	this.radius = size / 2;
+    DialMorph.uber.setExtent.call(this, new Point(size, size));
+};
+
+DialMorph.prototype.drawNew = function () {
+    var ctx, i, angle, x1, y1, x2, y2,
+    	light = this.color.lighter().toString(),
+    	range = this.max - this.min,
+     	ticks = range / this.tick,
+      	face = this.radius * 0.75,
+      	inner = face * 0.85,
+       	outer = face * 0.95;
+
+    this.image = newCanvas(this.extent());
+    ctx = this.image.getContext('2d');
+
+    // draw a light border:
+    ctx.fillStyle = light;
+    ctx.beginPath();
+    ctx.arc(
+        this.radius,
+        this.radius,
+        face + Math.min(1, this.radius - face),
+        0,
+        2 * Math.PI,
+        false
+    );
+    ctx.closePath();
+    ctx.fill();
+
+	// fill circle:
+    ctx.fillStyle = this.color.toString();
+    ctx.beginPath();
+    ctx.arc(
+        this.radius,
+        this.radius,
+        face,
+        0,
+        2 * Math.PI,
+        false
+    );
+    ctx.closePath();
+    ctx.fill();
+
+    // fill value
+    angle = (this.value - this.min) * (Math.PI * 2) / range - Math.PI / 2;
+    ctx.fillStyle = (this.fillColor || this.color.darker()).toString();
+    ctx.beginPath();
+    ctx.arc(
+    	this.radius,
+     	this.radius,
+      	face,
+       	Math.PI / -2,
+        angle,
+        false
+    );
+    ctx.lineTo(this.radius, this.radius);
+    ctx.closePath();
+    ctx.fill();
+
+	// draw ticks:
+ 	ctx.strokeStyle = new Color(35, 35, 35).toString();
+  	ctx.lineWidth = 1;
+ 	for (i = 0; i < ticks; i += 1) {
+  		angle = (i - 3) * (Math.PI * 2) / ticks - Math.PI / 2;
+    	ctx.beginPath();
+     	x1 = this.radius + Math.cos(angle) * inner;
+      	y1 = this.radius + Math.sin(angle) * inner;
+       	x2 = this.radius + Math.cos(angle) * outer;
+        y2 = this.radius + Math.sin(angle) * outer;
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+	}
+
+	// draw a filled center:
+    inner = face * 0.05;
+    ctx.fillStyle = 'black';
+    ctx.beginPath();
+    ctx.arc(
+        this.radius,
+        this.radius,
+        inner,
+        0,
+        2 * Math.PI,
+        false
+    );
+    ctx.closePath();
+    ctx.fill();
+
+    // draw the inner hand:
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 1;
+    angle = (this.value - this.min) * (Math.PI * 2) / range - Math.PI / 2;
+    outer = face * 0.8;
+    x1 = this.radius + Math.cos(angle) * inner;
+    y1 = this.radius + Math.sin(angle) * inner;
+    x2 = this.radius + Math.cos(angle) * outer;
+	y2 = this.radius + Math.sin(angle) * outer;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+
+    // draw a read-out circle:
+    inner = inner * 2;
+    x2 = this.radius + Math.cos(angle) * (outer + inner);
+    y2 = this.radius + Math.sin(angle) * (outer + inner);
+    ctx.fillStyle = 'black';
+    ctx.beginPath();
+    ctx.arc(
+        x2,
+        y2,
+        inner,
+        0,
+        2 * Math.PI,
+        false
+    );
+    ctx.closePath();
+    ctx.stroke();
+
+    // draw the outer hand:
+    angle = (this.value - this.min) * (Math.PI * 2) / range - Math.PI / 2;
+    x1 = this.radius + Math.cos(angle) * face;
+    y1 = this.radius + Math.sin(angle) * face;
+    x2 = this.radius + Math.cos(angle) * (this.radius - 1);
+    y2 = this.radius + Math.sin(angle) * (this.radius - 1);
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+	ctx.lineWidth = 3;
+ 	ctx.strokeStyle = light;
+    ctx.stroke();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+
+    // draw arrow tip:
+	angle = radians(degrees(angle) - 4);
+    x1 = this.radius + Math.cos(angle) * this.radius * 0.9;
+    y1 = this.radius + Math.sin(angle) * this.radius * 0.9;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    angle = radians(degrees(angle) + 8);
+    x1 = this.radius + Math.cos(angle) * this.radius * 0.9;
+    y1 = this.radius + Math.sin(angle) * this.radius * 0.9;
+    ctx.lineTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.closePath();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = light;
+    ctx.stroke();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+    ctx.fill();
+};
+
+// DialMorph stepping:
+
+DialMorph.prototype.step = null;
+
+DialMorph.prototype.mouseDownLeft = function (pos) {
+    var world, myself = this;
+    world = this.root();
+    this.step = function () {
+        if (world.hand.mouseButton) {
+            myself.setValue(
+            	myself.getValueOf(world.hand.bounds.origin),
+             	world.currentKey !== 16 // snap to tick
+            );
+        } else {
+            this.step = null;
+        }
+    };
+};
+
+// DialMorph menu:
+
+DialMorph.prototype.developersMenu = function () {
+    var menu = DialMorph.uber.developersMenu.call(this);
+    menu.addLine();
+    menu.addItem(
+        'set target',
+        "setTarget",
+        'select another morph\nwhose numerical property\nwill be ' +
+            'controlled by this one'
+    );
+    return menu;
+};
+
+DialMorph.prototype.setTarget = function () {
+    var choices = this.overlappedMorphs(),
+        menu = new MenuMorph(this, 'choose target:'),
+        myself = this;
+
+    choices.push(this.world());
+    choices.forEach(function (each) {
+        menu.addItem(each.toString().slice(0, 50), function () {
+            myself.target = each;
+            myself.setTargetSetter();
+        });
+    });
+    if (choices.length === 1) {
+        this.target = choices[0];
+        this.setTargetSetter();
+    } else if (choices.length > 0) {
+        menu.popUpAtHand(this.world());
+    }
+};
+
+DialMorph.prototype.setTargetSetter = function () {
+    var choices = this.target.numericalSetters(),
+        menu = new MenuMorph(this, 'choose target property:'),
+        myself = this;
+
+    choices.forEach(function (each) {
+        menu.addItem(each, function () {
+            myself.action = each;
+        });
+    });
+    if (choices.length === 1) {
+        this.action = choices[0];
+    } else if (choices.length > 0) {
+        menu.popUpAtHand(this.world());
+    }
+};
+
+DialMorph.prototype.updateTarget = function () {
+    if (this.action) {
+        if (typeof this.action === 'function') {
+            this.action.call(this.target, this.value);
+        } else { // assume it's a String
+            this.target[this.action](this.value);
+        }
+    }
 };
 
 // CircleBoxMorph //////////////////////////////////////////////////////
@@ -7687,7 +8106,8 @@ MenuMorph.prototype.drawNew = function () {
         isLine = false;
         if (tuple instanceof StringFieldMorph ||
                 tuple instanceof ColorPickerMorph ||
-                tuple instanceof SliderMorph) {
+                tuple instanceof SliderMorph ||
+                tuple instanceof DialMorph) {
             item = tuple;
         } else if (tuple[0] === 0) {
             isLine = true;
@@ -7744,7 +8164,8 @@ MenuMorph.prototype.maxWidth = function () {
             );
         } else if ((item instanceof StringFieldMorph) ||
                 (item instanceof ColorPickerMorph) ||
-                (item instanceof SliderMorph)) {
+                (item instanceof SliderMorph) ||
+                (item instanceof DialMorph)) {
             w = Math.max(w, item.width());
         }
     });
@@ -7759,7 +8180,9 @@ MenuMorph.prototype.adjustWidths = function () {
         isSelected,
         myself = this;
     this.children.forEach(function (item) {
-        item.silentSetWidth(w);
+    	if (!(item instanceof DialMorph)) {
+        	item.silentSetWidth(w);
+        }
         if (item instanceof MenuItemMorph) {
             item.fixLayout();
             isSelected = (item.image === item.pressImage);
@@ -7784,16 +8207,38 @@ MenuMorph.prototype.unselectAllItems = function () {
     this.children.forEach(function (item) {
         if (item instanceof MenuItemMorph) {
             item.image = item.normalImage;
+        } else if (item instanceof ScrollFrameMorph) {
+        	item.contents.children.forEach(function (morph) {
+         		if (morph instanceof MenuItemMorph) {
+           			morph.image = morph.normalImage;
+              	}
+         	});
         }
     });
     this.changed();
 };
 
+// MenuMorph popping up
+
 MenuMorph.prototype.popup = function (world, pos) {
+	var scroller;
+
     this.drawNew();
     this.setPosition(pos);
     this.addShadow(new Point(2, 2), 80);
     this.keepWithin(world);
+
+    if (this.bottom() > world.bottom()) {
+    	// scroll menu items if the menu is taller than the world
+    	this.removeShadow();
+        scroller = this.scroll();
+        this.bounds.corner.y = world.bottom() - 2;
+        MenuMorph.uber.drawNew.call(this);
+        this.addShadow(new Point(2, 2), 80);
+        scroller.setHeight(world.bottom() - scroller.top() - 6);
+        scroller.adjustScrollBars(); // ?
+     }
+
     if (world.activeMenu) {
         world.activeMenu.destroy();
     }
@@ -7804,6 +8249,21 @@ MenuMorph.prototype.popup = function (world, pos) {
     world.activeMenu = this;
     this.world = world; // optionally enable keyboard support
     this.fullChanged();
+};
+
+MenuMorph.prototype.scroll = function () {
+    // private - move all items into a scroll frame
+     var scroller = new ScrollFrameMorph(),
+          start = this.label ? 1 : 0,
+        first = this.children[start];
+
+    scroller.setPosition(first.position());
+      this.children.slice(start).forEach(function (morph) {
+        scroller.addContents(morph);
+    });
+    this.add(scroller);
+    scroller.setWidth(first.width());
+    return scroller;
 };
 
 MenuMorph.prototype.popUpAtHand = function (world) {
@@ -7896,21 +8356,31 @@ MenuMorph.prototype.processKeyPress = function (event) {
 };
 
 MenuMorph.prototype.selectFirst = function () {
-    var i;
-    for (i = 0; i < this.children.length; i += 1) {
-        if (this.children[i] instanceof MenuItemMorph) {
-            this.select(this.children[i]);
+    var scroller, items, i;
+
+    scroller = detect(this.children, function (morph) {
+         return morph instanceof ScrollFrameMorph;
+    });
+    items = scroller ? scroller.contents.children : this.children;
+    for (i = 0; i < items.length; i += 1) {
+        if (items[i] instanceof MenuItemMorph) {
+            this.select(items[i]);
             return;
-        }
-    }
+    	}
+	}
 };
 
 MenuMorph.prototype.selectUp = function () {
-    var triggers, idx;
+    var scroller, triggers, idx;
 
-    triggers = this.children.filter(function (each) {
-        return each instanceof MenuItemMorph;
+	scroller = detect(this.children, function (morph) {
+ 		return morph instanceof ScrollFrameMorph;
     });
+    triggers = (scroller ? scroller.contents.children : this.children).filter(
+    	function (each) {
+        	return each instanceof MenuItemMorph;
+    	}
+    );
     if (!this.selection) {
         if (triggers.length) {
             this.select(triggers[0]);
@@ -7925,11 +8395,16 @@ MenuMorph.prototype.selectUp = function () {
 };
 
 MenuMorph.prototype.selectDown = function () {
-    var triggers, idx;
+    var scroller, triggers, idx;
 
-    triggers = this.children.filter(function (each) {
-        return each instanceof MenuItemMorph;
+    scroller = detect(this.children, function (morph) {
+         return morph instanceof ScrollFrameMorph;
     });
+    triggers = (scroller ? scroller.contents.children : this.children).filter(
+        function (each) {
+            return each instanceof MenuItemMorph;
+        }
+    );
     if (!this.selection) {
         if (triggers.length) {
             this.select(triggers[0]);
@@ -7966,6 +8441,7 @@ MenuMorph.prototype.select = function (aMenuItem) {
     this.unselectAllItems();
     aMenuItem.image = aMenuItem.highlightImage;
     aMenuItem.changed();
+    aMenuItem.scrollIntoView();
     this.selection = aMenuItem;
 };
 
@@ -8277,7 +8753,7 @@ StringMorph.prototype.previousWordFrom = function (aSlot) {
     // answer the slot (index) slots indicating the position of the
     // previous word to the left of aSlot
     var index = aSlot - 1;
-    
+
     // while the current character is non-word one, we skip it, so that
     // if we are in the middle of a non-alphanumeric sequence, we'll get
     // right to the beginning of the previous word
@@ -8296,7 +8772,7 @@ StringMorph.prototype.previousWordFrom = function (aSlot) {
 
 StringMorph.prototype.nextWordFrom = function (aSlot) {
     var index = aSlot;
-    
+
     while (index < this.endOfLine() && !isWordChar(this.text[index])) {
         index += 1;
     }
@@ -9635,7 +10111,7 @@ MenuItemMorph.prototype.mouseLeave = function () {
 
 MenuItemMorph.prototype.mouseDownLeft = function (pos) {
     if (this.isListItem()) {
-        this.parent.unselectAllItems();
+        this.parentThatIsA(MenuMorph).unselectAllItems();
         this.escalateEvent('mouseDownLeft', pos);
     }
     this.image = this.pressImage;
@@ -9653,7 +10129,7 @@ MenuItemMorph.prototype.mouseClickLeft = function () {
         this.popUpSubmenu();
     } else {
         if (!this.isListItem()) {
-            this.parent.closeRootMenu();
+            this.parentThatIsA(MenuMorph).closeRootMenu();
             this.world().activeMenu = null;
         }
         this.trigger();
@@ -9661,8 +10137,9 @@ MenuItemMorph.prototype.mouseClickLeft = function () {
 };
 
 MenuItemMorph.prototype.isListItem = function () {
-    if (this.parent) {
-        return this.parent.isListContents;
+	var menu = this.parentThatIsA(MenuMorph);
+    if (menu) {
+        return menu.isListContents;
     }
     return false;
 };
@@ -10706,7 +11183,9 @@ HandMorph.prototype.grab = function (aMorph) {
     if (this.children.length === 0) {
         this.world.stopEditing();
         this.grabOrigin = aMorph.situation();
-        aMorph.addShadow();
+        if (!(aMorph instanceof MenuMorph)) {
+        	aMorph.addShadow();
+        }
         if (aMorph.prepareToBeGrabbed) {
             aMorph.prepareToBeGrabbed(this);
         }
@@ -10731,7 +11210,9 @@ HandMorph.prototype.drop = function () {
         morphToDrop.cachedFullImage = null;
         morphToDrop.cachedFullBounds = null;
         morphToDrop.changed();
-        morphToDrop.removeShadow();
+        if (!(morphToDrop instanceof MenuMorph)) {
+	        morphToDrop.removeShadow();
+        }
         this.children = [];
         this.setExtent(new Point());
         if (morphToDrop.justDropped) {
@@ -10916,7 +11397,7 @@ HandMorph.prototype.processMouseMove = function (event) {
     // determine the new mouse-over-list:
     // mouseOverNew = this.allMorphsAtPointer();
     mouseOverNew = this.morphAtPointer().allParents();
-    
+
     // BEGIN SNAPAPPS
     {
         var topMorphSnapApps = this.morphAtPointer();
@@ -10950,6 +11431,7 @@ HandMorph.prototype.processMouseMove = function (event) {
                         this.morphToGrab.selectForEdit() : this.morphToGrab;
                 this.grab(morph);
             } else if (this.morphToGrab.isTemplate) {
+                this.world.stopEditing();
                 morph = this.morphToGrab.fullCopy();
                 morph.isTemplate = false;
                 morph.isDraggable = true;
@@ -11040,6 +11522,7 @@ HandMorph.prototype.processDrop = function (event) {
         droppedImage(canvas, name)
         droppedSVG(image, name)
         droppedAudio(audio, name)
+        droppedText(text, name, type)
 
     events to interested Morphs at the mouse pointer
 */
@@ -11110,7 +11593,7 @@ HandMorph.prototype.processDrop = function (event) {
             target = target.parent;
         }
         frd.onloadend = function (e) {
-            target.droppedText(e.target.result, aFile.name);
+            target.droppedText(e.target.result, aFile.name, aFile.type);
         };
         frd.readAsText(aFile);
     }
@@ -11161,6 +11644,9 @@ HandMorph.prototype.processDrop = function (event) {
     if (files.length > 0) {
         for (i = 0; i < files.length; i += 1) {
             file = files[i];
+            suffix = file.name.slice(
+                file.name.lastIndexOf('.') + 1
+            ).toLowerCase();
             if (file.type.indexOf("svg") !== -1
                     && !MorphicPreferences.rasterizeSVGs) {
                 readSVG(file);
@@ -11168,7 +11654,10 @@ HandMorph.prototype.processDrop = function (event) {
                 readImage(file);
             } else if (file.type.indexOf("audio") === 0) {
                 readAudio(file);
-            } else if (file.type.indexOf("text") === 0) {
+            } else if ((file.type.indexOf("text") === 0) ||
+                    contains(['txt', 'csv', 'json'], suffix)) {
+                    // check the file-extension because Windows
+                    // doesn't specify CSVs to be text/csv, sigh
                 readText(file);
             } else { // assume it's meant to be binary
                 readBinary(file);
@@ -11421,7 +11910,7 @@ WorldMorph.prototype.getGlobalPixelColor = function (point) {
     return new Color(dta[0], dta[1], dta[2]);
 */
 
-    var clr = this.hand.morphAtPointer().getPixelColor(this.hand.position());
+    var clr = this.topMorphAt(point).getPixelColor(point);
     // IMPORTANT:
     // all callers of getGlobalPixelColor should make provisions for retina
     // display support, which gets null-pixels interlaced with non-null ones:
@@ -11694,7 +12183,7 @@ WorldMorph.prototype.initEventListeners = function () {
         },
         false
     );
-	
+
     window.onbeforeunload = function (evt) {
         var e = evt || window.event,
             msg = "Are you sure you want to leave?";
@@ -11866,6 +12355,10 @@ WorldMorph.prototype.userCreateMorph = function () {
     menu.addLine();
     menu.addItem('slider', function () {
         create(new SliderMorph());
+    });
+    menu.addItem('dial', function () {
+    	newMorph = new DialMorph();
+     	newMorph.pickUp(this);
     });
     menu.addItem('frame', function () {
         newMorph = new FrameMorph();
@@ -12120,6 +12613,9 @@ WorldMorph.prototype.stopEditing = function () {
         this.cursor.target.clearSelection();
         this.cursor.destroy();
         this.cursor = null;
+    }
+    if (this.keyboardReceiver && this.keyboardReceiver.stopEditing) {
+    	this.keyboardReceiver.stopEditing();
     }
     this.keyboardReceiver = null;
     if (this.virtualKeyboard) {

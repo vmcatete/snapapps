@@ -241,27 +241,29 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
         blocks.push(block('reportCellsY'));
 
         if (Cell.attributes.length > 0) {
+           /*
             blocks.push('-');
-            blocks.push(block('showCellAttribute'));
-            blocks.push(block('hideCellAttribute'));
-            blocks.push('-');
-            blocks.push(block('getCellAttribute'));
+                       blocks.push(block('showCellAttribute'));
+                       blocks.push(block('hideCellAttrisute'));
+                       blocks.push('-');*/
+           
+            //blocks.push(block('getCellAttribute'));
             blocks.push(block('getCellAttributeCell'));
             blocks.push(block('getCellAttributeHere'));
             blocks.push('-');
-            blocks.push(block('getCellAttributeAverage'));
-            blocks.push(block('getCellAttributeMaximum'));
-            blocks.push(block('getCellAttributeMinimum'));
-            blocks.push('-');
-            blocks.push(block('setCellAttribute'));
+            //blocks.push(block('getCellAttributeAverage'));
+            //blocks.push(block('getCellAttributeMaximum'));
+            //blocks.push(block('getCellAttributeMinimum'));
+            //blocks.push('-');
+            //blocks.push(block('setCellAttribute'));
             blocks.push(block('setCellAttributeCell'));
             blocks.push(block('setCellAttributeHere'));
-            blocks.push(block('setCellAttributeEverywhere'));
-            blocks.push('-');
-            blocks.push(block('changeCellAttribute'));
-            blocks.push(block('changeCellAttributeCell'));
-            blocks.push(block('changeCellAttributeHere'));
-            blocks.push(block('changeCellAttributeEverywhere'));
+            //blocks.push(block('setCellAttributeEverywhere'));
+            //blocks.push('-');
+            //blocks.push(block('changeCellAttribute'));
+            //blocks.push(block('changeCellAttributeCell'));
+            //blocks.push(block('changeCellAttributeHere'));
+            //blocks.push(block('changeCellAttributeEverywhere'));
         }
     }
     else if (cat == 'motion')
@@ -270,7 +272,7 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
         blocks.push(block('cellX'));
         blocks.push(block('cellY'));
         blocks.push('-');
-        blocks.push(block('moveToCell'));
+        //blocks.push(block('moveToCell'));
         blocks.push(block('moveToNbrCell'));
         blocks.push(block('moveToEmptyNbrCell'));
         blocks.push(block('moveToAnyCell'));
@@ -296,18 +298,18 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
     }
     else if (cat == 'objects')
     {
-        blocks.push(block('reportNobody'));
+        //blocks.push(block('reportNobody'));
         blocks.push(block('reportThis'));
         blocks.push('-');
-        blocks.push(block('isNobody'));
+        //blocks.push(block('isNobody'));
         blocks.push(block('isThis'));
         blocks.push('-');
         blocks.push(block('setVariable'));
         blocks.push(block('getVariable'));
-        blocks.push(block('changeVariable'));
+        //blocks.push(block('changeVariable'));
         blocks.push('-');
         blocks.push(block('getCostumeNameObject'));
-        blocks.push(block('getCostumeNumberObject'));
+        //blocks.push(block('getCostumeNumberObject'));
         blocks.push(block('getTypeName'));
         blocks.push(block('objectIsA'));
         blocks.push(block('obliterate'));
@@ -316,24 +318,24 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
         blocks.push('-');
         blocks.push(block('getObjectX'));
         blocks.push(block('getObjectY'));
-        blocks.push(block('setObjectPosition'));
+        //blocks.push(block('setObjectPosition'));
         blocks.push('-');
         blocks.push(block('getObjectCellX'));
         blocks.push(block('getObjectCellY'));
         blocks.push(block('setObjectCellPosition'));
         blocks.push('-');
-        blocks.push(block('nearestObject'));
+        //blocks.push(block('nearestObject'));
         blocks.push(block('nearestObjectToMe'));
     }
     else if (cat == 'neighbours')
     {
         blocks.push(block("objectInCellDir"));
         blocks.push(block("objectInCellCell"));
-        blocks.push(block("objectInCellReal"));
+        //blocks.push(block("objectInCellReal"));
         blocks.push('-');
         blocks.push(block("allObjectsInCellDir"));
         blocks.push(block("allObjectsInCellCell"));
-        blocks.push(block("allObjectsInCellReal"));
+        //blocks.push(block("allObjectsInCellReal"));
         blocks.push('-');
         blocks.push(block("numCostumeInNbrCells"));
         blocks.push(block("numObjectsInNbrCells"));
@@ -375,17 +377,17 @@ StageMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, h
             blocks.push(block('getCellAttribute'));
             blocks.push(block('getCellAttributeCell'));
             blocks.push('-');
-            blocks.push(block('getCellAttributeAverage'));
-            blocks.push(block('getCellAttributeMaximum'));
-            blocks.push(block('getCellAttributeMinimum'));
+            //blocks.push(block('getCellAttributeAverage'));
+            //blocks.push(block('getCellAttributeMaximum'));
+            //blocks.push(block('getCellAttributeMinimum'));
             blocks.push('-');
             blocks.push(block('setCellAttribute'));
             blocks.push(block('setCellAttributeCell'));
-            blocks.push(block('setCellAttributeEverywhere'));
+            //blocks.push(block('setCellAttributeEverywhere'));
             blocks.push('-');
-            blocks.push(block('changeCellAttribute'));
-            blocks.push(block('changeCellAttributeCell'));
-            blocks.push(block('changeCellAttributeEverywhere'));
+            //blocks.push(block('changeCellAttribute'));
+            //blocks.push(block('changeCellAttributeCell'));
+            //blocks.push(block('changeCellAttributeEverywhere'));
         }
     }
     else if (cat == 'sensing')
@@ -400,13 +402,13 @@ StageMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, h
     }
     else if (cat == 'objects')
     {
-        blocks.push(block('reportNobody'));
-        blocks.push('-');
-        blocks.push(block('isNobody'));
-        blocks.push('-');
+        //blocks.push(block('reportNobody'));
+        //blocks.push('-');
+        //blocks.push(block('isNobody'));
+       // blocks.push('-');
         blocks.push(block('setVariable'));
         blocks.push(block('getVariable'));
-        blocks.push(block('changeVariable'));
+        //blocks.push(block('changeVariable'));
         blocks.push('-');
         blocks.push(block('getCostumeNameObject'));
         blocks.push(block('getCostumeNumberObject'));
@@ -430,10 +432,10 @@ StageMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, h
     else if (cat == 'neighbours')
     {
         blocks.push(block("objectInCellCell"));
-        blocks.push(block("objectInCellReal"));
+       // blocks.push(block("objectInCellReal"));
         blocks.push('-');
         blocks.push(block("allObjectsInCellCell"));
-        blocks.push(block("allObjectsInCellReal"));
+       // blocks.push(block("allObjectsInCellReal"));
     }
 
     if (this.scribbleHookBlockTemplates)
@@ -2861,6 +2863,14 @@ StageMorph.prototype.fireKeyEvent = function (key) {
 
 StageMorph.prototype.uberFireGreenFlagEvent = StageMorph.prototype.fireGreenFlagEvent;
 StageMorph.prototype.fireGreenFlagEvent = function () {
+    // add logging here
+    // if (window.assignmentID) {
+    //     this.parent.saveProject(window.assignmentID, "run_script");
+    // } else {
+    //     this.parent.showMessage("You need to set a project name first.", 2);
+    // }
+    Trace.log("Stage.greenFlagFired");
+
     return removeNulls(this.uberFireGreenFlagEvent());
 };
 

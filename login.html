@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login Page</title>
+        <script src="isnap/lib/jquery-3.1.1.min.js?v=2.5.1-e1.1"></script>
+        <script src="isnap/lib/jquery-ui-1.12.1/jquery-ui.min.js?v=2.5.1-e1.1"></script>
+        <link rel="stylesheet" type="text/css" href="logging/login/assignment.css">
+		<link rel="stylesheet" type="text/css" href="logging/login/css/font-awesome.min.css">
+		<script type="text/javascript" src="morphic.js?v=2.4.9"></script>
+        <script type="text/javascript" src="cloud.js?v=2.4.9"></script>
+		<script type="text/javascript" src="sha512.js?v=2.4.9"></script>
+    </head>
+    <body>
+
+        <div id="flex-Parent">
+                <div id="blackBar"><div><img id="headerLogo"></div> <div><span id="courseName"> </span></div></div>
+                <div id="theBox">
+                    <div id="needsCookiesEnabled" class="hidden"><i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i><span>Wrong user name or password. Please try again.</span></div>
+                    <div id="theBorder">
+                        <div id="logout" class="getFlex"> <div id="back-arrow"><a href="#" onclick="logout()"><i class="fa fa-long-arrow-left fa-3x" aria-hidden="true"></i></a></div></div>
+                        <!-- <div id="snapLogo"><img src="login/SnapLogo.png"></img></div> -->
+                        <div class="container">
+                            <div class="belt-container">
+                                <div class="belt">
+                                    <div class="state state-1">
+                                        <div>
+                                            <img id="infusing-logo" src="infusing-pic.png">
+                                            <h1 id="unityID-instruction">Sign in with Snap Account</h1>
+                                            <div id="unityID-hint"> ( This is assigned by teacher )</div>
+                                        </div>
+                                        <div id="form-id">
+                                            <form id="form-flex-Parent">
+                                                <input id="input-id" name="id" placeholder="Enter User Name" required pattern="[A-Za-z0-9_]+" autofocus>
+                                                <input id="input-pwd" name="pwd" placeholder="Enter Password" required type="password">
+                                                <div id="confirm-new">
+                                                    <!-- adding content based on if new user is allowed -->
+                                                </div>
+                                                <div><input type="submit" id="sign-in-Button" value="Next"></input></div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="state state-2">
+                                        <div id="form-assignment">
+                                            <div id="signed-in-as">Signed in as <span id="display-id-loggedIN"></span></div>
+                                            <form id="form-select-assignment">
+                                                <h1>Select Teacher</h1>
+                                                <div><select id="teacher" name="teacher" disabled></select></div>
+                                                <h1>Select Assignment</h1>
+                                                <div><select id="assignment" name="assignment" disabled></select></div>
+                                                <div><button id="assignmentGObutton" type="submit" disabled>GO</button></div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        <script type="text/javascript">
+            function doLogin() {
+                var user = {};
+                user.username = $("#input-id").val().trim();
+                user.password = $('#input-pwd').val();
+                user.persist = false;
+
+                // check if the user name exists in our database.
+                $.post('logging/login/getUser.php', {
+					'user_name': user.username
+				}, function(data, status) {
+                    // if new user, display new user message.
+                    if (data == "new user") {
+                        window.alert("New user");
+                    }
+                    // if existing user, log into snap account.
+                    else {
+                        var response;
+                        try {
+                            response = JSON.parse(data);
+                            cloud.login(
+                                user.username,
+                                user.password,
+                                user.persist,
+                                function() {
+                                    sessionStorage.username = user.username;
+                                    sessionStorage.user = JSON.stringify(response);
+
+                                    $('#display-id-loggedIN').html(user.username);
+                                    $('#needsCookiesEnabled').addClass('hidden');
+                                    loadTeachers();
+                                    $('.belt-container').addClass('is-transitioned');
+                                    $('#logout').css('visibility', 'visible');
+                                },
+                                function() {
+                                    $('#needsCookiesEnabled').removeClass('hidden');
+                                }
+                            )
+                        } catch(e) {
+                            console.log(e);
+                            return;
+                        }
+                    }
+				}).fail(function(xhr, status, error) {
+					window.alert(xhr.responseText);
+				});
+
+                return false;
+            }
+
+            function loadAssignments() {
+                var select = document.getElementById("assignment");
+                var user = JSON.parse(sessionStorage.user);
+                var user_id = user.user_id;
+                var user_type = user.user_type;
+                var teacher_id = $('#teacher :selected').prop("value");
+
+                var option = document.createElement("option");
+                option.text = "Select one";
+                option.value = "default";
+                select.add(option);
+
+                $.post('logging/login/getAssignment.php', {
+                    'user_id': user_id,
+                    'teacher_id': teacher_id,
+                    'user_type': user_type
+				}, function(data, status) {
+					var response;
+					try {
+                        response = JSON.parse(data);
+                        response.forEach(assignment => {
+                            option = document.createElement("option");
+                            option.text = assignment.assignment_name;
+                            option.value = assignment.assignment_id;
+                            option.assignment = assignment;
+                            select.add(option);
+                        });
+                        $('#assignment').prop("disabled", false);
+                        $('#assignment').change(function() {
+                            if ($('#assignment :selected').prop("value") == "default") {
+                                $('#assignmentGObutton').prop("disabled", true);
+                            }
+                            else {
+                                $('#assignmentGObutton').prop("disabled", false);
+                            }
+                        });
+					} catch(e) {
+                        window.alert("Json parse error: getAssignment.php");
+						return;
+                    }
+				}).fail(function() {
+					window.alert("Post error: getAssignment.php");
+				});
+
+            }
+
+            function refreshAssignments() {
+                $('#assignment option').remove();
+                $('#assignmentGObutton').prop("disabled", true);
+
+                if ($("#teacher :selected").prop("value") == "default") {
+                    $('#assignment').prop("disabled", true);
+                    return;
+                }
+
+                loadAssignments();
+            }
+
+            function loadTeachers() {
+                var select = document.getElementById("teacher");
+                var user = JSON.parse(sessionStorage.user);
+                var user_id = user.user_id;
+                var user_type = user.user_type;
+
+                var option = document.createElement("option");
+                option.text = "Select one";
+                option.value = "default";
+                select.add(option);
+
+                $.post('logging/login/getTeacher.php', {
+                    'user_id': user_id,
+                    'user_type': user_type
+				}, function(data, status) {
+					var response;
+					try {
+                        response = JSON.parse(data);
+                        response.forEach(teacher => {
+                            option = document.createElement("option");
+                            option.text = teacher.display_name + " (" + teacher.period + " period)";
+                            option.value = teacher.teacher_id;
+                            select.add(option);
+                        });
+
+                        $('#teacher').change(refreshAssignments);
+                        $('#teacher').prop("disabled", false);
+					} catch(e) {
+                        window.alert("json parse error: getTeacher.php");
+						return;
+                    }
+				}).fail(function() {
+					window.alert("Post error: getTeacher.php");
+				});
+            }
+
+            function redirect() {
+                var assignment = $('#assignment :selected').prop("assignment");
+                sessionStorage.assignment = JSON.stringify(assignment);
+
+                if (assignment.environment == "Snap") {
+                    window.location.href = "snap.html";
+                }
+                else if (assignment.environment == "Cellular") {
+                    window.location.href = "../cellular/cellular.html";
+                }
+                else {
+                    window.alert("Unknown environment: " + assignment.environment);
+                }
+
+                return false;
+            }
+
+            function logout() {
+                cloud.logout();
+                delete sessionStorage.username;
+                delete sessionStorage.user;
+                delete sessionStorage.assignment;
+                $('.belt-container').removeClass('is-transitioned');
+                $('#teacher,#assignment,#assignmentGObutton').prop('disabled', true);
+                $('#teacher,#assignment').unbind('change');
+                $('#assignment option').remove();
+                $('#teacher option').remove();
+                $('#input-id').focus();
+                $('#logout').css('visibility', 'hidden');
+            }
+            var cloud = new Cloud();
+            logout(); // clear all previous user session
+
+            $("#form-flex-Parent").submit(doLogin);
+            $("#form-select-assignment").submit(redirect);
+
+        </script>
+    </body>
+</html>
